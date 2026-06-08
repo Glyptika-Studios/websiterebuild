@@ -11,8 +11,10 @@
 
 1. Clone the repo
    git clone <repo-url>
-   cd glyptika-backend
-   supabase init
+   cd <repo-folder>
+
+   Verify the repository contains a supabase/ directory.
+   If it does, do NOT run supabase init.
 
 2. Link to the cloud Supabase project (one time only)
    supabase login
