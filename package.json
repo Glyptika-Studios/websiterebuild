@@ -1,0 +1,24 @@
+{
+  "name": "websiterebuild-api",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Express.js REST API backed by Supabase",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.0",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "supabase": "^2.105.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
