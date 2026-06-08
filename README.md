@@ -1,58 +1,112 @@
-## Local Development Setup
+# Local Development Setup
 
-### Prerequisites
-- Docker Desktop installed and running
+## Prerequisites
+
+- Docker Desktop installed and running  
   Download: https://www.docker.com/products/docker-desktop/
 - Node.js 18+
 - Supabase CLI:
-  npm install -g supabase
 
-### First-time setup
+```bash
+npm install -g supabase
+```
+
+## First-time Setup
 
 1. Clone the repo
-   git clone <repo-url>
-   cd <repo-folder>
 
-   Verify the repository contains a supabase/ directory.
-   If it does, do NOT run supabase init.
+```bash
+git clone <repo-url>
+cd <repo-folder>
+```
+
+The repository already contains the Supabase configuration and migrations. Do **not** run:
+
+```bash
+supabase init
+```
 
 2. Link to the cloud Supabase project (one time only)
-   supabase login
-   supabase link --project-ref <your-project-ref>
+
+```bash
+supabase login
+supabase link --project-ref <project-ref>
+```
 
 3. Start local Supabase
-   supabase start
-   (Downloads Docker images on first run — takes 5-10 min)
 
-4. Copy the printed local keys into a new .env.local file
-   SUPABASE_URL=http://127.0.0.1:54321
-   SUPABASE_ANON_KEY=<from supabase start output>
-   SUPABASE_SERVICE_ROLE_KEY=<from supabase start output>
+```bash
+supabase start
+```
+
+Downloads Docker images on first run (typically 5–10 minutes).
+
+4. Copy the printed local keys into a new `.env.local` file
+
+```env
+SUPABASE_URL=http://127.0.0.1:54321
+SUPABASE_ANON_KEY=<from supabase start output>
+SUPABASE_SERVICE_ROLE_KEY=<from supabase start output>
+```
 
 5. Open local Supabase Studio
-   http://127.0.0.1:54323
 
-### Daily commands
+```text
+http://127.0.0.1:54323
+```
 
-  supabase start          start local Supabase
-  supabase stop           stop local Supabase
-  supabase db reset       wipe and re-apply all migrations + seed
-  supabase status         print local URLs and keys again
-  supabase migration new  create a new migration file
+## Daily Commands
 
-### Making schema changes
+| Command | Purpose |
+|----------|----------|
+| `supabase start` | Start local Supabase |
+| `supabase stop` | Stop local Supabase |
+| `supabase db reset` | Wipe and re-apply all migrations + seed |
+| `supabase status` | Print local URLs and keys |
+| `supabase migration new <name>` | Create a new migration file |
+
+## Making Schema Changes
 
 Never edit tables directly in the dashboard.
 
-1. supabase migration new describe_your_change
-2. Write ALTER TABLE SQL in the new migration file
-3. supabase db reset  (test locally)
-4. git add, commit, push
-5. Teammates run: supabase db reset
-6. Deploy to cloud: supabase db push
+1. Create a migration
 
-### Pulling cloud schema changes
+```bash
+supabase migration new describe_your_change
+```
 
-If someone pushed a migration to cloud that you don't have locally:
-  git pull
-  supabase db reset
+2. Write your SQL changes in the new migration file.
+
+3. Test locally
+
+```bash
+supabase db reset
+```
+
+4. Commit and push
+
+```bash
+git add .
+git commit -m "Describe change"
+git push
+```
+
+5. Teammates apply changes
+
+```bash
+git pull
+supabase db reset
+```
+
+6. Deploy to cloud
+
+```bash
+supabase db push
+```
+
+## Pulling Teammate Schema Changes
+
+```bash
+git pull
+supabase db reset
+```
