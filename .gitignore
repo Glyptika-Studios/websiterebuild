@@ -6,3 +6,5 @@
 # Supabase local temp files
 supabase/.temp/
 supabase/.branches/
+.DS_Store
+**/.DS_Store
