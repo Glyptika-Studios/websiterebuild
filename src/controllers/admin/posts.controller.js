@@ -1,6 +1,28 @@
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import {
+  formatPostWithTags,
+  formatPostsWithTags,
+  getPostIdsForTags,
+  POST_WITH_TAGS_SELECT,
+  syncPostTags,
+} from "../../utils/postTags.js";
+
+async function getPostByIdOrThrow(supabase, id) {
+  const { data, error } = await supabase
+    .from("posts")
+    .select(POST_WITH_TAGS_SELECT)
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    if (error.code === "PGRST116") throw new ApiError(404, "Post not found");
+    throw new ApiError(500, error.message);
+  }
+
+  return data;
+}
 
 export const getAdminPosts = asyncHandler(async (req, res) => {
   const { type, category_id, featured, tags, search, page = 1, limit = 20 } = req.query;
@@ -10,14 +32,29 @@ export const getAdminPosts = asyncHandler(async (req, res) => {
   const from = (pg - 1) * lim;
   const to = from + lim - 1;
 
+  const matchingPostIds = tags ? await getPostIdsForTags(req.supabase, tags) : null;
+
+  if (Array.isArray(matchingPostIds) && matchingPostIds.length === 0) {
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          posts: [],
+          pagination: { page: pg, limit: lim, total: 0, totalPages: 0 },
+        },
+        "Admin posts retrieved successfully"
+      )
+    );
+  }
+
   let query = req.supabase
     .from("posts")
-    .select("*, category:categories(id, label, slug)", { count: "exact" });
+    .select(POST_WITH_TAGS_SELECT, { count: "exact" });
 
   if (type) query = query.eq("type", type);
   if (category_id) query = query.eq("category_id", category_id);
   if (featured === "true") query = query.eq("featured", true);
-  if (tags) query = query.contains("tags", tags.split(","));
+  if (Array.isArray(matchingPostIds)) query = query.in("id", matchingPostIds);
   if (search) {
     query = query.or(`title.ilike.%${search}%,excerpt.ilike.%${search}%`);
   }
@@ -28,7 +65,7 @@ export const getAdminPosts = asyncHandler(async (req, res) => {
   if (error) throw new ApiError(500, error.message);
 
   const resultData = {
-    posts: data,
+    posts: formatPostsWithTags(data),
     pagination: {
       page: pg,
       limit: lim,
@@ -41,46 +78,57 @@ export const getAdminPosts = asyncHandler(async (req, res) => {
 });
 
 export const getAdminPostById = asyncHandler(async (req, res) => {
-  const { data, error } = await req.supabase
-    .from("posts")
-    .select("*, category:categories(id, label, slug)")
-    .eq("id", req.params.id)
-    .single();
-
-  if (error) {
-    if (error.code === "PGRST116") throw new ApiError(404, "Post not found");
-    else throw new ApiError(500, error.message);
-  }
-
-  return res.status(200).json(new ApiResponse(200, data, "Post retrieved successfully"));
+  const data = await getPostByIdOrThrow(req.supabase, req.params.id);
+  return res.status(200).json(new ApiResponse(200, formatPostWithTags(data), "Post retrieved successfully"));
 });
 
 export const createAdminPost = asyncHandler(async (req, res) => {
+  const { tags = [], ...postData } = req.validated;
   const { data, error } = await req.supabase
     .from("posts")
-    .insert({ ...req.validated, author_id: req.user.id })
-    .select("*, category:categories(id, label, slug)")
+    .insert({ ...postData, author_id: req.user.id })
+    .select("id")
     .single();
 
   if (error) throw new ApiError(500, error.message);
 
-  return res.status(201).json(new ApiResponse(201, data, "Post created successfully"));
+  try {
+    await syncPostTags(req.supabase, data.id, tags);
+  } catch (tagError) {
+    await req.supabase.from("posts").delete().eq("id", data.id);
+    throw tagError;
+  }
+
+  const post = await getPostByIdOrThrow(req.supabase, data.id);
+  return res.status(201).json(new ApiResponse(201, formatPostWithTags(post), "Post created successfully"));
 });
 
 export const updateAdminPost = asyncHandler(async (req, res) => {
-  const { data, error } = await req.supabase
-    .from("posts")
-    .update(req.validated)
-    .eq("id", req.params.id)
-    .select("*, category:categories(id, label, slug)")
-    .single();
+  const { tags, ...postData } = req.validated;
+  const hasPostData = Object.keys(postData).length > 0;
 
-  if (error) {
-    if (error.code === "PGRST116") throw new ApiError(404, "Post not found");
-    throw new ApiError(500, error.message);
+  if (hasPostData) {
+    const { error } = await req.supabase
+      .from("posts")
+      .update(postData)
+      .eq("id", req.params.id)
+      .select("id")
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") throw new ApiError(404, "Post not found");
+      throw new ApiError(500, error.message);
+    }
+  } else {
+    await getPostByIdOrThrow(req.supabase, req.params.id);
   }
 
-  return res.status(200).json(new ApiResponse(200, data, "Post updated successfully"));
+  if (tags !== undefined) {
+    await syncPostTags(req.supabase, req.params.id, tags);
+  }
+
+  const post = await getPostByIdOrThrow(req.supabase, req.params.id);
+  return res.status(200).json(new ApiResponse(200, formatPostWithTags(post), "Post updated successfully"));
 });
 
 export const deleteAdminPost = asyncHandler(async (req, res) => {

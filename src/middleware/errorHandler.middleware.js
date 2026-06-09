@@ -4,7 +4,9 @@ export function errorHandler(err, _req, res, _next) {
   let error = err;
 
   if (!(error instanceof ApiError)) {
-    const statusCode = error.statusCode || error instanceof Error ? 400 : 500;
+    const isMulterError = error.name === "MulterError";
+    const multerStatusCode = error.code === "LIMIT_FILE_SIZE" ? 413 : 400;
+    const statusCode = error.statusCode || error.status || (isMulterError ? multerStatusCode : 500);
     const message = error.message || "Something went wrong";
     error = new ApiError(statusCode, message, error?.errors || [], error.stack);
   }

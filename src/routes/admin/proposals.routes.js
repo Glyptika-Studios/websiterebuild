@@ -10,14 +10,13 @@ import {
 } from "../../controllers/admin/proposals.controller.js";
 
 const router = Router();
-router.use(requireRole(["superadmin", "editor", "viewer"]));
 
 router.route("/")
-  .get(getAdminProposals);
+  .get(requireRole(["superadmin", "editor", "viewer"]), getAdminProposals);
 
 router.route("/:id")
-  .get(getAdminProposalById)
-  .patch(validate(updateProposalSchema), updateAdminProposal)
-  .delete(deleteAdminProposal);
+  .get(requireRole(["superadmin", "editor", "viewer"]), getAdminProposalById)
+  .patch(requireRole(["superadmin", "editor"]), validate(updateProposalSchema), updateAdminProposal)
+  .delete(requireRole(["superadmin", "editor"]), deleteAdminProposal);
 
 export default router;
