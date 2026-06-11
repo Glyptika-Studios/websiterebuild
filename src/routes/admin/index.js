@@ -9,6 +9,7 @@ import socialLinksRouter from "./socialLinks.routes.js";
 import categoriesRouter from "./categories.routes.js";
 import pageContentRouter from "./pageContent.routes.js";
 import productsRouter from "./products.routes.js";
+import projectsRouter from "./projects.routes.js";
 
 const router = Router();
 router.use(authenticate);
@@ -21,5 +22,6 @@ router.use("/social-links", socialLinksRouter);
 router.use("/categories", categoriesRouter);
 router.use("/pages", pageContentRouter);
 router.use("/products", productsRouter);
+router.use("/projects", projectsRouter);
 
 export default router;

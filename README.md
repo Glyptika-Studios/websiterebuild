@@ -11,7 +11,7 @@
 ## Features Developed
 
 *   **Public API**: Open endpoints for retrieving posts, categories, tags, services, products, projects, and submitting proposals.
-*   **Admin API**: Secure, authenticated endpoints for managing posts, proposals, media, tags, social links, categories, products, and page content.
+*   **Admin API**: Secure, authenticated endpoints for managing posts, proposals, media, tags, social links, categories, products, projects, and page content.
 *   **Post Tags**: Posts now use normalized tags through `tags` and `post_tags`, while API responses still return a simple `tags` array.
 *   **Media Uploads**: Admin users can upload image, video, and audio files to the Supabase `media` storage bucket using multipart form uploads. Uploads are tracked in the `media_files` table.
 *   **Categories**: Categories support scoped management for `post`, `product`, `service`, and `project` content. Public category responses only return active categories.
@@ -75,6 +75,11 @@
 *   `POST /api/v1/admin/products`
 *   `PUT /api/v1/admin/products/:id`
 *   `DELETE /api/v1/admin/products/:id`
+*   `GET /api/v1/admin/projects`
+*   `GET /api/v1/admin/projects/:id`
+*   `POST /api/v1/admin/projects`
+*   `PUT /api/v1/admin/projects/:id`
+*   `DELETE /api/v1/admin/projects/:id`
 *   `GET /api/v1/admin/social-links`
 *   `PUT /api/v1/admin/social-links/:platform`
 *   `GET /api/v1/admin/pages`
