@@ -101,7 +101,7 @@ export const updatePage = asyncHandler(async (req, res) => {
     .update({
       content,
       updated_by: req.user.id,
-      updated_at: new Date().toISOString(),
+      
     })
     .eq("page", key)
     .select("id, page, content, updated_at, updated_by")

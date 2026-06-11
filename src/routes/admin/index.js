@@ -7,6 +7,7 @@ import mediaRoutes from "./media.routes.js";
 import tagsRouter from "./tags.routes.js";
 import socialLinksRouter from "./socialLinks.routes.js";
 import categoriesRouter from "./categories.routes.js";
+import pageContentRouter from "./pageContent.routes.js";
 
 const router = Router();
 router.use(authenticate);
@@ -17,5 +18,6 @@ router.use("/media", mediaRoutes);
 router.use("/tags", tagsRouter);
 router.use("/social-links", socialLinksRouter);
 router.use("/categories", categoriesRouter);
+router.use("/pages", pageContentRouter);
 
 export default router;
