@@ -1,6 +1,7 @@
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { recordAuditLog } from "../../utils/auditLog.js";
 import {
   uploadToMediaBucket,
   deleteFromMediaBucket,
@@ -15,6 +16,18 @@ export const uploadMedia = asyncHandler(async (req, res) => {
   }
 
   const uploaded = await uploadToMediaBucket(file, req.body.folder, req.user.id);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "CREATE",
+    entity: "media_files",
+    entityId: uploaded.id,
+    metadata: {
+      file_name: uploaded.file_name,
+      media_type: uploaded.media_type,
+      storage_path: uploaded.storage_path,
+    },
+  });
 
   return res.status(201).json(
     new ApiResponse(201, uploaded, "Media uploaded successfully")
@@ -48,6 +61,14 @@ export const deleteMedia = asyncHandler(async (req, res) => {
   }
 
   const deleted = await deleteFromMediaBucket(id);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "DELETE",
+    entity: "media_files",
+    entityId: deleted.id,
+    metadata: deleted,
+  });
 
   return res.status(200).json(
     new ApiResponse(200, deleted, "Media file deleted successfully")

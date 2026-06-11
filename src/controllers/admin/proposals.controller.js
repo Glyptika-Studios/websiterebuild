@@ -2,6 +2,8 @@ import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { parsePagination } from "../../utils/pagination.js";
+import { recordAuditLog } from "../../utils/auditLog.js";
+import { buildIlikeOrFilter } from "../../utils/queryFilters.js";
 
 export const getAdminProposals = asyncHandler(async (req, res) => {
   const { status, priority, source_channel, search } = req.query;
@@ -15,9 +17,8 @@ export const getAdminProposals = asyncHandler(async (req, res) => {
   if (status) query = query.eq("status", status);
   if (priority) query = query.eq("priority", priority);
   if (source_channel) query = query.eq("source_channel", source_channel);
-  if (search) {
-    query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%`);
-  }
+  const searchFilter = buildIlikeOrFilter(["name", "email"], search);
+  if (searchFilter) query = query.or(searchFilter);
 
   query = query.order("created_at", { ascending: false }).range(from, to);
 
@@ -93,6 +94,14 @@ export const updateAdminProposal = asyncHandler(async (req, res) => {
     throw new ApiError(500, error.message);
   }
 
+  await recordAuditLog({
+    user: req.user,
+    action: "UPDATE",
+    entity: "proposals",
+    entityId: data.id,
+    metadata: updateData,
+  });
+
   return res.status(200).json(new ApiResponse(200, data, "Proposal updated successfully"));
 });
 
@@ -108,6 +117,14 @@ export const deleteAdminProposal = asyncHandler(async (req, res) => {
     if (error.code === "PGRST116") throw new ApiError(404, "Proposal not found");
     throw new ApiError(500, error.message);
   }
+
+  await recordAuditLog({
+    user: req.user,
+    action: "DELETE",
+    entity: "proposals",
+    entityId: data.id,
+    metadata: { id: data.id },
+  });
 
   return res.status(200).json(new ApiResponse(200, { id: data.id, deleted: true }, "Proposal deleted successfully"));
 });

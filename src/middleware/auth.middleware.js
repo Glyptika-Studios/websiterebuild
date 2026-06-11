@@ -5,11 +5,16 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 export const authenticate = asyncHandler(async (req, res, next) => {
   const header = req.headers.authorization;
 
-  if (!header || !header.startsWith("Bearer ")) {
+  if (!header || typeof header !== "string" || !header.startsWith("Bearer ")) {
     throw new ApiError(401, "Missing Authorization header");
   }
 
-  const token = header.replace("Bearer ", "");
+  const token = header.slice("Bearer ".length).trim();
+
+  if (!token || token.includes(" ")) {
+    throw new ApiError(401, "Invalid Authorization header");
+  }
+
   const supabase = createUserClient(token);
 
   const { data, error } = await supabase.auth.getUser();

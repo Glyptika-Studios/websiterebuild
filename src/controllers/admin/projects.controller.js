@@ -3,6 +3,8 @@ import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { parsePagination } from "../../utils/pagination.js";
+import { recordAuditLog } from "../../utils/auditLog.js";
+import { toIlikePattern } from "../../utils/queryFilters.js";
 
 const PROJECT_SELECT =
   "id, title, category_id, active, publish, display_order, category:categories(id, label, slug)";
@@ -41,19 +43,6 @@ async function ensureProjectCategory(categoryId) {
   }
 }
 
-async function logAudit(action, entityId, metadata) {
-  try {
-    await supabaseAdmin.from("audit_logs").insert({
-      action,
-      entity: "projects",
-      entity_id: String(entityId),
-      metadata,
-    });
-  } catch (error) {
-    console.error("Project audit log failed:", error.message);
-  }
-}
-
 function handleProjectWriteError(error) {
   if (error.code === "23505") {
     throw new ApiError(409, "A project with this unique value already exists");
@@ -84,7 +73,8 @@ export const getProjects = asyncHandler(async (req, res) => {
   if (published === "true" || published === "false") {
     query = query.eq("publish", published === "true");
   }
-  if (search) query = query.ilike("title", `%${search}%`);
+  const searchPattern = toIlikePattern(search);
+  if (searchPattern) query = query.ilike("title", searchPattern);
 
   query = query
     .order("display_order", { ascending: true })
@@ -119,7 +109,13 @@ export const createProject = asyncHandler(async (req, res) => {
 
   if (error) handleProjectWriteError(error);
 
-  await logAudit("CREATE", data.id, { title: data.title, category_id: data.category_id });
+  await recordAuditLog({
+    user: req.user,
+    action: "CREATE",
+    entity: "projects",
+    entityId: data.id,
+    metadata: { title: data.title, category_id: data.category_id },
+  });
 
   return res.status(201).json(new ApiResponse(201, data, "Project created successfully"));
 });
@@ -140,7 +136,13 @@ export const updateProject = asyncHandler(async (req, res) => {
 
   if (error) handleProjectWriteError(error);
 
-  await logAudit("UPDATE", data.id, req.validated);
+  await recordAuditLog({
+    user: req.user,
+    action: "UPDATE",
+    entity: "projects",
+    entityId: data.id,
+    metadata: req.validated,
+  });
 
   return res.status(200).json(new ApiResponse(200, data, "Project updated successfully"));
 });
@@ -164,7 +166,13 @@ export const deleteProject = asyncHandler(async (req, res) => {
     throw new ApiError(500, error.message);
   }
 
-  await logAudit("DELETE", project.id, { title: project.title });
+  await recordAuditLog({
+    user: req.user,
+    action: "DELETE",
+    entity: "projects",
+    entityId: project.id,
+    metadata: { title: project.title },
+  });
 
   return res.status(200).json(new ApiResponse(200, { id: project.id }, "Project deleted successfully"));
 });

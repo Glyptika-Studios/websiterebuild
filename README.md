@@ -11,7 +11,8 @@
 ## Features Developed
 
 *   **Public API**: Open endpoints for retrieving posts, categories, tags, services, products, projects, and submitting proposals.
-*   **Admin API**: Secure, authenticated endpoints for managing posts, proposals, media, tags, social links, categories, products, projects, and page content.
+*   **Admin API**: Secure, authenticated endpoints for managing posts, proposals, media, tags, social links, categories, products, projects, page content, and audit logs.
+*   **Admin Auth**: Login, logout, and current-admin endpoints backed by Supabase Auth, admin role checks, generic auth failures, and login throttling.
 *   **Post Tags**: Posts now use normalized tags through `tags` and `post_tags`, while API responses still return a simple `tags` array.
 *   **Media Uploads**: Admin users can upload image, video, and audio files to the Supabase `media` storage bucket using multipart form uploads. Uploads are tracked in the `media_files` table.
 *   **Categories**: Categories support scoped management for `post`, `product`, `service`, and `project` content. Public category responses only return active categories.
@@ -25,13 +26,16 @@
 *   **Role-Based Access Control (RBAC)**: Enforces three distinct user roles (`superadmin`, `editor`, `viewer`). 
     *   `auth.middleware.js` identifies the user and fetches their role from the database.
     *   `authorize.middleware.js` protects specific routes based on the role (e.g., viewers can only read, editors/superadmins can read and write).
+*   **Audit Logs**: Admin login/logout and protected write actions are recorded in `audit_logs`. Superadmins can view logs with pagination and filters.
+*   **Security Hardening**: Supabase clients do not persist server-side sessions, login attempts are rate-limited, bearer headers are validated, JSON request bodies are capped, and search filters are sanitized before Supabase query construction.
 
 ## Getting Started
 
 1.  Clone the repository.
 2.  Run `npm install` to install dependencies.
 3.  Copy `.env.example` to `.env` and fill in your Supabase credentials.
-4.  Run `npm run start` to start the Express server.
+4.  Set `CORS_ORIGIN` to your dashboard origin in production. Use a comma-separated list for multiple allowed origins.
+5.  Run `npm run start` to start the Express server.
 
 ## Current Endpoints
 
@@ -47,7 +51,14 @@
 *   `GET /api/v1/projects`
 *   `POST /api/v1/proposals`
 
+### Admin Auth
+*   `POST /api/v1/admin/auth/login`
+*   `POST /api/v1/admin/auth/logout`
+*   `GET /api/v1/admin/auth/me`
+
 ### Admin (Requires JWT)
+*   `GET /api/v1/admin/audit-logs`
+*   `GET /api/v1/admin/audit-logs/:id`
 *   `GET /api/v1/admin/posts`
 *   `GET /api/v1/admin/posts/:id`
 *   `POST /api/v1/admin/posts`

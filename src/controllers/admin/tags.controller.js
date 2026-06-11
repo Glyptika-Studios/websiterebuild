@@ -2,6 +2,8 @@ import { supabaseAdmin } from "../../config/supabase.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { recordAuditLog } from "../../utils/auditLog.js";
+import { buildIlikeOrFilter } from "../../utils/queryFilters.js";
 
 async function getTagByIdOrThrow(id) {
   const { data, error } = await supabaseAdmin
@@ -30,9 +32,8 @@ export const getTags = asyncHandler(async (req, res) => {
     .from("tags")
     .select("id, slug, label, created_at", { count: "exact" });
 
-  if (search) {
-    query = query.or(`label.ilike.%${search}%,slug.ilike.%${search}%`);
-  }
+  const searchFilter = buildIlikeOrFilter(["label", "slug"], search);
+  if (searchFilter) query = query.or(searchFilter);
 
   query = query.order("label", { ascending: true }).range(from, to);
 
@@ -65,6 +66,14 @@ export const createTag = asyncHandler(async (req, res) => {
     throw new ApiError(500, error.message);
   }
 
+  await recordAuditLog({
+    user: req.user,
+    action: "CREATE",
+    entity: "tags",
+    entityId: data.id,
+    metadata: { label: data.label, slug: data.slug },
+  });
+
   return res.status(201).json(new ApiResponse(201, data, "Tag created successfully"));
 });
 
@@ -82,6 +91,14 @@ export const updateTag = asyncHandler(async (req, res) => {
     if (error.code === "23505") throw new ApiError(409, "A tag with this slug already exists");
     throw new ApiError(500, error.message);
   }
+
+  await recordAuditLog({
+    user: req.user,
+    action: "UPDATE",
+    entity: "tags",
+    entityId: data.id,
+    metadata: req.validated,
+  });
 
   return res.status(200).json(new ApiResponse(200, data, "Tag updated successfully"));
 });
@@ -104,6 +121,14 @@ export const deleteTag = asyncHandler(async (req, res) => {
 
     throw new ApiError(500, error.message);
   }
+
+  await recordAuditLog({
+    user: req.user,
+    action: "DELETE",
+    entity: "tags",
+    entityId: tag.id,
+    metadata: { label: tag.label, slug: tag.slug },
+  });
 
   return res.status(200).json(new ApiResponse(200, { id: tag.id }, "Tag deleted successfully"));
 });

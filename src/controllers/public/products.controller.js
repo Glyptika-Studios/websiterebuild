@@ -2,6 +2,7 @@ import { supabasePublic } from "../../config/supabase.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { toIlikePattern } from "../../utils/queryFilters.js";
 
 export const getProducts = asyncHandler(async (req, res) => {
   const { category_id, published, search } = req.query;
@@ -17,7 +18,8 @@ export const getProducts = asyncHandler(async (req, res) => {
 
   if (published === "true") query = query.eq("publish", true);
   if (category_id) query = query.eq("category_id", category_id);
-  if (search) query = query.ilike("title", `%${search}%`);
+  const searchPattern = toIlikePattern(search);
+  if (searchPattern) query = query.ilike("title", searchPattern);
 
   const { data, error } = await query;
   if (error) throw new ApiError(500, error.message);

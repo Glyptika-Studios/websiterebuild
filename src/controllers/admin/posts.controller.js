@@ -1,7 +1,9 @@
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { recordAuditLog } from "../../utils/auditLog.js";
 import { parsePagination } from "../../utils/pagination.js";
+import { buildIlikeOrFilter } from "../../utils/queryFilters.js";
 import {
   formatPostWithTags,
   formatPostsWithTags,
@@ -53,9 +55,8 @@ export const getAdminPosts = asyncHandler(async (req, res) => {
   if (category_id) query = query.eq("category_id", category_id);
   if (featured === "true") query = query.eq("featured", true);
   if (Array.isArray(matchingPostIds)) query = query.in("id", matchingPostIds);
-  if (search) {
-    query = query.or(`title.ilike.%${search}%,excerpt.ilike.%${search}%`);
-  }
+  const searchFilter = buildIlikeOrFilter(["title", "excerpt"], search);
+  if (searchFilter) query = query.or(searchFilter);
 
   query = query.order("created_at", { ascending: false }).range(from, to);
 
@@ -98,6 +99,14 @@ export const createAdminPost = asyncHandler(async (req, res) => {
   }
 
   const post = await getPostByIdOrThrow(req.supabase, data.id);
+  await recordAuditLog({
+    user: req.user,
+    action: "CREATE",
+    entity: "posts",
+    entityId: data.id,
+    metadata: { title: post.title, type: post.type, tags },
+  });
+
   return res.status(201).json(new ApiResponse(201, formatPostWithTags(post), "Post created successfully"));
 });
 
@@ -126,6 +135,14 @@ export const updateAdminPost = asyncHandler(async (req, res) => {
   }
 
   const post = await getPostByIdOrThrow(req.supabase, req.params.id);
+  await recordAuditLog({
+    user: req.user,
+    action: "UPDATE",
+    entity: "posts",
+    entityId: req.params.id,
+    metadata: { ...postData, ...(tags !== undefined ? { tags } : {}) },
+  });
+
   return res.status(200).json(new ApiResponse(200, formatPostWithTags(post), "Post updated successfully"));
 });
 
@@ -141,6 +158,14 @@ export const deleteAdminPost = asyncHandler(async (req, res) => {
     if (error.code === "PGRST116") throw new ApiError(404, "Post not found");
     throw new ApiError(500, error.message);
   }
+
+  await recordAuditLog({
+    user: req.user,
+    action: "DELETE",
+    entity: "posts",
+    entityId: data.id,
+    metadata: { id: data.id },
+  });
 
   return res.status(200).json(new ApiResponse(200, { id: data.id, deleted: true }, "Post deleted successfully"));
 });

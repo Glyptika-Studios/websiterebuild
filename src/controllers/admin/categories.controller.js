@@ -2,6 +2,8 @@ import { supabaseAdmin } from "../../config/supabase.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { recordAuditLog } from "../../utils/auditLog.js";
+import { toIlikePattern } from "../../utils/queryFilters.js";
 
 const VALID_SCOPES = ["post", "product", "service", "project"];
 
@@ -18,19 +20,6 @@ async function getCategoryByIdOrThrow(id) {
   }
 
   return data;
-}
-
-async function writeAuditLog(action, entityId, metadata) {
-  const { error } = await supabaseAdmin
-    .from("audit_logs")
-    .insert({
-      action,
-      entity: "categories",
-      entity_id: entityId,
-      metadata,
-    });
-
-  if (error) throw new ApiError(500, "Database error: " + error.message);
 }
 
 function handleCategoryWriteError(error) {
@@ -63,7 +52,8 @@ export const getCategories = asyncHandler(async (req, res) => {
 
   if (scope) query = query.eq("scope", scope);
   if (active === "true" || active === "false") query = query.eq("active", active === "true");
-  if (search) query = query.ilike("label", `%${search}%`);
+  const searchPattern = toIlikePattern(search);
+  if (searchPattern) query = query.ilike("label", searchPattern);
 
   query = query
     .order("scope", { ascending: true })
@@ -99,7 +89,13 @@ export const createCategory = asyncHandler(async (req, res) => {
 
   if (error) handleCategoryWriteError(error);
 
-  await writeAuditLog("CREATE", data.id, { label: data.label, scope: data.scope });
+  await recordAuditLog({
+    user: req.user,
+    action: "CREATE",
+    entity: "categories",
+    entityId: data.id,
+    metadata: { label: data.label, scope: data.scope },
+  });
 
   return res.status(201).json(new ApiResponse(201, data, "Category created successfully"));
 });
@@ -118,7 +114,13 @@ export const updateCategory = asyncHandler(async (req, res) => {
 
   if (error) handleCategoryWriteError(error);
 
-  await writeAuditLog("UPDATE", req.params.id, req.validated);
+  await recordAuditLog({
+    user: req.user,
+    action: "UPDATE",
+    entity: "categories",
+    entityId: req.params.id,
+    metadata: req.validated,
+  });
 
   return res.status(200).json(new ApiResponse(200, data, "Category updated successfully"));
 });
@@ -142,7 +144,13 @@ export const deleteCategory = asyncHandler(async (req, res) => {
     throw new ApiError(500, error.message);
   }
 
-  await writeAuditLog("DELETE", category.id, { label: category.label, scope: category.scope });
+  await recordAuditLog({
+    user: req.user,
+    action: "DELETE",
+    entity: "categories",
+    entityId: category.id,
+    metadata: { label: category.label, scope: category.scope },
+  });
 
   return res.status(200).json(new ApiResponse(200, { id: category.id }, "Category deleted successfully"));
 });

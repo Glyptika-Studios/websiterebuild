@@ -3,6 +3,7 @@ import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { parsePagination } from "../../utils/pagination.js";
+import { buildIlikeOrFilter } from "../../utils/queryFilters.js";
 import {
   formatPostWithTags,
   formatPostsWithTags,
@@ -41,9 +42,8 @@ export const getPosts = asyncHandler(async (req, res) => {
   if (category_id) query = query.eq("category_id", category_id);
   if (featured === "true") query = query.eq("featured", true);
   if (Array.isArray(matchingPostIds)) query = query.in("id", matchingPostIds);
-  if (search) {
-    query = query.or(`title.ilike.%${search}%,excerpt.ilike.%${search}%`);
-  }
+  const searchFilter = buildIlikeOrFilter(["title", "excerpt"], search);
+  if (searchFilter) query = query.or(searchFilter);
 
   query = query.order("published_at", { ascending: false }).range(from, to);
 

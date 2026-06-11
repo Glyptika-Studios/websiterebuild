@@ -2,6 +2,7 @@ import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { supabaseAdmin } from "../../config/supabase.js";
+import { recordAuditLog } from "../../utils/auditLog.js";
 
 // Valid page keys from page_key ENUM
 const VALID_PAGE_KEYS = ["home", "services", "xplor", "ims", "team"];
@@ -13,23 +14,6 @@ function validatePageKey(key) {
       400,
       `Invalid page key. Must be one of: ${VALID_PAGE_KEYS.join(", ")}`
     );
-  }
-}
-
-// Helper for audit logging — failure must not fail the main request
-async function logAudit(user, action, entity, entityId, metadata = null) {
-  try {
-    await supabaseAdmin.from("audit_logs").insert({
-      user_id: user.id,
-      user_email: user.email,
-      user_name: user.user_metadata?.name || user.email,
-      action,
-      entity,
-      entity_id: String(entityId),
-      metadata,
-    });
-  } catch (e) {
-    console.error("Audit log failed:", e.message);
   }
 }
 
@@ -110,8 +94,12 @@ export const updatePage = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Failed to update page: " + error.message);
   }
 
-  await logAudit(req.user, "UPDATE", "page_content", key, {
-    page: key,
+  await recordAuditLog({
+    user: req.user,
+    action: "UPDATE",
+    entity: "page_content",
+    entityId: key,
+    metadata: { page: key },
   });
 
   return res
