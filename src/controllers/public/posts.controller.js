@@ -2,6 +2,7 @@ import { supabasePublic } from "../../config/supabase.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { parsePagination } from "../../utils/pagination.js";
 import {
   formatPostWithTags,
   formatPostsWithTags,
@@ -10,12 +11,12 @@ import {
 } from "../../utils/postTags.js";
 
 export const getPosts = asyncHandler(async (req, res) => {
-  const { type, category_id, featured, tags, search, page = 1, limit = 10 } = req.query;
+  const { type, category_id, featured, tags, search } = req.query;
 
-  const pg = Math.max(1, Number(page));
-  const lim = Math.min(50, Math.max(1, Number(limit)));
-  const from = (pg - 1) * lim;
-  const to = from + lim - 1;
+  const { page, limit, from, to } = parsePagination(req.query, {
+    defaultLimit: 10,
+    maxLimit: 50,
+  });
 
   const matchingPostIds = tags ? await getPostIdsForTags(supabasePublic, tags) : null;
 
@@ -25,7 +26,7 @@ export const getPosts = asyncHandler(async (req, res) => {
         200,
         {
           posts: [],
-          pagination: { page: pg, limit: lim, total: 0, totalPages: 0 },
+          pagination: { page, limit, total: 0, totalPages: 0 },
         },
         "Posts retrieved successfully"
       )
@@ -52,10 +53,10 @@ export const getPosts = asyncHandler(async (req, res) => {
   const resultData = {
     posts: formatPostsWithTags(data),
     pagination: {
-      page: pg,
-      limit: lim,
+      page,
+      limit,
       total: count,
-      totalPages: Math.ceil(count / lim),
+      totalPages: Math.ceil(count / limit),
     },
   };
 

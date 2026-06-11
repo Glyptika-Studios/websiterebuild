@@ -79,7 +79,7 @@ export const getPageByKey = asyncHandler(async (req, res) => {
 // No manual versioning needed here.
 export const updatePage = asyncHandler(async (req, res) => {
   const { key } = req.params;
-  const { content } = req.body;
+  const { content } = req.validated;
 
   validatePageKey(key);
 
@@ -101,7 +101,6 @@ export const updatePage = asyncHandler(async (req, res) => {
     .update({
       content,
       updated_by: req.user.id,
-      
     })
     .eq("page", key)
     .select("id, page, content, updated_at, updated_by")
@@ -147,10 +146,10 @@ export const getPageHistory = asyncHandler(async (req, res) => {
   }
 
   return res.status(200).json(
-    new ApiResponse(200, data, "Page history fetched successfully", {
-      page,
-      limit,
-      total: count,
-    })
+    new ApiResponse(
+      200,
+      { items: data, meta: { page, limit, total: count } },
+      "Page history fetched successfully"
+    )
   );
 });

@@ -1,14 +1,12 @@
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { parsePagination } from "../../utils/pagination.js";
 
 export const getAdminProposals = asyncHandler(async (req, res) => {
-  const { status, priority, source_channel, search, page = 1, limit = 20 } = req.query;
+  const { status, priority, source_channel, search } = req.query;
 
-  const pg = Math.max(1, Number(page));
-  const lim = Math.min(100, Math.max(1, Number(limit)));
-  const from = (pg - 1) * lim;
-  const to = from + lim - 1;
+  const { page, limit, from, to } = parsePagination(req.query);
 
   let query = req.supabase
     .from("proposals")
@@ -29,10 +27,10 @@ export const getAdminProposals = asyncHandler(async (req, res) => {
   const resultData = {
     proposals: data,
     pagination: {
-      page: pg,
-      limit: lim,
+      page,
+      limit,
       total: count,
-      totalPages: Math.ceil(count / lim),
+      totalPages: Math.ceil(count / limit),
     },
   };
 

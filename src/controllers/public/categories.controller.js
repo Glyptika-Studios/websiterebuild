@@ -15,6 +15,7 @@ export const getCategories = asyncHandler(async (req, res) => {
   let query = supabasePublic
     .from("categories")
     .select("id, label, scope, slug, display_order")
+    .eq("active", true)
     .order("display_order", { ascending: true })
     .order("label", { ascending: true });
 

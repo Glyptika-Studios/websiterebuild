@@ -7,7 +7,7 @@ import {
 } from "../../controllers/admin/pageContent.controller.js";
 import { requireRole } from "../../middleware/authorize.middleware.js";
 import { validate } from "../../middleware/validate.middleware.js";
-import { updatePageSchema } from "../../validators/admin/pageContent.validator.js";
+import { updatePageSchema } from "../../validators/pageContent.validator.js";
 
 const router = Router();
 

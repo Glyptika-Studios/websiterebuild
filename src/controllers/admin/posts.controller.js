@@ -1,6 +1,7 @@
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { parsePagination } from "../../utils/pagination.js";
 import {
   formatPostWithTags,
   formatPostsWithTags,
@@ -25,12 +26,9 @@ async function getPostByIdOrThrow(supabase, id) {
 }
 
 export const getAdminPosts = asyncHandler(async (req, res) => {
-  const { type, category_id, featured, tags, search, page = 1, limit = 20 } = req.query;
+  const { type, category_id, featured, tags, search } = req.query;
 
-  const pg = Math.max(1, Number(page));
-  const lim = Math.min(100, Math.max(1, Number(limit)));
-  const from = (pg - 1) * lim;
-  const to = from + lim - 1;
+  const { page, limit, from, to } = parsePagination(req.query);
 
   const matchingPostIds = tags ? await getPostIdsForTags(req.supabase, tags) : null;
 
@@ -40,7 +38,7 @@ export const getAdminPosts = asyncHandler(async (req, res) => {
         200,
         {
           posts: [],
-          pagination: { page: pg, limit: lim, total: 0, totalPages: 0 },
+          pagination: { page, limit, total: 0, totalPages: 0 },
         },
         "Admin posts retrieved successfully"
       )
@@ -67,10 +65,10 @@ export const getAdminPosts = asyncHandler(async (req, res) => {
   const resultData = {
     posts: formatPostsWithTags(data),
     pagination: {
-      page: pg,
-      limit: lim,
+      page,
+      limit,
       total: count,
-      totalPages: Math.ceil(count / lim),
+      totalPages: Math.ceil(count / limit),
     },
   };
 

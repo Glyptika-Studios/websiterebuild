@@ -4,7 +4,7 @@ import { requireRole } from "../../middleware/authorize.middleware.js";
 import {
   createCategorySchema,
   updateCategorySchema,
-} from "../../validators/admin/categories.validator.js";
+} from "../../validators/categories.validator.js";
 import {
   getCategories,
   getCategoryById,

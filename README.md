@@ -10,13 +10,18 @@
 
 ## Features Developed
 
-*   **Public API**: Open endpoints for retrieving posts, categories, tags, services, and submitting proposals.
-*   **Admin API**: Secure, authenticated endpoints for managing posts, proposals, and media uploads.
+*   **Public API**: Open endpoints for retrieving posts, categories, tags, services, products, projects, and submitting proposals.
+*   **Admin API**: Secure, authenticated endpoints for managing posts, proposals, media, tags, social links, categories, products, and page content.
 *   **Post Tags**: Posts now use normalized tags through `tags` and `post_tags`, while API responses still return a simple `tags` array.
-*   **Media Uploads**: Admin users can upload images/PDFs to the Supabase `media` storage bucket using multipart form uploads.
+*   **Media Uploads**: Admin users can upload image, video, and audio files to the Supabase `media` storage bucket using multipart form uploads. Uploads are tracked in the `media_files` table.
+*   **Categories**: Categories support scoped management for `post`, `product`, `service`, and `project` content. Public category responses only return active categories.
+*   **Tags**: Tags can be managed directly by admins and are also created/synced automatically from post tag payloads.
+*   **Page Content**: Admin users can list and update editable page content for the supported page keys, with database-backed version history.
+*   **Social Links**: Admin users can read and update supported social URLs for `linkedin`, `instagram`, and `discord`.
+*   **Products and Projects**: Public lookup endpoints expose active products and projects for browsing and proposal forms.
 *   **Supabase Integration**: Implements a three client strategy to respect Row Level Security (RLS).
 *   **Error Handling**: A centralized error handling system that catches all unhandled promise rejections and returns standardized, predictable JSON error responses.
-*   **Data Validation**: Incoming POST and PATCH requests are validated with Zod, including post tags and proposal budget/source rules.
+*   **Data Validation**: Incoming POST, PUT, and PATCH requests are validated with Zod, including post tags, proposal budget/source rules, category scopes, page content JSON, and HTTPS social links.
 *   **Role-Based Access Control (RBAC)**: Enforces three distinct user roles (`superadmin`, `editor`, `viewer`). 
     *   `auth.middleware.js` identifies the user and fetches their role from the database.
     *   `authorize.middleware.js` protects specific routes based on the role (e.g., viewers can only read, editors/superadmins can read and write).
@@ -38,6 +43,8 @@
 *   `GET /api/v1/categories`
 *   `GET /api/v1/tags`
 *   `GET /api/v1/services`
+*   `GET /api/v1/products`
+*   `GET /api/v1/projects`
 *   `POST /api/v1/proposals`
 
 ### Admin (Requires JWT)
@@ -50,4 +57,27 @@
 *   `GET /api/v1/admin/proposals/:id`
 *   `PATCH /api/v1/admin/proposals/:id`
 *   `DELETE /api/v1/admin/proposals/:id`
+*   `GET /api/v1/admin/media`
 *   `POST /api/v1/admin/media/upload`
+*   `DELETE /api/v1/admin/media/:id`
+*   `GET /api/v1/admin/tags`
+*   `GET /api/v1/admin/tags/:id`
+*   `POST /api/v1/admin/tags`
+*   `PUT /api/v1/admin/tags/:id`
+*   `DELETE /api/v1/admin/tags/:id`
+*   `GET /api/v1/admin/categories`
+*   `GET /api/v1/admin/categories/:id`
+*   `POST /api/v1/admin/categories`
+*   `PUT /api/v1/admin/categories/:id`
+*   `DELETE /api/v1/admin/categories/:id`
+*   `GET /api/v1/admin/products`
+*   `GET /api/v1/admin/products/:id`
+*   `POST /api/v1/admin/products`
+*   `PUT /api/v1/admin/products/:id`
+*   `DELETE /api/v1/admin/products/:id`
+*   `GET /api/v1/admin/social-links`
+*   `PUT /api/v1/admin/social-links/:platform`
+*   `GET /api/v1/admin/pages`
+*   `GET /api/v1/admin/pages/:key`
+*   `PUT /api/v1/admin/pages/:key`
+*   `GET /api/v1/admin/pages/:key/history`
