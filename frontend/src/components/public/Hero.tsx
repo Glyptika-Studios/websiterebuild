@@ -38,7 +38,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
               <Link
                 href="/request-proposal"
-                className="px-8 py-4 rounded-full text-center font-semibold text-white bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-500 hover:to-teal-450 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 whitespace-nowrap flex-shrink-0"
+                className="px-8 py-4 rounded-full text-center font-semibold text-white bg-blue-600 hover:bg-blue-500 border border-blue-500/40 hover:border-blue-400/60 shadow-[0_0_15px_rgba(37,99,235,0.25)] hover:shadow-[0_0_25px_rgba(37,99,235,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 whitespace-nowrap flex-shrink-0"
               >
                 Request Proposal
               </Link>
