@@ -12,6 +12,7 @@ import categoriesRouter from "./categories.routes.js";
 import pageContentRouter from "./pageContent.routes.js";
 import productsRouter from "./products.routes.js";
 import projectsRouter from "./projects.routes.js";
+import teamRouter from "./team.routes.js";
 
 const router = Router();
 
@@ -28,5 +29,6 @@ router.use("/categories", categoriesRouter);
 router.use("/pages", pageContentRouter);
 router.use("/products", productsRouter);
 router.use("/projects", projectsRouter);
+router.use("/team", teamRouter);
 
 export default router;

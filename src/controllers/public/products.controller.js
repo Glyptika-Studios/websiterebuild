@@ -28,3 +28,23 @@ export const getProducts = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, data, "Products retrieved successfully"));
 });
+
+export const getProductById = asyncHandler(async (req, res) => {
+  const { data, error } = await supabasePublic
+    .from("products")
+    .select(
+      "id, title, category_id, active, publish, display_order, category:categories(id, label, slug)"
+    )
+    .eq("id", req.params.id)
+    .eq("active", true)
+    .single();
+
+  if (error) {
+    if (error.code === "PGRST116") throw new ApiError(404, "Product not found");
+    throw new ApiError(500, error.message);
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, data, "Product retrieved successfully"));
+});

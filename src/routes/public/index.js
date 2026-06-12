@@ -7,6 +7,10 @@ import tagsRoutes from "./tags.routes.js";
 import servicesRoutes from "./services.routes.js";
 import productsRoutes from "./products.routes.js";
 import projectsRoutes from "./projects.routes.js";
+import positionsRoutes from "./positions.routes.js";
+import teamRoutes from "./team.routes.js";
+import socialLinksRoutes from "./socialLinks.routes.js";
+import pagesRoutes from "./pages.routes.js";
 
 const router = Router();
 
@@ -18,5 +22,9 @@ router.use("/tags", tagsRoutes);
 router.use("/services", servicesRoutes);
 router.use("/products", productsRoutes);
 router.use("/projects", projectsRoutes);
+router.use("/positions", positionsRoutes);
+router.use("/team", teamRoutes);
+router.use("/social-links", socialLinksRoutes);
+router.use("/pages", pagesRoutes);
 
 export default router;

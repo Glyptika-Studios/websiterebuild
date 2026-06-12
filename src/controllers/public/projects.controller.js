@@ -28,3 +28,23 @@ export const getProjects = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, data, "Projects retrieved successfully"));
 });
+
+export const getProjectById = asyncHandler(async (req, res) => {
+  const { data, error } = await supabasePublic
+    .from("projects")
+    .select(
+      "id, title, category_id, active, publish, display_order, category:categories(id, label, slug)"
+    )
+    .eq("id", req.params.id)
+    .eq("active", true)
+    .single();
+
+  if (error) {
+    if (error.code === "PGRST116") throw new ApiError(404, "Project not found");
+    throw new ApiError(500, error.message);
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, data, "Project retrieved successfully"));
+});
