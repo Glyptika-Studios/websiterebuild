@@ -57,8 +57,8 @@
 *   `GET /api/v1/admin/auth/me`
 
 ### Admin (Requires JWT)
-*   `GET /api/v1/admin/audit-logs`
-*   `GET /api/v1/admin/audit-logs/:id`
+*   `GET /api/v1/admin/audit_logs`
+*   `GET /api/v1/admin/audit_logs/:id`
 *   `GET /api/v1/admin/posts`
 *   `GET /api/v1/admin/posts/:id`
 *   `POST /api/v1/admin/posts`
@@ -86,13 +86,24 @@
 *   `POST /api/v1/admin/products`
 *   `PUT /api/v1/admin/products/:id`
 *   `DELETE /api/v1/admin/products/:id`
+*   `PATCH /api/v1/admin/products/:id/status`
+*   `GET /api/v1/admin/products/:id/modules`
+*   `POST /api/v1/admin/products/:id/modules`
+*   `PUT /api/v1/admin/products/:id/modules/:mid`
+*   `DELETE /api/v1/admin/products/:id/modules/:mid`
+*   `PATCH /api/v1/admin/products/:id/modules/reorder`
+*   `PUT /api/v1/admin/modules/:mid/pricing/:tier`
 *   `GET /api/v1/admin/projects`
 *   `GET /api/v1/admin/projects/:id`
 *   `POST /api/v1/admin/projects`
 *   `PUT /api/v1/admin/projects/:id`
 *   `DELETE /api/v1/admin/projects/:id`
-*   `GET /api/v1/admin/social-links`
-*   `PUT /api/v1/admin/social-links/:platform`
+*   `PATCH /api/v1/admin/projects/:id/status`
+*   `POST /api/v1/admin/projects/:id/media`
+*   `DELETE /api/v1/admin/projects/:id/media/:emid`
+*   `PATCH /api/v1/admin/projects/:id/media/reorder`
+*   `GET /api/v1/admin/social_links`
+*   `PUT /api/v1/admin/social_links/:platform`
 *   `GET /api/v1/admin/pages`
 *   `GET /api/v1/admin/pages/:key`
 *   `PUT /api/v1/admin/pages/:key`

@@ -2,6 +2,23 @@ import { z } from "zod";
 
 const titleSchema = z.string().trim().min(1).max(200);
 const displayOrderSchema = z.number().int().min(0);
+const jsonSchema = z.union([
+  z.string(),
+  z.number(),
+  z.boolean(),
+  z.null(),
+  z.array(z.unknown()),
+  z.record(z.unknown()),
+]);
+
+export const productStatusSchema = z
+  .object({
+    active: z.boolean().optional(),
+    publish: z.boolean().optional(),
+  })
+  .refine((d) => Object.keys(d).length > 0, {
+    message: "Provide active or publish status",
+  });
 
 export const createProductSchema = z.object({
   title: titleSchema,
@@ -21,4 +38,55 @@ export const updateProductSchema = z
   })
   .refine((d) => Object.keys(d).length > 0, {
     message: "Provide at least one field to update",
+  });
+
+export const createProductModuleSchema = z
+  .object({
+    title: titleSchema,
+    description: z.string().trim().max(5000).optional().nullable(),
+    display_order: displayOrderSchema.default(0),
+    active: z.boolean().default(true),
+    publish: z.boolean().optional(),
+    metadata: z.record(z.unknown()).optional().nullable(),
+  })
+  .catchall(jsonSchema);
+
+export const updateProductModuleSchema = z
+  .object({
+    title: titleSchema.optional(),
+    description: z.string().trim().max(5000).optional().nullable(),
+    display_order: displayOrderSchema.optional(),
+    active: z.boolean().optional(),
+    publish: z.boolean().optional(),
+    metadata: z.record(z.unknown()).optional().nullable(),
+  })
+  .catchall(jsonSchema)
+  .refine((d) => Object.keys(d).length > 0, {
+    message: "Provide at least one field to update",
+  });
+
+export const reorderProductModulesSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        id: z.string().uuid(),
+        display_order: displayOrderSchema,
+      })
+    )
+    .min(1),
+});
+
+export const upsertModulePricingSchema = z
+  .object({
+    price: z.number().min(0).optional(),
+    currency: z.string().trim().min(1).max(10).optional(),
+    label: z.string().trim().min(1).max(120).optional(),
+    description: z.string().trim().max(5000).optional().nullable(),
+    features: z.array(z.unknown()).optional(),
+    active: z.boolean().optional(),
+    metadata: z.record(z.unknown()).optional().nullable(),
+  })
+  .catchall(jsonSchema)
+  .refine((d) => Object.keys(d).length > 0, {
+    message: "Provide at least one pricing field",
   });

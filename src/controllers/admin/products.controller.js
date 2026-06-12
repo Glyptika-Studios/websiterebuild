@@ -8,6 +8,15 @@ import { toIlikePattern } from "../../utils/queryFilters.js";
 
 const PRODUCT_SELECT =
   "id, title, category_id, active, publish, display_order, category:categories(id, label, slug)";
+const VALID_PRICING_TIERS = ["basic", "standard", "premium"];
+const MODULE_MANAGED_FIELDS = ["id", "product_id", "created_at", "updated_at"];
+const PRICING_MANAGED_FIELDS = ["id", "module_id", "tier", "created_at", "updated_at"];
+
+function omitFields(data, fields) {
+  const copy = { ...data };
+  for (const field of fields) delete copy[field];
+  return copy;
+}
 
 async function getProductByIdOrThrow(id) {
   const { data, error } = await supabaseAdmin
@@ -57,6 +66,49 @@ function handleProductWriteError(error) {
   }
 
   throw new ApiError(500, error.message);
+}
+
+function handleModuleWriteError(error) {
+  if (error.code === "23505") {
+    throw new ApiError(409, "A module with this unique value already exists");
+  }
+
+  if (error.code === "23503") {
+    throw new ApiError(400, "Invalid module reference");
+  }
+
+  throw new ApiError(500, error.message);
+}
+
+async function getProductModuleOrThrow(productId, moduleId) {
+  const { data, error } = await supabaseAdmin
+    .from("product_modules")
+    .select("*")
+    .eq("id", moduleId)
+    .eq("product_id", productId)
+    .single();
+
+  if (error) {
+    if (error.code === "PGRST116") throw new ApiError(404, "Product module not found");
+    throw new ApiError(500, error.message);
+  }
+
+  return data;
+}
+
+async function getModuleOrThrow(moduleId) {
+  const { data, error } = await supabaseAdmin
+    .from("product_modules")
+    .select("*")
+    .eq("id", moduleId)
+    .single();
+
+  if (error) {
+    if (error.code === "PGRST116") throw new ApiError(404, "Product module not found");
+    throw new ApiError(500, error.message);
+  }
+
+  return data;
 }
 
 export const getProducts = asyncHandler(async (req, res) => {
@@ -175,4 +227,199 @@ export const deleteProduct = asyncHandler(async (req, res) => {
   });
 
   return res.status(200).json(new ApiResponse(200, { id: product.id }, "Product deleted successfully"));
+});
+
+export const updateProductStatus = asyncHandler(async (req, res) => {
+  await getProductByIdOrThrow(req.params.id);
+
+  const { data, error } = await supabaseAdmin
+    .from("products")
+    .update(req.validated)
+    .eq("id", req.params.id)
+    .select(PRODUCT_SELECT)
+    .single();
+
+  if (error) handleProductWriteError(error);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "UPDATE_STATUS",
+    entity: "products",
+    entityId: data.id,
+    metadata: req.validated,
+  });
+
+  return res.status(200).json(new ApiResponse(200, data, "Product status updated successfully"));
+});
+
+export const getProductModules = asyncHandler(async (req, res) => {
+  await getProductByIdOrThrow(req.params.id);
+
+  const { data, error } = await supabaseAdmin
+    .from("product_modules")
+    .select("*")
+    .eq("product_id", req.params.id)
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) throw new ApiError(500, error.message);
+
+  return res.status(200).json(new ApiResponse(200, data, "Product modules retrieved successfully"));
+});
+
+export const createProductModule = asyncHandler(async (req, res) => {
+  await getProductByIdOrThrow(req.params.id);
+  const moduleData = omitFields(req.validated, MODULE_MANAGED_FIELDS);
+
+  const { data, error } = await supabaseAdmin
+    .from("product_modules")
+    .insert({ ...moduleData, product_id: req.params.id })
+    .select("*")
+    .single();
+
+  if (error) handleModuleWriteError(error);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "CREATE",
+    entity: "product_modules",
+    entityId: data.id,
+    metadata: { product_id: req.params.id, title: data.title },
+  });
+
+  return res.status(201).json(new ApiResponse(201, data, "Product module created successfully"));
+});
+
+export const updateProductModule = asyncHandler(async (req, res) => {
+  await getProductModuleOrThrow(req.params.id, req.params.mid);
+  const moduleData = omitFields(req.validated, MODULE_MANAGED_FIELDS);
+
+  if (Object.keys(moduleData).length === 0) {
+    throw new ApiError(400, "Provide at least one editable module field");
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("product_modules")
+    .update(moduleData)
+    .eq("id", req.params.mid)
+    .eq("product_id", req.params.id)
+    .select("*")
+    .single();
+
+  if (error) handleModuleWriteError(error);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "UPDATE",
+    entity: "product_modules",
+    entityId: data.id,
+    metadata: { product_id: req.params.id, changes: moduleData },
+  });
+
+  return res.status(200).json(new ApiResponse(200, data, "Product module updated successfully"));
+});
+
+export const deleteProductModule = asyncHandler(async (req, res) => {
+  const module = await getProductModuleOrThrow(req.params.id, req.params.mid);
+
+  const { error } = await supabaseAdmin
+    .from("product_modules")
+    .delete()
+    .eq("id", module.id)
+    .eq("product_id", req.params.id);
+
+  if (error) handleModuleWriteError(error);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "DELETE",
+    entity: "product_modules",
+    entityId: module.id,
+    metadata: { product_id: req.params.id, title: module.title },
+  });
+
+  return res.status(200).json(new ApiResponse(200, { id: module.id }, "Product module deleted successfully"));
+});
+
+export const reorderProductModules = asyncHandler(async (req, res) => {
+  await getProductByIdOrThrow(req.params.id);
+
+  const moduleIds = req.validated.items.map((item) => item.id);
+  const { data: existing, error: fetchError } = await supabaseAdmin
+    .from("product_modules")
+    .select("id")
+    .eq("product_id", req.params.id)
+    .in("id", moduleIds);
+
+  if (fetchError) throw new ApiError(500, fetchError.message);
+  if ((existing || []).length !== moduleIds.length) {
+    throw new ApiError(400, "All module IDs must belong to this product");
+  }
+
+  const updates = await Promise.all(
+    req.validated.items.map((item) =>
+      supabaseAdmin
+        .from("product_modules")
+        .update({ display_order: item.display_order })
+        .eq("id", item.id)
+        .eq("product_id", req.params.id)
+        .select("*")
+        .single()
+    )
+  );
+
+  const failed = updates.find((result) => result.error);
+  if (failed) handleModuleWriteError(failed.error);
+
+  const items = updates.map((result) => result.data).sort((a, b) => a.display_order - b.display_order);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "REORDER",
+    entity: "product_modules",
+    entityId: req.params.id,
+    metadata: { product_id: req.params.id, items: req.validated.items },
+  });
+
+  return res.status(200).json(new ApiResponse(200, items, "Product modules reordered successfully"));
+});
+
+export const upsertModulePricing = asyncHandler(async (req, res) => {
+  const { mid, tier } = req.params;
+
+  if (!VALID_PRICING_TIERS.includes(tier)) {
+    throw new ApiError(400, "Invalid pricing tier. Must be one of: basic, standard, premium");
+  }
+
+  const module = await getModuleOrThrow(mid);
+  const pricingData = omitFields(req.validated, PRICING_MANAGED_FIELDS);
+
+  if (Object.keys(pricingData).length === 0) {
+    throw new ApiError(400, "Provide at least one editable pricing field");
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("module_pricing")
+    .upsert(
+      {
+        ...pricingData,
+        module_id: mid,
+        tier,
+      },
+      { onConflict: "module_id,tier" }
+    )
+    .select("*")
+    .single();
+
+  if (error) handleModuleWriteError(error);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "UPSERT",
+    entity: "module_pricing",
+    entityId: data.id || `${mid}:${tier}`,
+    metadata: { module_id: mid, product_id: module.product_id, tier },
+  });
+
+  return res.status(200).json(new ApiResponse(200, data, "Module pricing saved successfully"));
 });
