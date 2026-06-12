@@ -14,6 +14,9 @@ import pageContentRouter from "./pageContent.routes.js";
 import productsRouter from "./products.routes.js";
 import projectsRouter from "./projects.routes.js";
 import teamRouter from "./team.routes.js";
+import servicesRouter from "./services.routes.js";
+import positionsRouter from "./positions.routes.js";
+import usersRouter from "./users.routes.js";
 
 const router = Router();
 
@@ -32,5 +35,10 @@ router.use("/pages", pageContentRouter);
 router.use("/products", productsRouter);
 router.use("/projects", projectsRouter);
 router.use("/team", teamRouter);
+router.use("/services", servicesRouter);
+router.use("/positions", positionsRouter);
+router.use("/users", usersRouter);
+
+
 
 export default router;
