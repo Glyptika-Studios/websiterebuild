@@ -2,9 +2,11 @@ import { Router } from "express";
 import { validate } from "../../middleware/validate.middleware.js";
 import { requireRole } from "../../middleware/authorize.middleware.js";
 import {
+  addProductMediaSchema,
   createProductSchema,
   createProductModuleSchema,
   productStatusSchema,
+  reorderProductMediaSchema,
   reorderProductModulesSchema,
   updateProductSchema,
   updateProductModuleSchema,
@@ -21,6 +23,9 @@ import {
   updateProductModule,
   deleteProductModule,
   reorderProductModules,
+  addProductMedia,
+  deleteProductMedia,
+  reorderProductMedia,
 } from "../../controllers/admin/products.controller.js";
 
 const router = Router();
@@ -32,6 +37,14 @@ router
 
 router
   .patch("/:id/status", requireRole(["superadmin", "editor"]), validate(productStatusSchema), updateProductStatus)
+  .post("/:id/media", requireRole(["superadmin", "editor"]), validate(addProductMediaSchema), addProductMedia)
+  .delete("/:id/media/:emid", requireRole(["superadmin", "editor"]), deleteProductMedia)
+  .patch(
+    "/:id/media/reorder",
+    requireRole(["superadmin", "editor"]),
+    validate(reorderProductMediaSchema),
+    reorderProductMedia
+  )
   .get("/:id/modules", requireRole(["superadmin", "editor", "viewer"]), getProductModules)
   .post("/:id/modules", requireRole(["superadmin", "editor"]), validate(createProductModuleSchema), createProductModule)
   .patch(

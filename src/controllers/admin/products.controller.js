@@ -11,6 +11,7 @@ const PRODUCT_SELECT =
 const VALID_PRICING_TIERS = ["basic", "standard", "premium"];
 const MODULE_MANAGED_FIELDS = ["id", "product_id", "created_at", "updated_at"];
 const PRICING_MANAGED_FIELDS = ["id", "module_id", "tier", "created_at", "updated_at"];
+const PRODUCT_MEDIA_MANAGED_FIELDS = ["id", "product_id", "created_at", "updated_at"];
 
 function omitFields(data, fields) {
   const copy = { ...data };
@@ -105,6 +106,50 @@ async function getModuleOrThrow(moduleId) {
 
   if (error) {
     if (error.code === "PGRST116") throw new ApiError(404, "Product module not found");
+    throw new ApiError(500, error.message);
+  }
+
+  return data;
+}
+
+async function getModulePricingOrThrow(moduleId, tier) {
+  const { data, error } = await supabaseAdmin
+    .from("module_pricing")
+    .select("*")
+    .eq("module_id", moduleId)
+    .eq("tier", tier)
+    .single();
+
+  if (error) {
+    if (error.code === "PGRST116") throw new ApiError(404, "Module pricing not found");
+    throw new ApiError(500, error.message);
+  }
+
+  return data;
+}
+
+function handleProductMediaWriteError(error) {
+  if (error.code === "23505") {
+    throw new ApiError(409, "This media item is already attached to the product");
+  }
+
+  if (error.code === "23503") {
+    throw new ApiError(400, "Invalid product media reference");
+  }
+
+  throw new ApiError(500, error.message);
+}
+
+async function getProductMediaOrThrow(productId, mediaEntryId) {
+  const { data, error } = await supabaseAdmin
+    .from("product_media")
+    .select("*")
+    .eq("id", mediaEntryId)
+    .eq("product_id", productId)
+    .single();
+
+  if (error) {
+    if (error.code === "PGRST116") throw new ApiError(404, "Product media item not found");
     throw new ApiError(500, error.message);
   }
 
@@ -422,4 +467,127 @@ export const upsertModulePricing = asyncHandler(async (req, res) => {
   });
 
   return res.status(200).json(new ApiResponse(200, data, "Module pricing saved successfully"));
+});
+
+export const deleteModulePricing = asyncHandler(async (req, res) => {
+  const { mid, tier } = req.params;
+
+  if (!VALID_PRICING_TIERS.includes(tier)) {
+    throw new ApiError(400, "Invalid pricing tier. Must be one of: basic, standard, premium");
+  }
+
+  const module = await getModuleOrThrow(mid);
+  const pricing = await getModulePricingOrThrow(mid, tier);
+
+  const { error } = await supabaseAdmin
+    .from("module_pricing")
+    .delete()
+    .eq("module_id", mid)
+    .eq("tier", tier);
+
+  if (error) handleModuleWriteError(error);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "DELETE",
+    entity: "module_pricing",
+    entityId: pricing.id || `${mid}:${tier}`,
+    metadata: { module_id: mid, product_id: module.product_id, tier },
+  });
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      { id: pricing.id || null, module_id: mid, tier },
+      "Module pricing deleted successfully"
+    )
+  );
+});
+
+export const addProductMedia = asyncHandler(async (req, res) => {
+  await getProductByIdOrThrow(req.params.id);
+  const mediaData = omitFields(req.validated, PRODUCT_MEDIA_MANAGED_FIELDS);
+
+  const { data, error } = await supabaseAdmin
+    .from("product_media")
+    .insert({ ...mediaData, product_id: req.params.id })
+    .select("*")
+    .single();
+
+  if (error) handleProductMediaWriteError(error);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "CREATE",
+    entity: "product_media",
+    entityId: data.id,
+    metadata: { product_id: req.params.id, media_file_id: mediaData.media_file_id },
+  });
+
+  return res.status(201).json(new ApiResponse(201, data, "Product media added successfully"));
+});
+
+export const deleteProductMedia = asyncHandler(async (req, res) => {
+  const mediaEntry = await getProductMediaOrThrow(req.params.id, req.params.emid);
+
+  const { error } = await supabaseAdmin
+    .from("product_media")
+    .delete()
+    .eq("id", mediaEntry.id)
+    .eq("product_id", req.params.id);
+
+  if (error) handleProductMediaWriteError(error);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "DELETE",
+    entity: "product_media",
+    entityId: mediaEntry.id,
+    metadata: { product_id: req.params.id, media_file_id: mediaEntry.media_file_id },
+  });
+
+  return res.status(200).json(new ApiResponse(200, { id: mediaEntry.id }, "Product media removed successfully"));
+});
+
+export const reorderProductMedia = asyncHandler(async (req, res) => {
+  await getProductByIdOrThrow(req.params.id);
+
+  const mediaEntryIds = req.validated.items.map((item) => item.id);
+  const { data: existing, error: fetchError } = await supabaseAdmin
+    .from("product_media")
+    .select("id")
+    .eq("product_id", req.params.id)
+    .in("id", mediaEntryIds);
+
+  if (fetchError) throw new ApiError(500, fetchError.message);
+  if ((existing || []).length !== mediaEntryIds.length) {
+    throw new ApiError(400, "All media IDs must belong to this product");
+  }
+
+  const updates = await Promise.all(
+    req.validated.items.map((item) =>
+      supabaseAdmin
+        .from("product_media")
+        .update({ display_order: item.display_order })
+        .eq("id", item.id)
+        .eq("product_id", req.params.id)
+        .select("*")
+        .single()
+    )
+  );
+
+  const failed = updates.find((result) => result.error);
+  if (failed) handleProductMediaWriteError(failed.error);
+
+  const items = updates.map((result) => result.data).sort((a, b) => a.display_order - b.display_order);
+
+  await recordAuditLog({
+    user: req.user,
+    action: "REORDER",
+    entity: "product_media",
+    entityId: req.params.id,
+    metadata: { product_id: req.params.id, items: req.validated.items },
+  });
+
+  return res.status(200).json(new ApiResponse(200, items, "Product gallery reordered successfully"));
 });

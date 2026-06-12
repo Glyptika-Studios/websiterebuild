@@ -76,6 +76,27 @@ export const reorderProductModulesSchema = z.object({
     .min(1),
 });
 
+export const addProductMediaSchema = z
+  .object({
+    media_file_id: z.string().uuid(),
+    display_order: displayOrderSchema.default(0),
+    alt_text: z.string().trim().max(500).optional().nullable(),
+    caption: z.string().trim().max(1000).optional().nullable(),
+    metadata: z.record(z.unknown()).optional().nullable(),
+  })
+  .catchall(jsonSchema);
+
+export const reorderProductMediaSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        id: z.string().uuid(),
+        display_order: displayOrderSchema,
+      })
+    )
+    .min(1),
+});
+
 export const upsertModulePricingSchema = z
   .object({
     price: z.number().min(0).optional(),

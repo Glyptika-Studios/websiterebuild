@@ -112,12 +112,16 @@
 *   `PUT /api/v1/admin/products/:id`
 *   `DELETE /api/v1/admin/products/:id`
 *   `PATCH /api/v1/admin/products/:id/status`
+*   `POST /api/v1/admin/products/:id/media`
+*   `DELETE /api/v1/admin/products/:id/media/:emid`
+*   `PATCH /api/v1/admin/products/:id/media/reorder`
 *   `GET /api/v1/admin/products/:id/modules`
 *   `POST /api/v1/admin/products/:id/modules`
 *   `PUT /api/v1/admin/products/:id/modules/:mid`
 *   `DELETE /api/v1/admin/products/:id/modules/:mid`
 *   `PATCH /api/v1/admin/products/:id/modules/reorder`
 *   `PUT /api/v1/admin/modules/:mid/pricing/:tier`
+*   `DELETE /api/v1/admin/modules/:mid/pricing/:tier`
 
 #### Projects
 *   `GET /api/v1/admin/projects`
