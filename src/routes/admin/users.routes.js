@@ -15,7 +15,7 @@ import {
   inviteAdminUserSchema,
   updateAdminUserSchema,
   upsertPermissionsSchema,
-} from "../../validators/admin/users.validator.js";
+} from "../../validators/users.validator.js";
 
 const router = Router();
 

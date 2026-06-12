@@ -13,7 +13,7 @@ import {
   createServiceSchema,
   updateServiceSchema,
   reorderServicesSchema,
-} from "../../validators/admin/services.validator.js";
+} from "../../validators/services.validator.js";
 
 const router = Router();
 

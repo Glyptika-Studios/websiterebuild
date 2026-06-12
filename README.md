@@ -48,7 +48,14 @@
 *   `GET /api/v1/tags`
 *   `GET /api/v1/services`
 *   `GET /api/v1/products`
+*   `GET /api/v1/products/:id`
 *   `GET /api/v1/projects`
+*   `GET /api/v1/projects/:id`
+*   `GET /api/v1/positions`
+*   `GET /api/v1/positions/:id`
+*   `GET /api/v1/team`
+*   `GET /api/v1/social-links`
+*   `GET /api/v1/pages/:key`
 *   `POST /api/v1/proposals`
 
 ### Admin Auth
@@ -59,28 +66,46 @@
 ### Admin (Requires JWT)
 *   `GET /api/v1/admin/audit_logs`
 *   `GET /api/v1/admin/audit_logs/:id`
+
+#### Posts
 *   `GET /api/v1/admin/posts`
 *   `GET /api/v1/admin/posts/:id`
 *   `POST /api/v1/admin/posts`
 *   `PATCH /api/v1/admin/posts/:id`
 *   `DELETE /api/v1/admin/posts/:id`
+
+#### Proposals
 *   `GET /api/v1/admin/proposals`
 *   `GET /api/v1/admin/proposals/:id`
 *   `PATCH /api/v1/admin/proposals/:id`
 *   `DELETE /api/v1/admin/proposals/:id`
+
+#### Media
 *   `GET /api/v1/admin/media`
 *   `POST /api/v1/admin/media/upload`
 *   `DELETE /api/v1/admin/media/:id`
+
+#### Tags
 *   `GET /api/v1/admin/tags`
 *   `GET /api/v1/admin/tags/:id`
 *   `POST /api/v1/admin/tags`
 *   `PUT /api/v1/admin/tags/:id`
 *   `DELETE /api/v1/admin/tags/:id`
+
+#### Categories
 *   `GET /api/v1/admin/categories`
 *   `GET /api/v1/admin/categories/:id`
 *   `POST /api/v1/admin/categories`
 *   `PUT /api/v1/admin/categories/:id`
 *   `DELETE /api/v1/admin/categories/:id`
+
+#### Pages
+*   `GET /api/v1/admin/pages`
+*   `GET /api/v1/admin/pages/:key`
+*   `PUT /api/v1/admin/pages/:key`
+*   `GET /api/v1/admin/pages/:key/history`
+
+#### Products
 *   `GET /api/v1/admin/products`
 *   `GET /api/v1/admin/products/:id`
 *   `POST /api/v1/admin/products`
@@ -93,6 +118,8 @@
 *   `DELETE /api/v1/admin/products/:id/modules/:mid`
 *   `PATCH /api/v1/admin/products/:id/modules/reorder`
 *   `PUT /api/v1/admin/modules/:mid/pricing/:tier`
+
+#### Projects
 *   `GET /api/v1/admin/projects`
 *   `GET /api/v1/admin/projects/:id`
 *   `POST /api/v1/admin/projects`
@@ -102,9 +129,44 @@
 *   `POST /api/v1/admin/projects/:id/media`
 *   `DELETE /api/v1/admin/projects/:id/media/:emid`
 *   `PATCH /api/v1/admin/projects/:id/media/reorder`
+
+#### Services
+*   `GET /api/v1/admin/services`
+*   `GET /api/v1/admin/services/:id`
+*   `POST /api/v1/admin/services`
+*   `PUT /api/v1/admin/services/:id`
+*   `PATCH /api/v1/admin/services/reorder`
+*   `DELETE /api/v1/admin/services/:id`
+
+#### Positions
+*   `GET /api/v1/admin/positions`
+*   `GET /api/v1/admin/positions/:id`
+*   `POST /api/v1/admin/positions`
+*   `PUT /api/v1/admin/positions/:id`
+*   `DELETE /api/v1/admin/positions/:id`
+*   `GET /api/v1/admin/positions/:id/items`
+*   `POST /api/v1/admin/positions/:id/items`
+*   `PUT /api/v1/admin/positions/:id/items/:iid`
+*   `DELETE /api/v1/admin/positions/:id/items/:iid`
+*   `PATCH /api/v1/admin/positions/:id/items/reorder`
+
+#### Team
+*   `GET /api/v1/admin/team`
+*   `POST /api/v1/admin/team`
+*   `PATCH /api/v1/admin/team/reorder`
+*   `PUT /api/v1/admin/team/:id`
+*   `DELETE /api/v1/admin/team/:id`
+
+#### Social Links
 *   `GET /api/v1/admin/social_links`
 *   `PUT /api/v1/admin/social_links/:platform`
-*   `GET /api/v1/admin/pages`
-*   `GET /api/v1/admin/pages/:key`
-*   `PUT /api/v1/admin/pages/:key`
-*   `GET /api/v1/admin/pages/:key/history`
+
+#### Users
+*   `GET /api/v1/admin/users`
+*   `GET /api/v1/admin/users/:id`
+*   `POST /api/v1/admin/users/invite`
+*   `PUT /api/v1/admin/users/:id`
+*   `DELETE /api/v1/admin/users/:id`
+*   `GET /api/v1/admin/users/:id/permissions`
+*   `PUT /api/v1/admin/users/:id/permissions`
+*   `DELETE /api/v1/admin/users/:id/permissions/:section`

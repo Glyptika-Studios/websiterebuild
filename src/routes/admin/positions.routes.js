@@ -19,7 +19,7 @@ import {
   createPositionItemSchema,
   updatePositionItemSchema,
   reorderPositionItemsSchema,
-} from "../../validators/admin/positions.validator.js";
+} from "../../validators/positions.validator.js";
 
 const router = Router();
 

@@ -57,9 +57,11 @@ export const getServices = asyncHandler(async (req, res) => {
   }
 
   return res.status(200).json(
-    new ApiResponse(200, data, "Services fetched successfully", {
-      page, limit, total: count,
-    })
+    new ApiResponse(
+      200,
+      { items: data, meta: { page, limit, total: count } },
+      "Services fetched successfully"
+    )
   );
 });
 
