@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -32,28 +33,26 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#f8fafc] border-t border-slate-200 text-slate-600 py-16 transition-colors duration-300">
+    <footer className="bg-[#050B14] border-t border-white/10 text-slate-400 py-16 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           
           {/* Brand & Mission column */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 group mb-6">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-teal-500 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                <svg className="w-4.5 h-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
-                </svg>
+              <div className="w-10 h-10 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300 overflow-hidden">
+                <Image src="/logo.jpg" alt="Glyptika Studios Logo" width={40} height={40} className="object-contain" />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-slate-800 tracking-wide leading-tight">
+                <span className="text-sm font-bold text-white tracking-wide leading-tight">
                   Glyptika Studios
                 </span>
-                <span className="text-[8px] font-semibold text-teal-500 uppercase tracking-widest leading-none mt-0.5">
+                <span className="text-[8px] font-semibold text-blue-400 uppercase tracking-widest leading-none mt-0.5">
                   A Creative Tech Startup
                 </span>
               </div>
             </Link>
-            <p className="text-slate-500 text-sm max-w-sm mb-6 leading-relaxed">
+            <p className="text-slate-400 text-sm max-w-sm mb-6 leading-relaxed">
               We design and construct bleeding-edge digital ecosystems, next-gen SaaS portals, and state-of-the-art interactive platforms. Accelerating your growth through robust software architecture.
             </p>
             {/* Social Icons */}
@@ -83,11 +82,11 @@ export default function Footer() {
 
           {/* Quick Links column 1 */}
           <div>
-            <h3 className="text-slate-800 text-sm font-semibold uppercase tracking-wider mb-5">Company</h3>
+            <h3 className="text-white text-sm font-semibold uppercase tracking-wider mb-5">Company</h3>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="hover:text-[#2563eb] transition-colors duration-200 text-sm text-slate-500">
+                  <Link href={link.href} className="hover:text-blue-400 transition-colors duration-200 text-sm text-slate-400">
                     {link.name}
                   </Link>
                 </li>
@@ -97,11 +96,11 @@ export default function Footer() {
 
           {/* Quick Links column 2 */}
           <div>
-            <h3 className="text-slate-800 text-sm font-semibold uppercase tracking-wider mb-5">Solutions</h3>
+            <h3 className="text-white text-sm font-semibold uppercase tracking-wider mb-5">Solutions</h3>
             <ul className="space-y-3">
               {footerLinks.solutions.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="hover:text-[#2563eb] transition-colors duration-200 text-sm text-slate-500">
+                  <Link href={link.href} className="hover:text-blue-400 transition-colors duration-200 text-sm text-slate-400">
                     {link.name}
                   </Link>
                 </li>
@@ -111,7 +110,7 @@ export default function Footer() {
 
           {/* Contact Details column */}
           <div>
-            <h3 className="text-slate-800 text-sm font-semibold uppercase tracking-wider mb-5">Contact Us</h3>
+            <h3 className="text-white text-sm font-semibold uppercase tracking-wider mb-5">Contact Us</h3>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-2">
                 <svg className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -149,11 +148,11 @@ export default function Footer() {
         </div>
 
         {/* Copyright and Legal Section */}
-        <div className="border-t border-slate-200 mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400">
+        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
           <p>&copy; {currentYear} Glyptika Studios. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
             {footerLinks.legal.map((link) => (
-              <Link key={link.name} href={link.href} className="hover:text-slate-600 transition-colors duration-200">
+              <Link key={link.name} href={link.href} className="hover:text-slate-300 transition-colors duration-200">
                 {link.name}
               </Link>
             ))}

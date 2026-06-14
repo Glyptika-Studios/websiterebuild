@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function Header() {
@@ -60,9 +61,14 @@ export default function Header() {
 
           {/* Logo Section */}
           <div className="flex-shrink-0 relative z-10">
-            <Link href="/" className="flex items-center group/logo">
+            <Link href="/" className="flex items-center gap-3 group/logo">
+              {/* Logo Image */}
+              <div className="relative w-10 h-10 overflow-hidden rounded-lg shadow-lg border border-white/10 group-hover/logo:border-blue-400/50 transition-colors">
+                <Image src="/logo.jpg" alt="Glyptika Logo" fill className="object-cover" />
+              </div>
+              
               {/* Title & Tagline */}
-              <div className="flex flex-col">
+              <div className="hidden sm:flex flex-col">
                 <span className="text-lg sm:text-xl font-black text-white tracking-wide group-hover/logo:text-zinc-200 transition-colors leading-tight">
                   Glyptika Studios
                 </span>
@@ -138,7 +144,10 @@ export default function Header() {
         <div>
           {/* Mobile Menu Header */}
           <div className="flex justify-between items-center px-6 py-6 border-b border-white/10 bg-zinc-950/50 backdrop-blur-md">
-            <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center">
+            <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3">
+              <div className="relative w-8 h-8 overflow-hidden rounded-lg shadow-lg border border-white/10">
+                <Image src="/logo.jpg" alt="Glyptika Logo" fill className="object-cover" />
+              </div>
               <div className="flex flex-col">
                 <span className="text-lg sm:text-xl font-black text-white tracking-wide leading-tight">Glyptika Studios</span>
                 <span className="text-[11px] font-extrabold text-teal-400 uppercase tracking-widest leading-none mt-1">A Creative Tech Startup</span>

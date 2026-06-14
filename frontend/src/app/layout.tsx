@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import PublicLayoutWrapper from "@/components/layout/PublicLayoutWrapper";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,11 +39,11 @@ export default function RootLayout({
           <div className="floating-circle w-24 h-24 bg-gradient-to-tr from-teal-500/10 to-cyan-400/5 bottom-[20%] left-[20%] [animation-delay:4s]" />
         </div>
 
-        <Header />
-
-        {children}
-
-        <Footer />
+        <AuthProvider>
+          <PublicLayoutWrapper>
+            {children}
+          </PublicLayoutWrapper>
+        </AuthProvider>
       </body>
     </html>
   );

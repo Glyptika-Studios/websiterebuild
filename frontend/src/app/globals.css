@@ -141,12 +141,6 @@ html {
     anchor-name: --test;
 }
 
-/* Squircle / Pill shape support */
-@supports (corner-shape: squircle) {
-    .anchor-nav-list::after {
-        border-shape: squircle;
-    }
-}
 
 /* Fallback for browsers that do not support anchor positioning */
 @supports not (position-anchor: --any) {
@@ -159,5 +153,15 @@ html {
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid rgba(37, 99, 235, 0.4);
         box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+    }
+}
+
+/* ==================== PROCEDURAL SOUNDWAVE ANIMATION ==================== */
+@keyframes soundwave {
+    0%, 100% {
+        transform: scaleY(0.3);
+    }
+    50% {
+        transform: scaleY(1.1);
     }
 }
