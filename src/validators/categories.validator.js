@@ -17,6 +17,10 @@ const slugSchema = z
 const labelSchema = z.string().trim().min(1).max(100);
 const displayOrderSchema = z.number().int().min(0);
 
+export const categoryIdSchema = z.object({
+  id: z.string().uuid(),
+});
+
 export const createCategorySchema = z.object({
   label: labelSchema,
   scope: scopeSchema,

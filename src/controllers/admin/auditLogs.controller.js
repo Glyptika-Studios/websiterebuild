@@ -9,7 +9,7 @@ function applyAuditFilters(query, filters) {
   const {
     action,
     entity,
-    entity_id,
+    entity_id,  
     user_id,
     user_email,
     from_date,
@@ -26,7 +26,7 @@ function applyAuditFilters(query, filters) {
   if (from_date) query = query.gte("created_at", from_date);
   if (to_date) query = query.lte("created_at", to_date);
   const searchFilter = buildIlikeOrFilter(
-    ["action", "entity", "entity_id", "user_email", "user_name"],
+    ["entity", "entity_id", "user_email", "user_name"],
     search
   );
   if (searchFilter) query = query.or(searchFilter);

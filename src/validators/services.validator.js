@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+export const serviceIdSchema = z.object({
+  id: z.string().uuid(),
+});
+
 export const createServiceSchema = z.object({
   title: z
     .string()

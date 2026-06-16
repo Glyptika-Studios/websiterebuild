@@ -5,7 +5,9 @@ import {
   deleteMedia,
 } from "../../controllers/admin/media.controller.js";
 import { requireRole } from "../../middleware/authorize.middleware.js";
+import { validate } from "../../middleware/validate.middleware.js";
 import uploadMiddleware from "../../middleware/upload.middleware.js";
+import { mediaIdSchema } from "../../validators/media.validator.js";
 
 const router = Router();
 
@@ -31,6 +33,7 @@ router.post(
 router.delete(
   "/:id",
   requireRole(["superadmin", "editor"]),
+  validate(mediaIdSchema, "params"),
   deleteMedia
 );
 

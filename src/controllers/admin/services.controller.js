@@ -163,7 +163,7 @@ export const updateService = asyncHandler(async (req, res) => {
   // Check exists
   const { data: existing, error: fetchError } = await supabaseAdmin
     .from("services")
-    .select("id, title")
+    .select("id, title, url, url_type")
     .eq("id", id)
     .single();
 
@@ -177,6 +177,13 @@ export const updateService = asyncHandler(async (req, res) => {
       400,
       `Invalid url_type. Must be one of: ${VALID_URL_TYPES.join(", ")}`
     );
+  }
+
+  const finalUrlType = url_type ?? existing.url_type;
+  const finalUrl = url !== undefined ? url : existing.url;
+
+  if (finalUrlType === "external" && !finalUrl) {
+    throw new ApiError(400, "url is required when url_type is external");
   }
 
   // Build update object — only include fields that were sent

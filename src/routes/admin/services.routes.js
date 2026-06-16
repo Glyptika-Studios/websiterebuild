@@ -13,6 +13,7 @@ import {
   createServiceSchema,
   updateServiceSchema,
   reorderServicesSchema,
+  serviceIdSchema,
 } from "../../validators/services.validator.js";
 
 const router = Router();
@@ -24,13 +25,6 @@ router.get(
   getServices
 );
 
-// GET /api/v1/admin/services/:id
-router.get(
-  "/:id",
-  requireRole(["superadmin", "editor", "viewer"]),
-  getServiceById
-);
-
 // POST /api/v1/admin/services
 router.post(
   "/",
@@ -38,15 +32,6 @@ router.post(
   validate(createServiceSchema),
   createService
 );
-
-// PUT /api/v1/admin/services/:id
-router.put(
-  "/:id",
-  requireRole(["superadmin", "editor"]),
-  validate(updateServiceSchema),
-  updateService
-);
-
 
 // PATCH /api/v1/admin/services/reorder
 // Must be defined BEFORE /:id to avoid Express matching
@@ -58,10 +43,28 @@ router.patch(
   reorderServices
 );
 
+// GET /api/v1/admin/services/:id
+router.get(
+  "/:id",
+  requireRole(["superadmin", "editor", "viewer"]),
+  validate(serviceIdSchema, "params"),
+  getServiceById
+);
+
+// PUT /api/v1/admin/services/:id
+router.put(
+  "/:id",
+  requireRole(["superadmin", "editor"]),
+  validate(serviceIdSchema, "params"),
+  validate(updateServiceSchema),
+  updateService
+);
+
 // DELETE /api/v1/admin/services/:id
 router.delete(
   "/:id",
   requireRole(["superadmin", "editor"]),
+  validate(serviceIdSchema, "params"),
   deleteService
 );
 

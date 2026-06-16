@@ -1,8 +1,8 @@
 import { ApiError } from "../utils/ApiError.js";
 
-export function validate(schema) {
+export function validate(schema, source = "body") {
   return (req, res, next) => {
-    const result = schema.safeParse(req.body);
+    const result = schema.safeParse(req[source]);
 
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
@@ -10,7 +10,7 @@ export function validate(schema) {
       return;
     }
 
-    req.body = result.data;
+    req[source] = result.data;
     req.validated = result.data;
     next();
   };

@@ -10,6 +10,10 @@ const slugSchema = z
 
 const labelSchema = z.string().trim().min(1).max(100);
 
+export const tagIdSchema = z.object({
+  id: z.string().uuid(),
+});
+
 export const createTagSchema = z.object({
   slug: slugSchema,
   label: labelSchema,

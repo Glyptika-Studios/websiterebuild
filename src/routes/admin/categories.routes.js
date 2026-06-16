@@ -4,6 +4,7 @@ import { requireRole } from "../../middleware/authorize.middleware.js";
 import {
   createCategorySchema,
   updateCategorySchema,
+  categoryIdSchema,
 } from "../../validators/categories.validator.js";
 import {
   getCategories,
@@ -20,8 +21,21 @@ router.route("/")
   .post(requireRole(["superadmin", "editor"]), validate(createCategorySchema), createCategory);
 
 router.route("/:id")
-  .get(requireRole(["superadmin", "editor", "viewer"]), getCategoryById)
-  .put(requireRole(["superadmin", "editor"]), validate(updateCategorySchema), updateCategory)
-  .delete(requireRole(["superadmin", "editor"]), deleteCategory);
+  .get(
+    requireRole(["superadmin", "editor", "viewer"]),
+    validate(categoryIdSchema, "params"),
+    getCategoryById
+  )
+  .put(
+    requireRole(["superadmin", "editor"]),
+    validate(categoryIdSchema, "params"),
+    validate(updateCategorySchema),
+    updateCategory
+  )
+  .delete(
+    requireRole(["superadmin", "editor"]),
+    validate(categoryIdSchema, "params"),
+    deleteCategory
+  );
 
 export default router;
