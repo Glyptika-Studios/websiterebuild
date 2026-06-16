@@ -143,7 +143,7 @@ export const createPosition = asyncHandler(async (req, res) => {
     employment_type,
     description,
     active,
-  } = req.body;
+  } = req.validated;
 
   if (!VALID_EMPLOYMENT_TYPES.includes(employment_type)) {
     throw new ApiError(
@@ -188,7 +188,7 @@ export const updatePosition = asyncHandler(async (req, res) => {
     employment_type,
     description,
     active,
-  } = req.body;
+  } = req.validated;
 
   // Check exists
   const { data: existing, error: fetchError } = await supabaseAdmin
@@ -320,7 +320,7 @@ export const getPositionItems = asyncHandler(async (req, res) => {
 // ── POST /api/v1/admin/positions/:id/items ───────────────────
 export const createPositionItem = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { kind, body, display_order } = req.body;
+  const { kind, body, display_order } = req.validated;
 
   // Check position exists
   const { data: position, error: posError } = await supabaseAdmin
@@ -382,7 +382,7 @@ export const createPositionItem = asyncHandler(async (req, res) => {
 // ── PUT /api/v1/admin/positions/:id/items/:iid ───────────────
 export const updatePositionItem = asyncHandler(async (req, res) => {
   const { id, iid } = req.params;
-  const { kind, body, display_order } = req.body;
+  const { kind, body, display_order } = req.validated;
 
   // Check item exists and belongs to this position
   const { data: existing, error: fetchError } = await supabaseAdmin
@@ -465,7 +465,7 @@ export const deletePositionItem = asyncHandler(async (req, res) => {
 // Example body: { items: [{ id: "uuid1", display_order: 0 }, ...] }
 export const reorderPositionItems = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { items } = req.body;
+  const { items } = req.validated;
 
   if (!Array.isArray(items) || items.length === 0)
     throw new ApiError(400, "items must be a non-empty array");

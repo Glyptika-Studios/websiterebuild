@@ -6,11 +6,11 @@ import { ApiError } from "../utils/ApiError.js";
 export const requireRole = (allowedRoles) => {
   return (req, res, next) => {
     if (!req.user || !req.user.role) {
-      throw new ApiError(401, "Unauthorized");
+      return next(new ApiError(401, "Unauthorized"));
     }
 
     if (!allowedRoles.includes(req.user.role)) {
-      throw new ApiError(403, `Forbidden. Requires one of: ${allowedRoles.join(", ")}`);
+      return next(new ApiError(403, "Forbidden"));
     }
 
     next();

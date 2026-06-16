@@ -34,7 +34,7 @@ export function limitAdminLogin(req, res, next) {
 
   if (current?.blockedUntil && current.blockedUntil > now) {
     res.set("Retry-After", String(getRetryAfterSeconds(current, now)));
-    throw new ApiError(429, "Too many login attempts. Please try again later.");
+    return next(new ApiError(429, "Too many login attempts. Please try again later."));
   }
 
   res.on("finish", () => {

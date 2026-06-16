@@ -8,6 +8,8 @@ import publicRoutes from "./routes/public/index.js";
 import adminRoutes from "./routes/admin/index.js";
 import { errorHandler } from "./middleware/errorHandler.middleware.js";
 
+import { ApiError } from "./utils/ApiError.js";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const allowedOrigins = (process.env.CORS_ORIGIN || "")
@@ -23,7 +25,7 @@ const corsOptions = allowedOrigins.length
           return;
         }
 
-        callback(new Error("CORS origin is not allowed"));
+        callback(new ApiError(403, "CORS origin is not allowed"));
       },
     }
   : undefined;
@@ -36,6 +38,10 @@ app.use(express.json({ limit: process.env.JSON_BODY_LIMIT || "1mb" }));
 
 app.use("/api/v1", publicRoutes);
 app.use("/api/v1/admin", adminRoutes);
+
+app.use((_req, _res, next) => {
+  next(new ApiError(404, "Route not found"));
+});
 
 app.use(errorHandler);
 

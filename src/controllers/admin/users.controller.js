@@ -213,13 +213,10 @@ export const inviteAdminUser = asyncHandler(async (req, res) => {
     .single();
 
   if (insertError) {
-    // If admin_users insert fails, the auth user was already created
-    // Log the inconsistency — do not delete auth user automatically
-    // as that requires careful cleanup
-    console.error(
-      "Auth user created but admin_users insert failed:",
-      insertError.message
-    );
+    // Clean up the orphaned auth user
+    await supabaseAdmin.auth.admin.deleteUser(userId).catch((e) => {
+      console.error("Failed to clean up orphaned auth user:", e.message);
+    });
     throw new ApiError(
       500,
       "Failed to create admin record: " + insertError.message
@@ -287,6 +284,21 @@ export const updateAdminUser = asyncHandler(async (req, res) => {
     );
   }
 
+  // Prevent demoting the last superadmin
+  if (role && role !== "superadmin" && existing.role === "superadmin") {
+    const { count } = await supabaseAdmin
+      .from("admin_users")
+      .select("id", { count: "exact", head: true })
+      .eq("role", "superadmin");
+
+    if (count <= 1) {
+      throw new ApiError(
+        400,
+        "Cannot demote the last superadmin. Promote another user first."
+      );
+    }
+  }
+
   // Validate role if provided
   if (role && !VALID_ROLES.includes(role)) {
     throw new ApiError(
@@ -321,6 +333,17 @@ export const updateAdminUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Failed to update user: " + error.message);
   }
 
+  // If role changed to viewer, clear any can_write permissions
+  if (role === "viewer") {
+    await supabaseAdmin
+      .from("admin_permissions")
+      .update({ can_write: false })
+      .eq("user_id", id)
+      .then(({ error: permErr }) => {
+        if (permErr) console.error("Failed to clear write permissions:", permErr.message);
+      });
+  }
+
   await logAudit(req.user, "UPDATE", "admin_users", id, updates);
 
   return res.status(200).json(
@@ -347,7 +370,15 @@ export const deleteAdminUser = asyncHandler(async (req, res) => {
   if (fetchError || !existing)
     throw new ApiError(404, "Admin user not found");
 
-  // Delete from admin_users
+  // Delete from Supabase Auth first
+  const { error: authError } =
+    await supabaseAdmin.auth.admin.deleteUser(id);
+
+  if (authError) {
+    throw new ApiError(500, "Failed to delete auth user: " + authError.message);
+  }
+
+  // Then delete from admin_users
   // ON DELETE CASCADE removes admin_permissions rows automatically
   const { error: deleteError } = await supabaseAdmin
     .from("admin_users")
@@ -356,21 +387,6 @@ export const deleteAdminUser = asyncHandler(async (req, res) => {
 
   if (deleteError)
     throw new ApiError(500, "Failed to delete admin user: " + deleteError.message);
-
-  // Also delete from Supabase Auth
-  // This prevents them from logging in again
-  const { error: authError } =
-    await supabaseAdmin.auth.admin.deleteUser(id);
-
-  if (authError) {
-    // admin_users row is deleted but auth user remains
-    // Log this — they cannot access admin_users data but
-    // can still attempt auth requests
-    console.error(
-      "admin_users deleted but auth user deletion failed:",
-      authError.message
-    );
-  }
 
   await logAudit(req.user, "DELETE", "admin_users", id, {
     email:  existing.email,

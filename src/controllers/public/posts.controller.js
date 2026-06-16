@@ -50,13 +50,15 @@ export const getPosts = asyncHandler(async (req, res) => {
   const { data, error, count } = await query;
   if (error) throw new ApiError(500, error.message);
 
+  const total = count ?? 0;
+
   const resultData = {
     posts: formatPostsWithTags(data),
     pagination: {
       page,
       limit,
-      total: count,
-      totalPages: Math.ceil(count / limit),
+      total,
+      totalPages: Math.ceil(total / limit),
     },
   };
 

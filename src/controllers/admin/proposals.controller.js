@@ -25,13 +25,15 @@ export const getAdminProposals = asyncHandler(async (req, res) => {
   const { data, error, count } = await query;
   if (error) throw new ApiError(500, error.message);
 
+  const total = count ?? 0;
+
   const resultData = {
     proposals: data,
     pagination: {
       page,
       limit,
-      total: count,
-      totalPages: Math.ceil(count / limit),
+      total,
+      totalPages: Math.ceil(total / limit),
     },
   };
 
@@ -66,6 +68,11 @@ export const getAdminProposalById = asyncHandler(async (req, res) => {
       .select("project:projects(id, title)")
       .eq("proposal_id", id),
   ]);
+
+  if (svcRes.error || prodRes.error || projRes.error) {
+    const failedQuery = svcRes.error || prodRes.error || projRes.error;
+    throw new ApiError(500, "Failed to fetch proposal relations: " + failedQuery.message);
+  }
 
   proposal.services = (svcRes.data || []).map((r) => r.service);
   proposal.products = (prodRes.data || []).map((r) => r.product);

@@ -33,7 +33,10 @@ export const authenticate = asyncHandler(async (req, res, next) => {
     .single();
 
   if (adminErr) {
-    throw new ApiError(403, "Access denied. User is not an administrator.");
+    if (adminErr.code === "PGRST116") {
+      throw new ApiError(403, "Access denied. User is not an administrator.");
+    }
+    throw new ApiError(500, "Failed to verify admin status");
   }
 
   req.user.role = adminData.role;
