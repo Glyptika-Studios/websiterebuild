@@ -17,7 +17,11 @@ export const getProjects = asyncHandler(async (req, res) => {
     .order("title", { ascending: true });
 
   if (published === "true") query = query.eq("publish", true);
+  else if (published === "false") query = query.eq("publish", false);
+  else query = query.eq("publish", true);
+
   if (category_id) query = query.eq("category_id", category_id);
+
   const searchPattern = toIlikePattern(search);
   if (searchPattern) query = query.ilike("title", searchPattern);
 
@@ -37,6 +41,7 @@ export const getProjectById = asyncHandler(async (req, res) => {
     )
     .eq("id", req.params.id)
     .eq("active", true)
+    .eq("publish", true)
     .single();
 
   if (error) {
