@@ -5,6 +5,9 @@ import {
   addProductMediaSchema,
   createProductSchema,
   createProductModuleSchema,
+  productIdParamsSchema,
+  productMediaParamsSchema,
+  productModuleParamsSchema,
   productStatusSchema,
   reorderProductMediaSchema,
   reorderProductModulesSchema,
@@ -36,35 +39,84 @@ router
   .post(requireRole(["superadmin", "editor"]), validate(createProductSchema), createProduct);
 
 router
-  .patch("/:id/status", requireRole(["superadmin", "editor"]), validate(productStatusSchema), updateProductStatus)
-  .post("/:id/media", requireRole(["superadmin", "editor"]), validate(addProductMediaSchema), addProductMedia)
-  .delete("/:id/media/:emid", requireRole(["superadmin", "editor"]), deleteProductMedia)
+  .patch(
+    "/:id/status",
+    requireRole(["superadmin", "editor"]),
+    validate(productIdParamsSchema, "params"),
+    validate(productStatusSchema),
+    updateProductStatus
+  )
+  .post(
+    "/:id/media",
+    requireRole(["superadmin", "editor"]),
+    validate(productIdParamsSchema, "params"),
+    validate(addProductMediaSchema),
+    addProductMedia
+  )
+  .delete(
+    "/:id/media/:emid",
+    requireRole(["superadmin", "editor"]),
+    validate(productMediaParamsSchema, "params"),
+    deleteProductMedia
+  )
   .patch(
     "/:id/media/reorder",
     requireRole(["superadmin", "editor"]),
+    validate(productIdParamsSchema, "params"),
     validate(reorderProductMediaSchema),
     reorderProductMedia
   )
-  .get("/:id/modules", requireRole(["superadmin", "editor", "viewer"]), getProductModules)
-  .post("/:id/modules", requireRole(["superadmin", "editor"]), validate(createProductModuleSchema), createProductModule)
+  .get(
+    "/:id/modules",
+    requireRole(["superadmin", "editor", "viewer"]),
+    validate(productIdParamsSchema, "params"),
+    getProductModules
+  )
+  .post(
+    "/:id/modules",
+    requireRole(["superadmin", "editor"]),
+    validate(productIdParamsSchema, "params"),
+    validate(createProductModuleSchema),
+    createProductModule
+  )
   .patch(
     "/:id/modules/reorder",
     requireRole(["superadmin", "editor"]),
+    validate(productIdParamsSchema, "params"),
     validate(reorderProductModulesSchema),
     reorderProductModules
   )
   .put(
     "/:id/modules/:mid",
     requireRole(["superadmin", "editor"]),
+    validate(productModuleParamsSchema, "params"),
     validate(updateProductModuleSchema),
     updateProductModule
   )
-  .delete("/:id/modules/:mid", requireRole(["superadmin", "editor"]), deleteProductModule);
+  .delete(
+    "/:id/modules/:mid",
+    requireRole(["superadmin", "editor"]),
+    validate(productModuleParamsSchema, "params"),
+    deleteProductModule
+  );
 
 router
   .route("/:id")
-  .get(requireRole(["superadmin", "editor", "viewer"]), getProductById)
-  .put(requireRole(["superadmin", "editor"]), validate(updateProductSchema), updateProduct)
-  .delete(requireRole(["superadmin", "editor"]), deleteProduct);
+  .get(
+    requireRole(["superadmin", "editor", "viewer"]),
+    validate(productIdParamsSchema, "params"),
+    getProductById
+  )
+  .put(
+    requireRole(["superadmin", "editor"]),
+    validate(productIdParamsSchema, "params"),
+    validate(updateProductSchema),
+    updateProduct
+  )
+  .delete(
+    requireRole(["superadmin", "editor"]),
+    validate(productIdParamsSchema, "params"),
+    deleteProduct
+  );
 
 export default router;

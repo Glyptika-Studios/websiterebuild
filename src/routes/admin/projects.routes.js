@@ -4,6 +4,8 @@ import { requireRole } from "../../middleware/authorize.middleware.js";
 import {
   addProjectMediaSchema,
   createProjectSchema,
+  projectIdParamsSchema,
+  projectMediaParamsSchema,
   projectStatusSchema,
   reorderProjectMediaSchema,
   updateProjectSchema,
@@ -28,20 +30,51 @@ router
   .post(requireRole(["superadmin", "editor"]), validate(createProjectSchema), createProject);
 
 router
-  .patch("/:id/status", requireRole(["superadmin", "editor"]), validate(projectStatusSchema), updateProjectStatus)
-  .post("/:id/media", requireRole(["superadmin", "editor"]), validate(addProjectMediaSchema), addProjectMedia)
-  .delete("/:id/media/:emid", requireRole(["superadmin", "editor"]), deleteProjectMedia)
+  .patch(
+    "/:id/status",
+    requireRole(["superadmin", "editor"]),
+    validate(projectIdParamsSchema, "params"),
+    validate(projectStatusSchema),
+    updateProjectStatus
+  )
+  .post(
+    "/:id/media",
+    requireRole(["superadmin", "editor"]),
+    validate(projectIdParamsSchema, "params"),
+    validate(addProjectMediaSchema),
+    addProjectMedia
+  )
+  .delete(
+    "/:id/media/:emid",
+    requireRole(["superadmin", "editor"]),
+    validate(projectMediaParamsSchema, "params"),
+    deleteProjectMedia
+  )
   .patch(
     "/:id/media/reorder",
     requireRole(["superadmin", "editor"]),
+    validate(projectIdParamsSchema, "params"),
     validate(reorderProjectMediaSchema),
     reorderProjectMedia
   );
 
 router
   .route("/:id")
-  .get(requireRole(["superadmin", "editor", "viewer"]), getProjectById)
-  .put(requireRole(["superadmin", "editor"]), validate(updateProjectSchema), updateProject)
-  .delete(requireRole(["superadmin", "editor"]), deleteProject);
+  .get(
+    requireRole(["superadmin", "editor", "viewer"]),
+    validate(projectIdParamsSchema, "params"),
+    getProjectById
+  )
+  .put(
+    requireRole(["superadmin", "editor"]),
+    validate(projectIdParamsSchema, "params"),
+    validate(updateProjectSchema),
+    updateProject
+  )
+  .delete(
+    requireRole(["superadmin", "editor"]),
+    validate(projectIdParamsSchema, "params"),
+    deleteProject
+  );
 
 export default router;

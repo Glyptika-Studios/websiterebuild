@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { validate } from "../../middleware/validate.middleware.js";
 import { requireRole } from "../../middleware/authorize.middleware.js";
-import { upsertModulePricingSchema } from "../../validators/products.validator.js";
+import {
+  modulePricingParamsSchema,
+  upsertModulePricingSchema,
+} from "../../validators/products.validator.js";
 import {
   upsertModulePricing,
   deleteModulePricing,
@@ -12,6 +15,7 @@ const router = Router();
 router.put(
   "/:mid/pricing/:tier",
   requireRole(["superadmin", "editor"]),
+  validate(modulePricingParamsSchema, "params"),
   validate(upsertModulePricingSchema),
   upsertModulePricing
 );
@@ -19,6 +23,7 @@ router.put(
 router.delete(
   "/:mid/pricing/:tier",
   requireRole(["superadmin", "editor"]),
+  validate(modulePricingParamsSchema, "params"),
   deleteModulePricing
 );
 

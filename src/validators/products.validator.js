@@ -111,3 +111,21 @@ export const upsertModulePricingSchema = z
   .refine((d) => Object.keys(d).length > 0, {
     message: "Provide at least one pricing field",
   });
+export const productIdParamsSchema = z.object({
+  id: z.string().uuid("Invalid product id"),
+});
+
+export const productMediaParamsSchema = z.object({
+  id: z.string().uuid("Invalid product id"),
+  emid: z.string().uuid("Invalid product media id"),
+});
+
+export const productModuleParamsSchema = z.object({
+  id: z.string().uuid("Invalid product id"),
+  mid: z.string().uuid("Invalid product module id"),
+});
+
+export const modulePricingParamsSchema = z.object({
+  mid: z.string().uuid("Invalid module id"),
+  tier: z.enum(["basic", "standard", "premium"]),
+});

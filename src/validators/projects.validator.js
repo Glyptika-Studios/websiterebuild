@@ -60,3 +60,13 @@ export const reorderProjectMediaSchema = z.object({
     )
     .min(1),
 });
+import { z } from "zod";
+
+export const projectIdParamsSchema = z.object({
+  id: z.string().uuid("Invalid project id"),
+});
+
+export const projectMediaParamsSchema = z.object({
+  id: z.string().uuid("Invalid project id"),
+  emid: z.string().uuid("Invalid project media id"),
+});
