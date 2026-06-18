@@ -7,7 +7,7 @@ import ContactTeaser from "@/components/public/ContactTeaser";
 export default function Home() {
   return (
     <>
-      <main className="flex flex-col w-full bg-[#0a0f1c] min-h-screen">
+      <main className="flex flex-col w-full bg-transparent min-h-screen">
         <Hero />
         <Stats />
         <Services />

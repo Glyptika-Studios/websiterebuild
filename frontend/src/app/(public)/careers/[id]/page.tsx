@@ -94,7 +94,7 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black text-slate-400 flex items-center justify-center font-space">
+      <div className="min-h-screen bg-transparent text-slate-400 flex items-center justify-center font-space">
         <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mr-3" />
         <span>Loading role details...</span>
       </div>
@@ -103,7 +103,7 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
 
   if (!job) {
     return (
-      <div className="min-h-screen bg-black text-slate-350 flex flex-col items-center justify-center font-space px-4">
+      <div className="min-h-screen bg-transparent text-slate-350 flex flex-col items-center justify-center font-space px-4">
         <h2 className="text-3xl font-black text-white mb-3">Role Not Found</h2>
         <p className="text-slate-500 mb-8 max-w-sm text-center">This position has been filled or archiving limits apply.</p>
         <Link href="/careers" className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-all flex items-center gap-2">
@@ -117,7 +117,7 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
   const requirements = job.items.filter(item => item.kind === "requirement");
 
   return (
-    <main className="min-h-screen bg-[#000000] text-slate-300 font-sans selection:bg-blue-500/30 pb-32">
+    <main className="min-h-screen bg-transparent text-slate-300 font-sans selection:bg-blue-500/30 pb-32">
       {/* Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-900/10 blur-[150px] rounded-full -translate-y-1/3" />

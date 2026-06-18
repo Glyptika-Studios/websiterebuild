@@ -3,12 +3,11 @@
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
-// Mock Data - structured for future API integration
 const MOCK_STATS = [
   { id: "stat-1", label: "Projects Delivered", value: 10, suffix: "+" },
   { id: "stat-2", label: "Defense Projects", value: 4, suffix: "+" },
   { id: "stat-3", label: "VR Environments", value: 25, suffix: "+" },
-  { id: "stat-4", label: "Proprietary Softwares Created", value: 3, suffix: "" },
+  { id: "stat-4", label: "Proprietary Softwares", value: 3, suffix: "" },
 ];
 
 function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
@@ -18,68 +17,71 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 
   useEffect(() => {
     if (inView) {
-      // Animate over 2 seconds
       const duration = 2000;
       const startTime = performance.now();
-
       const animate = (currentTime: number) => {
-        const elapsedTime = currentTime - startTime;
-        const progress = Math.min(elapsedTime / duration, 1);
-        
-        // Easing function (easeOutQuart)
-        const easeProgress = 1 - Math.pow(1 - progress, 4);
-        
-        setCount(Math.floor(easeProgress * value));
-
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        }
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 4);
+        setCount(Math.floor(ease * value));
+        if (progress < 1) requestAnimationFrame(animate);
       };
-
       requestAnimationFrame(animate);
     }
   }, [inView, value]);
 
-  return (
-    <span ref={nodeRef}>
-      {count}{suffix}
-    </span>
-  );
+  return <span ref={nodeRef}>{count}{suffix}</span>;
 }
 
 export default function Stats() {
   return (
-    <section className="relative w-full py-16 bg-[#0a0f1c] z-20">
+    <section className="relative w-full py-12 z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="relative rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-xl p-8 md:p-12 shadow-2xl overflow-hidden">
-          
-          {/* Subtle glowing lines inside the container */}
-          <div className="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
-          <div className="absolute bottom-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 relative z-10">
+        {/* Glass panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="relative rounded-3xl overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 50%, rgba(37,99,235,0.04) 100%)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            border: "1px solid rgba(255,255,255,0.10)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08), 0 0 0 1px rgba(37,99,235,0.08)",
+          }}
+        >
+          {/* Top edge highlight */}
+          <div className="absolute top-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-blue-400/40 to-transparent" />
+          {/* Bottom edge */}
+          <div className="absolute bottom-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-teal-400/20 to-transparent" />
+
+          {/* Inner glow orb */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-32 bg-blue-600/6 blur-3xl rounded-full pointer-events-none" />
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 relative z-10 p-8 md:p-10">
             {MOCK_STATS.map((stat, index) => (
               <motion.div
                 key={stat.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="flex flex-col items-center justify-center text-center space-y-2 group"
               >
-                <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:text-blue-400 group-hover:drop-shadow-[0_0_20px_rgba(96,165,250,0.5)] transition-all duration-300">
+                <div className="text-4xl md:text-5xl font-bold text-white tracking-tight group-hover:text-blue-300 transition-colors duration-300 drop-shadow-[0_0_20px_rgba(96,165,250,0.3)]">
                   <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                 </div>
-                <div className="text-sm md:text-base text-slate-400 font-medium uppercase tracking-widest group-hover:text-slate-300 transition-colors">
+                <div className="text-xs text-slate-400 font-semibold uppercase tracking-widest group-hover:text-slate-300 transition-colors">
                   {stat.label}
                 </div>
               </motion.div>
             ))}
           </div>
-          
-        </div>
-        
+        </motion.div>
+
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Header from "./Header";
 import Footer from "./Footer";
 import { Volume2, VolumeX } from "lucide-react";
+import ScrollBackgroundController from "@/components/background/ScrollBackgroundController";
 
 // ============================================================
 // PROCEDURAL AUDIO SYNTHESIZER (WEB AUDIO API)
@@ -209,6 +210,7 @@ export default function PublicLayoutWrapper({ children }: PublicLayoutWrapperPro
 
   return (
     <>
+      <ScrollBackgroundController />
       <Header />
       <MouseGlow />
       <AmbientAudioPlayer />

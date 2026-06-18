@@ -33,7 +33,13 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#050B14] border-t border-white/10 text-slate-400 py-16 transition-colors duration-300">
+    <footer className="relative border-t border-white/8 text-slate-400 py-16 transition-colors duration-300"
+      style={{
+        background: "linear-gradient(180deg, rgba(7,9,12,0.95) 0%, rgba(7,9,12,1) 100%)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           

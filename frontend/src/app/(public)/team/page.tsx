@@ -32,7 +32,7 @@ const MOCK_TEAM = [
 
 export default function TeamPage() {
   return (
-    <main className="min-h-screen bg-[#000000] text-slate-300 font-sans selection:bg-blue-500/30">
+    <main className="min-h-screen bg-transparent text-slate-300 font-sans selection:bg-blue-500/30">
 
       {/* Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0">

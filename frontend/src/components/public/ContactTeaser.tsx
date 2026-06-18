@@ -2,46 +2,87 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 export default function ContactTeaser() {
   return (
-    <section className="relative w-full py-32 bg-[#0a0f1c] overflow-hidden">
+    <section className="relative w-full py-32 overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
+
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative rounded-[3rem] p-10 md:p-16 text-center overflow-hidden border border-white/10 shadow-2xl"
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="relative rounded-[3rem] p-10 md:p-16 text-center overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, rgba(37,99,235,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(99,102,241,0.10) 100%)",
+            backdropFilter: "blur(40px)",
+            WebkitBackdropFilter: "blur(40px)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            boxShadow: "0 30px 100px rgba(0,0,0,0.6), 0 0 80px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(37,99,235,0.08)",
+          }}
         >
-          {/* Complex Distorted Background */}
-          <div className="absolute inset-0 bg-blue-900/40 backdrop-blur-3xl -z-10" />
-          <div className="absolute -top-[50%] -left-[10%] w-[70%] h-[150%] bg-blue-600/50 blur-[120px] rounded-full rotate-12 -z-10 animate-pulse" style={{ animationDuration: '8s' }} />
-          <div className="absolute -bottom-[50%] -right-[10%] w-[70%] h-[150%] bg-indigo-500/40 blur-[100px] rounded-full -rotate-12 -z-10 animate-pulse" style={{ animationDuration: '12s' }} />
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-50 mix-blend-overlay -z-10" />
+          {/* Ambient glows inside the card */}
+          <div
+            className="absolute -top-1/2 -left-1/4 w-3/4 h-[150%] rounded-full blur-[120px] pointer-events-none"
+            style={{ background: "rgba(37,99,235,0.20)", animation: "pulse 8s ease-in-out infinite" }}
+          />
+          <div
+            className="absolute -bottom-1/2 -right-1/4 w-3/4 h-[150%] rounded-full blur-[100px] pointer-events-none"
+            style={{ background: "rgba(99,102,241,0.15)", animation: "pulse 12s ease-in-out infinite 4s" }}
+          />
+
+          {/* Top shimmer line */}
+          <div className="absolute top-0 left-1/6 w-2/3 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent pointer-events-none" />
+          {/* Corner accents */}
+          <div className="absolute top-6 left-6 w-10 h-10 rounded-tl-2xl border-t-2 border-l-2 border-blue-400/30 pointer-events-none" />
+          <div className="absolute top-6 right-6 w-10 h-10 rounded-tr-2xl border-t-2 border-r-2 border-indigo-400/30 pointer-events-none" />
+          <div className="absolute bottom-6 left-6 w-10 h-10 rounded-bl-2xl border-b-2 border-l-2 border-blue-400/30 pointer-events-none" />
+          <div className="absolute bottom-6 right-6 w-10 h-10 rounded-br-2xl border-b-2 border-r-2 border-indigo-400/30 pointer-events-none" />
 
           {/* Content */}
-          <div className="relative z-20 max-w-3xl mx-auto flex flex-col items-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 drop-shadow-lg">
+          <div className="relative z-20 max-w-3xl mx-auto flex flex-col items-center gap-6">
+            {/* Sparkle badge */}
+            <div
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-blue-300"
+              style={{
+                background: "rgba(37,99,235,0.12)",
+                border: "1px solid rgba(37,99,235,0.25)",
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              <Sparkles className="w-3 h-3" />
+              Work With Us
+            </div>
+
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight">
               Request a Custom Proposal
             </h2>
-            <p className="text-base md:text-lg text-white font-light mb-8 max-w-2xl leading-relaxed">
-              Tell us about your project and our team will create a customized proposal tailored to your specific needs and requirements.
+
+            <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed max-w-2xl">
+              Tell us about your project and our team will craft a fully customized proposal tailored to your goals, timeline, and budget.
             </p>
-            
+
+            {/* CTA button — glassmorphic */}
             <Link
               href="/request-proposal"
-              className="group relative flex items-center justify-center gap-3 px-8 py-4 rounded-lg text-lg font-semibold text-blue-600 bg-white hover:bg-slate-50 transition-all duration-300 transform hover:-translate-y-1"
+              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-base font-bold text-white overflow-hidden transition-all duration-400"
+              style={{
+                background: "linear-gradient(135deg, rgba(37,99,235,0.80) 0%, rgba(99,102,241,0.70) 100%)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.20)",
+                boxShadow: "0 0 30px rgba(37,99,235,0.35), inset 0 1px 0 rgba(255,255,255,0.20)",
+              }}
             >
-              <span>Request Proposal</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              {/* Shine sweep */}
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 ease-out rounded-2xl" />
+              <span className="relative z-10">Request Proposal</span>
+              <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-
         </motion.div>
-        
+
       </div>
     </section>
   );

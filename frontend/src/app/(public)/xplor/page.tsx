@@ -385,7 +385,7 @@ export default function XplorPage() {
   const ModuleIcon = activeModule.icon;
 
   return (
-    <main className="min-h-screen bg-[#02050b] text-slate-300 font-sans selection:bg-blue-500/30 overflow-x-hidden relative">
+    <main className="min-h-screen bg-transparent text-slate-300 font-sans selection:bg-blue-500/30 overflow-x-hidden relative">
       
       {/* Background Grid & Ambient Glows */}
       <div className="absolute inset-0 pointer-events-none z-0">

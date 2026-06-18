@@ -31,14 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased relative min-h-screen bg-white text-slate-800`}>
-        {/* Floating Background Elements */}
-        <div className="floating-elements">
-          <div className="floating-circle w-32 h-32 bg-gradient-to-tr from-blue-600/10 to-teal-500/5 top-[20%] left-[10%] [animation-delay:0s]" />
-          <div className="floating-circle w-48 h-48 bg-gradient-to-tr from-indigo-600/10 to-blue-500/5 top-[60%] right-[15%] [animation-delay:2s]" />
-          <div className="floating-circle w-24 h-24 bg-gradient-to-tr from-teal-500/10 to-cyan-400/5 bottom-[20%] left-[20%] [animation-delay:4s]" />
-        </div>
-
+      <body className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased relative min-h-screen bg-[#0B1220] text-slate-800`}>
         <AuthProvider>
           <PublicLayoutWrapper>
             {children}
