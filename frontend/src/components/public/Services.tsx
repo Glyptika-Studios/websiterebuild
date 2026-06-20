@@ -202,10 +202,12 @@ export default function Services() {
           </motion.p>
         </motion.div>
 
-        {/* Cards — each has its own scroll-driven reveal */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Cards — flex-wrap so incomplete rows are centered */}
+        <div className="flex flex-wrap justify-center gap-6">
           {SERVICES_DATA.map((service) => (
-            <ServiceCard key={service.id} service={service} />
+            <div key={service.id} className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <ServiceCard service={service} />
+            </div>
           ))}
         </div>
 

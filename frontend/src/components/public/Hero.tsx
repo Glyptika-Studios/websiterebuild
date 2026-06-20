@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Script from "next/script";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Layers } from "lucide-react";
+import { Search, Layers } from "lucide-react";
 
 export default function Hero() {
   const vantaRef = useRef<HTMLDivElement>(null);
@@ -29,22 +29,24 @@ export default function Hero() {
   useEffect(() => {
     const initVanta = () => {
       // @ts-expect-error - VANTA is loaded dynamically via external script
-      if (!vantaEffect && window.VANTA && window.VANTA.HALO) {
+      if (!vantaEffect && window.VANTA && window.VANTA.NET) {
         setVantaEffect(
           // @ts-expect-error - VANTA is loaded dynamically via external script
-          window.VANTA.HALO({
+          window.VANTA.NET({
             el: vantaRef.current,
             mouseControls: true,
             touchControls: true,
             gyroControls: false,
             minHeight: 200.0,
             minWidth: 200.0,
-            baseColor: 0x1e3a8a,
-            backgroundColor: 0x000000,
-            amplitudeFactor: 1.0,
-            xOffset: 0,
-            yOffset: 0.1,
-            size: 0.6,
+            scale: 1.0,
+            scaleMobile: 1.0,
+            color: 0x2563eb,
+            backgroundColor: 0x060C18,
+            points: 10,
+            maxDistance: 23,
+            spacing: 16,
+            showDots: true,
           })
         );
       }
@@ -52,7 +54,7 @@ export default function Hero() {
 
     const interval = setInterval(() => {
       // @ts-expect-error - VANTA is loaded dynamically via external script
-      if (window.VANTA && window.VANTA.HALO) {
+      if (window.VANTA && window.VANTA.NET) {
         initVanta();
         clearInterval(interval);
       }
@@ -75,6 +77,15 @@ export default function Hero() {
     boxShadow: "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)",
   };
 
+  /* Unified glassmorphic style for both CTA buttons */
+  const glassCta = {
+    background: "linear-gradient(135deg, rgba(37,99,235,0.25) 0%, rgba(99,102,241,0.12) 100%)",
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+    border: "1px solid rgba(255,255,255,0.15)",
+    boxShadow: "0 4px 24px rgba(0,0,0,0.3), 0 0 20px rgba(37,99,235,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
+  };
+
   const serviceCards = [
     { title: "3D Modeling",  desc: "Photorealistic assets & animations",   rgb: "59,130,246" },
     { title: "VR Simulation", desc: "Defense & commercial training",        rgb: "6,182,212" },
@@ -85,7 +96,7 @@ export default function Hero() {
   return (
     <>
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" strategy="afterInteractive" />
-      <Script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js" strategy="afterInteractive" />
+      <Script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" strategy="afterInteractive" />
 
       {/* The VANTA background is pinned to the section */}
       <section
@@ -143,41 +154,36 @@ export default function Hero() {
               </p>
             </motion.div>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons — unified glass style */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.6 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
             >
-              <Link
-                href="#services"
-                className="group relative inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
-                style={{
-                  background: "linear-gradient(135deg, rgba(37,99,235,0.85) 0%, rgba(59,130,246,0.70) 100%)",
-                  backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(255,255,255,0.20)",
-                  boxShadow: "0 0 30px rgba(37,99,235,0.40), inset 0 1px 0 rgba(255,255,255,0.25)",
-                }}
-              >
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 rounded-2xl" />
-                <span className="relative z-10">Explore Services</span>
-                <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              <motion.div whileHover={{ y: -3, scale: 1.04 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 17 }}>
+                <Link
+                  href="#services"
+                  className="group relative inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl text-base font-bold text-white overflow-hidden transition-all duration-300"
+                  style={glassCta}
+                >
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 rounded-2xl" />
+                  <Search className="relative z-10 w-4 h-4 text-blue-300 group-hover:text-white transition-colors" />
+                  <span className="relative z-10">Explore Services</span>
+                </Link>
+              </motion.div>
 
-              <Link
-                href="#products"
-                className="group inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
-                style={{
-                  background: "rgba(255,255,255,0.05)",
-                  backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.07)",
-                }}
-              >
-                <Layers className="w-4 h-4 text-blue-400" />
-                View Products
-              </Link>
+              <motion.div whileHover={{ y: -3, scale: 1.04 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 17 }}>
+                <Link
+                  href="#products"
+                  className="group relative inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl text-base font-bold text-white overflow-hidden transition-all duration-300"
+                  style={glassCta}
+                >
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 rounded-2xl" />
+                  <Layers className="relative z-10 w-4 h-4 text-blue-300 group-hover:text-white transition-colors" />
+                  <span className="relative z-10">View Products</span>
+                </Link>
+              </motion.div>
             </motion.div>
 
             {/* Glass Service Cards — slower parallax (feels heavier) */}

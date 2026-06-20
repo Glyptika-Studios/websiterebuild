@@ -1,22 +1,26 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { DM_Sans, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import PublicLayoutWrapper from "@/components/layout/PublicLayoutWrapper";
 import { AuthProvider } from "@/context/AuthContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -31,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased relative min-h-screen bg-[#0B1220] text-slate-800`}>
+      <body className={`${dmSans.variable} ${jetbrainsMono.variable} ${playfair.variable} antialiased relative min-h-screen bg-[#0B1220] text-slate-800`}>
         <AuthProvider>
           <PublicLayoutWrapper>
             {children}

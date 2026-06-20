@@ -39,9 +39,14 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
     }
   };
 
+  // For 4 items use 2×2 grid; for 3 or 5+ use 3 columns with centered last row
+  const lgWidth = items.length === 4 || items.length <= 2
+    ? "lg:w-[calc(50%-12px)]"
+    : "lg:w-[calc(33.333%-16px)]";
+
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="flex flex-wrap justify-center gap-6">
         {items.map((item, index) => (
           <motion.div 
             key={item.id}
@@ -50,7 +55,7 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
             onClick={(e) => handleCardClick(e, item)}
-            className={`group relative bg-[#0a1128]/60 backdrop-blur-md border border-white/10 hover:border-blue-500/50 rounded-3xl p-8 transition-all duration-300 flex flex-col hover:shadow-[0_0_30px_rgba(37,99,235,0.15)] overflow-hidden ${
+            className={`w-full md:w-[calc(50%-12px)] ${lgWidth} group relative bg-[#0a1128]/60 backdrop-blur-md border border-white/10 hover:border-blue-500/50 rounded-3xl p-8 transition-all duration-300 flex flex-col hover:shadow-[0_0_30px_rgba(37,99,235,0.15)] overflow-hidden ${
               type !== "posts" ? "cursor-pointer" : ""
             }`}
           >
