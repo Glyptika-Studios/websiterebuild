@@ -7,6 +7,7 @@ import Footer from "./Footer";
 import { Volume2, VolumeX } from "lucide-react";
 import ScrollBackgroundController from "@/components/background/ScrollBackgroundController";
 import ScrollToTop from "@/components/shared/ScrollToTop";
+import ScrollProgressLine from "@/components/shared/ScrollProgressLine";
 
 // ============================================================
 // PROCEDURAL AUDIO SYNTHESIZER (WEB AUDIO API)
@@ -211,6 +212,7 @@ export default function PublicLayoutWrapper({ children }: PublicLayoutWrapperPro
 
   return (
     <>
+      <ScrollProgressLine />
       <ScrollBackgroundController />
       <Header />
       <MouseGlow />
