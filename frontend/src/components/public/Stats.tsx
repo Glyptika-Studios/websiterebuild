@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const MOCK_STATS = [
@@ -34,63 +34,30 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export default function Stats() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start 0.95", "end 0.3"],
-  });
-
-  // Glass panel floats upward with a parallax offset
-  const panelY = useTransform(scrollYProgress, [0, 1], [40, -20]);
-  const panelOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
-
   return (
-    <section ref={sectionRef} className="relative w-full py-12 z-20">
+    <section className="relative w-full py-8 z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Glass panel — with parallax float */}
-        <motion.div
-          style={{
-            y: panelY,
-            opacity: panelOpacity,
-            background: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 50%, rgba(37,99,235,0.04) 100%)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            border: "1px solid rgba(255,255,255,0.10)",
-            boxShadow: "0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08), 0 0 0 1px rgba(37,99,235,0.08)",
-          }}
-          className="relative rounded-3xl overflow-hidden"
-        >
-          {/* Top edge highlight */}
-          <div className="absolute top-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-blue-400/40 to-transparent" />
-          {/* Bottom edge */}
-          <div className="absolute bottom-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-teal-400/20 to-transparent" />
-
-          {/* Inner glow orb */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-32 bg-blue-600/6 blur-3xl rounded-full pointer-events-none" />
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 relative z-10 p-8 md:p-10">
+        <div className="bg-white rounded-2xl border border-[#DADCE0] shadow-sm overflow-hidden">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 p-8 md:p-10">
             {MOCK_STATS.map((stat, index) => (
               <motion.div
                 key={stat.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex flex-col items-center justify-center text-center space-y-2 group"
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+                className="flex flex-col items-center justify-center text-center space-y-1.5 group"
               >
-                <div className="text-4xl md:text-5xl font-bold text-white tracking-tight group-hover:text-blue-300 transition-colors duration-300 drop-shadow-[0_0_20px_rgba(96,165,250,0.3)]">
+                <div className="text-3xl md:text-4xl font-bold text-[#202124] tracking-tight group-hover:text-[#1A73E8] transition-colors duration-200">
                   <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                 </div>
-                <div className="text-xs text-slate-400 font-semibold uppercase tracking-widest group-hover:text-slate-300 transition-colors">
+                <div className="text-xs text-[#5F6368] font-medium uppercase tracking-widest group-hover:text-[#202124] transition-colors duration-200">
                   {stat.label}
                 </div>
               </motion.div>
             ))}
           </div>
-        </motion.div>
-
+        </div>
       </div>
     </section>
   );

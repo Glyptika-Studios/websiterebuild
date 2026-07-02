@@ -10,70 +10,67 @@ interface BackgroundCanvasProps {
   reducedMotion: boolean;
 }
 
-// ─── Glow blob definitions ────────────────────────────────────────────────────
-// Each blob belongs to a scroll zone [start, end] (0-1).
-// Opacity peaks at the midpoint of its zone, fades in/out at edges.
-// This creates vivid FLASH of colour rather than gradual grey blending.
+// Glow blobs designed to fit a light Google Developers layout.
 const GLOW_BLOBS = [
   {
-    // Hero — electric blue, top-centre
+    // Hero — soft Google blue, top-centre
     zone: [0.00, 0.28] as [number, number],
-    color: "37,99,235",
-    maxOpacity: 0.28,
-    size: "80vw",
+    color: "26, 115, 232", // Google Blue
+    maxOpacity: 0.12,
+    size: "75vw",
     xPct: 52,
-    yPct: 28,
-    parallaxStrength: 0.06, // how far it drifts on scroll (fraction of viewport)
-    blurPx: 140,
-    animDuration: "9s",
-  },
-  {
-    // Services — teal, left edge
-    zone: [0.18, 0.50] as [number, number],
-    color: "20,184,166",
-    maxOpacity: 0.22,
-    size: "65vw",
-    xPct: 12,
-    yPct: 55,
-    parallaxStrength: -0.08,
-    blurPx: 130,
-    animDuration: "11s",
-  },
-  {
-    // Portfolio — indigo, right edge
-    zone: [0.38, 0.68] as [number, number],
-    color: "99,102,241",
-    maxOpacity: 0.20,
-    size: "70vw",
-    xPct: 88,
-    yPct: 62,
-    parallaxStrength: 0.07,
-    blurPx: 150,
-    animDuration: "13s",
-  },
-  {
-    // Lab — cyan, centre-right
-    zone: [0.58, 0.82] as [number, number],
-    color: "6,182,212",
-    maxOpacity: 0.18,
-    size: "55vw",
-    xPct: 60,
-    yPct: 72,
-    parallaxStrength: -0.05,
+    yPct: 25,
+    parallaxStrength: 0.05,
     blurPx: 120,
     animDuration: "10s",
   },
   {
-    // Footer — deep violet, bottom
-    zone: [0.75, 1.00] as [number, number],
-    color: "124,58,237",
-    maxOpacity: 0.16,
-    size: "50vw",
-    xPct: 40,
-    yPct: 88,
-    parallaxStrength: 0.04,
-    blurPx: 110,
+    // Services — soft amber/orange, left
+    zone: [0.18, 0.50] as [number, number],
+    color: "230, 120, 20", // Amber
+    maxOpacity: 0.08,
+    size: "65vw",
+    xPct: 15,
+    yPct: 50,
+    parallaxStrength: -0.06,
+    blurPx: 130,
+    animDuration: "12s",
+  },
+  {
+    // Projects — soft purple, right
+    zone: [0.38, 0.68] as [number, number],
+    color: "161, 66, 244", // Purple
+    maxOpacity: 0.08,
+    size: "70vw",
+    xPct: 85,
+    yPct: 60,
+    parallaxStrength: 0.06,
+    blurPx: 140,
     animDuration: "14s",
+  },
+  {
+    // Lab — soft rose, centre-right
+    zone: [0.58, 0.82] as [number, number],
+    color: "244, 63, 94", // Rose
+    maxOpacity: 0.06,
+    size: "60vw",
+    xPct: 60,
+    yPct: 70,
+    parallaxStrength: -0.04,
+    blurPx: 110,
+    animDuration: "11s",
+  },
+  {
+    // Footer — soft warm gold/beige, bottom
+    zone: [0.75, 1.00] as [number, number],
+    color: "227, 116, 0", // Gold
+    maxOpacity: 0.08,
+    size: "55vw",
+    xPct: 40,
+    yPct: 85,
+    parallaxStrength: 0.03,
+    blurPx: 100,
+    animDuration: "15s",
   },
 ];
 
@@ -89,7 +86,6 @@ function triangleOpacity(
     progress <= mid
       ? (progress - start) / (mid - start)
       : (end - progress) / (end - mid);
-  // ease-in-out the raw triangle
   return maxOpacity * (raw * raw * (3 - 2 * raw));
 }
 
@@ -99,13 +95,13 @@ export default function BackgroundCanvas({
   mouseY,
   reducedMotion,
 }: BackgroundCanvasProps) {
-  // Mouse-glow opacity — brighter in mid sections
+  // Soft mouse-glow intensity stops
   const mouseGlowOpacity = useMemo(() => {
     const stops = [
-      { p: 0.0, o: 0.10 },
-      { p: 0.4, o: 0.20 },
-      { p: 0.8, o: 0.12 },
-      { p: 1.0, o: 0.06 },
+      { p: 0.0, o: 0.06 },
+      { p: 0.4, o: 0.12 },
+      { p: 0.8, o: 0.08 },
+      { p: 1.0, o: 0.04 },
     ];
     for (let i = 1; i < stops.length; i++) {
       if (progress <= stops[i].p) {
@@ -118,17 +114,16 @@ export default function BackgroundCanvas({
 
   return (
     <>
-      {/* ── Fixed dark base — never changes, no colour interpolation ── */}
+      {/* Fixed Google background base */}
       <div
         aria-hidden="true"
         className="fixed inset-0 pointer-events-none"
-        style={{ zIndex: 0, backgroundColor: "#060C18" }}
+        style={{ zIndex: 0, backgroundColor: "#F8F9FA" }}
       />
 
-      {/* ── Vivid scroll-zone glow blobs ── */}
+      {/* Crème glow blobs */}
       {GLOW_BLOBS.map((blob, idx) => {
         const opacity = reducedMotion ? 0 : triangleOpacity(progress, blob.zone, blob.maxOpacity);
-        // Parallax: blob drifts vertically as scroll progress changes
         const midZone = (blob.zone[0] + blob.zone[1]) / 2;
         const drift = reducedMotion ? 0 : (progress - midZone) * blob.parallaxStrength * 100;
 
@@ -159,18 +154,18 @@ export default function BackgroundCanvas({
         );
       })}
 
-      {/* ── Interactive mouse glow — always electric blue, tracks cursor ── */}
+      {/* Interactive mouse glow orb (Google blue) */}
       <div
         aria-hidden="true"
         className="fixed inset-0 pointer-events-none"
         style={{
           zIndex: 0,
-          background: `radial-gradient(ellipse 50% 40% at ${mouseX * 100}% ${mouseY * 60 + 20}%, rgba(37,99,235,${mouseGlowOpacity}) 0%, transparent 70%)`,
+          background: `radial-gradient(ellipse 50% 40% at ${mouseX * 100}% ${mouseY * 60 + 20}%, rgba(26, 115, 232, ${mouseGlowOpacity}) 0%, transparent 70%)`,
           transition: reducedMotion ? "none" : "background 0.5s ease-out",
         }}
       />
 
-      {/* ── Blueprint grid ── */}
+      {/* Blueprint grid */}
       <AmbientGrid progress={progress} reducedMotion={reducedMotion} />
     </>
   );

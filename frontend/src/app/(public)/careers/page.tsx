@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { MapPin, Briefcase, Sparkles, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-// Dummy data for upcoming API integration
 const MOCK_JOBS = [
   {
     id: "job-1",
@@ -26,23 +25,16 @@ const MOCK_JOBS = [
 
 export default function CareersPage() {
   return (
-    <main className="min-h-screen bg-transparent text-slate-300 font-sans selection:bg-blue-500/30">
-      
-      {/* Background Elements */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-900/10 blur-[150px] rounded-full -translate-y-1/2" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_30%,#000_20%,transparent_100%)] opacity-20" />
-      </div>
-
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 pb-24">
+    <main className="min-h-screen bg-[#FAFAF9]">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24">
         
         {/* Hero Section */}
-        <div className="text-center max-w-3xl mx-auto mb-20 flex flex-col items-center">
+        <div className="text-center max-w-3xl mx-auto mb-16 flex flex-col items-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold uppercase tracking-widest mb-6"
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8F0FE] border border-[#D2E3FC] text-[#1A73E8] text-xs font-semibold uppercase tracking-widest mb-6"
           >
             <Sparkles className="w-3.5 h-3.5" />
             Join the Team
@@ -51,17 +43,17 @@ export default function CareersPage() {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl"
+            transition={{ duration: 0.6, delay: 0.05 }}
+            className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#202124] mb-5 tracking-tight"
           >
-            Build the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">future</span> with us.
+            Build the <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#1A73E8] via-[#8B5CF6] to-[#EC4899] pb-0.5 inline-block">future</span> with us.
           </motion.h1>
           
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-slate-400 text-lg md:text-xl font-light leading-relaxed max-w-2xl"
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-[#5F6368] text-lg font-normal leading-relaxed max-w-2xl"
           >
             We are always looking for visionary engineers, artists, and innovators who want to push the boundaries of spatial computing and high-performance software.
           </motion.p>
@@ -69,48 +61,45 @@ export default function CareersPage() {
 
         {/* Job Listings */}
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
           className="space-y-6"
         >
-          <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-8">
-            <h2 className="text-2xl font-bold text-white tracking-wide">Open Positions</h2>
-            <span className="text-sm font-semibold px-3 py-1 bg-white/5 rounded-full text-slate-400 border border-white/10">
+          <div className="flex items-center justify-between border-b border-[#DADCE0] pb-4 mb-6">
+            <h2 className="text-xl font-bold text-[#202124] tracking-tight">Open Positions</h2>
+            <span className="text-xs font-semibold px-3 py-1 bg-white rounded-full text-[#5F6368] border border-[#DADCE0]">
               {MOCK_JOBS.length} Openings
             </span>
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-4">
             {MOCK_JOBS.map((job) => (
               <div 
                 key={job.id}
-                className="group relative bg-[#0a1128]/60 backdrop-blur-md border border-white/10 hover:border-blue-500/50 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_30px_rgba(37,99,235,0.15)] flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden"
+                className="group relative bg-white border border-[#DADCE0] hover:border-[#BDC1C6] rounded-2xl p-6 md:p-8 transition-all duration-200 hover:shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden"
               >
-                {/* Hover Glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-blue-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                
                 <div className="flex-1 relative z-10">
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1A73E8] bg-[#E8F0FE] px-3 py-1 rounded-full border border-[#D2E3FC]">
                       {job.department}
                     </span>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
+                  <h3 className="text-xl font-bold text-[#202124] mb-2 group-hover:text-[#1A73E8] transition-colors leading-tight">
                     {job.title}
                   </h3>
-                  <p className="text-slate-400 text-sm mb-5 max-w-2xl leading-relaxed">
+                  <p className="text-[#5F6368] text-sm mb-4 max-w-2xl leading-relaxed">
                     {job.description}
                   </p>
                   
-                  <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-slate-500">
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="w-4 h-4 text-slate-400" />
+                  <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-[#5F6368]">
+                    <div className="flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-[#80868B]" />
                       {job.location}
                     </div>
-                    <div className="w-1 h-1 rounded-full bg-slate-700" />
-                    <div className="flex items-center gap-1.5">
-                      <Briefcase className="w-4 h-4 text-slate-400" />
+                    <div className="w-1 h-1 rounded-full bg-[#BDC1C6]" />
+                    <div className="flex items-center gap-1">
+                      <Briefcase className="w-3.5 h-3.5 text-[#80868B]" />
                       {job.type}
                     </div>
                   </div>
@@ -119,7 +108,7 @@ export default function CareersPage() {
                 <div className="relative z-10 md:shrink-0 flex items-center justify-start md:justify-end">
                   <Link 
                     href={`/careers/${job.id}`} 
-                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-blue-600 text-white border border-white/10 hover:border-blue-500 rounded-xl font-semibold transition-all duration-300"
+                    className="flex items-center gap-1.5 px-5 py-2.5 bg-white hover:bg-[#F8F9FA] text-[#202124] border border-[#DADCE0] hover:border-[#BDC1C6] rounded-full font-semibold transition-all duration-200 text-sm"
                   >
                     View Role
                     <ChevronRight className="w-4 h-4" />
@@ -130,16 +119,16 @@ export default function CareersPage() {
           </div>
 
           {/* Fallback / General Application */}
-          <div className="mt-12 p-8 rounded-2xl bg-gradient-to-br from-[#050B14] to-[#0a1128] border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="mt-10 p-8 rounded-2xl bg-white border border-[#DADCE0] flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
-              <h3 className="text-xl font-bold text-white mb-2">Don&apos;t see a perfect fit?</h3>
-              <p className="text-slate-400 text-sm max-w-md">
+              <h3 className="text-lg font-bold text-[#202124] mb-1">Don&apos;t see a perfect fit?</h3>
+              <p className="text-[#5F6368] text-sm max-w-md">
                 We&apos;re always looking for outstanding talent. Send us your resume and a brief intro, and we&apos;ll keep you in mind for future roles.
               </p>
             </div>
             <Link 
               href="/request-proposal" 
-              className="shrink-0 px-6 py-3 bg-transparent hover:bg-white/5 border border-slate-600 hover:border-slate-400 text-white rounded-xl font-semibold transition-colors"
+              className="shrink-0 px-6 py-3 bg-[#1A73E8] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-colors duration-200 text-sm shadow-sm hover:shadow-md"
             >
               Get in Touch
             </Link>
@@ -150,4 +139,3 @@ export default function CareersPage() {
     </main>
   );
 }
-

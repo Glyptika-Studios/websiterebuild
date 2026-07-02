@@ -187,7 +187,6 @@ const FAQS = [
 ];
 
 export default function ImsPage() {
-  // Page States
   const [activeModuleTab, setActiveModuleTab] = useState<"core" | "flow" | "dispatch">("core");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   
@@ -203,45 +202,24 @@ export default function ImsPage() {
   const ModuleIcon = activeModule.icon;
 
   return (
-    <main className="min-h-screen bg-transparent text-slate-300 font-sans selection:bg-blue-500/30 overflow-x-hidden relative">
-      
-      {/* Background Grid & Ambient Glows */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-indigo-900/10 blur-[150px] rounded-full" />
-        <div className="absolute top-[40%] right-[10%] w-[500px] h-[500px] bg-blue-900/10 blur-[150px] rounded-full" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0c1322_1px,transparent_1px),linear-gradient(to_bottom,#0c1322_1px,transparent_1px)] bg-[size:5rem_5rem] opacity-30" />
-      </div>
-
+    <main className="min-h-screen bg-[#FAFAF9] overflow-x-hidden relative">
       <div className="relative z-10">
         
         {/* ============================================================
-            1. DYNAMIC HERO SECTION WITH LOOPS BACKGROUND VIDEO
+            1. HERO SECTION
            ============================================================ */}
-        <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-white/5">
-          {/* Looping BG Video */}
-          <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-            <video 
-              src="/reference.mp4" 
-              autoPlay 
-              loop 
-              muted 
-              playsInline 
-              className="absolute inset-0 w-full h-full object-cover opacity-45 filter grayscale contrast-125"
-            />
-            {/* Glossy Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#02050b]/40 via-[#02050b]/60 to-[#02050b]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#02050b]/40 via-transparent to-[#02050b]/40" />
-          </div>
-
+        <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-[#DADCE0]"
+          style={{ background: "linear-gradient(180deg, #FFFFFF 0%, #F1F3F4 100%)" }}
+        >
           <div className="relative z-10 max-w-7xl mx-auto text-center flex flex-col items-center">
             {/* Tech Badge */}
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/35 text-indigo-400 text-xs font-semibold uppercase tracking-widest mb-8 shadow-[0_0_15px_rgba(99,102,241,0.15)]"
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8F0FE] border border-[#D2E3FC] text-[#1A73E8] text-xs font-semibold uppercase tracking-widest mb-8"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
+              <ShieldCheck className="w-3.5 h-3.5 animate-pulse" />
               Defense-Grade Inventory System
             </motion.div>
 
@@ -250,40 +228,39 @@ export default function ImsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-none mb-6 font-space max-w-4xl"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#202124] tracking-tight leading-[1.1] mb-5 max-w-4xl"
             >
               IMS Portal: <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-blue-300">Next-Gen Logistics.</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#1A73E8] via-[#8B5CF6] to-[#EC4899] pb-1 block">Next-Gen Logistics.</span>
             </motion.h1>
 
             {/* Description */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg sm:text-xl text-slate-400 max-w-3xl leading-relaxed mb-12 font-light"
+              className="text-lg sm:text-xl text-[#5F6368] max-w-3xl leading-relaxed mb-10"
             >
               Automated logistics management custom-engineered for defense institutions and secure enterprises. Eliminate inventory leaks with air-gapped PostgreSQL cores, packaging registries, and immutable logs.
             </motion.p>
 
             {/* CTA Actions */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <Link
                 href="/request-proposal"
-                className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase tracking-wider transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
+                className="px-7 py-3.5 bg-[#1A73E8] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm"
               >
-                <span>Request Custom Demo</span>
+                Request Custom Demo
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              
               <a
                 href="#modules"
-                className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-bold border border-white/5 hover:border-white/10 transition-all duration-300"
+                className="px-7 py-3.5 bg-white hover:bg-[#F8F9FA] text-[#202124] rounded-full font-medium border border-[#DADCE0] hover:border-[#BDC1C6] transition-all duration-200 text-sm"
               >
                 View System Modules
               </a>
@@ -291,239 +268,149 @@ export default function ImsPage() {
           </div>
 
           {/* Interactive Scroll Down Prompt */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-xs text-slate-500 z-10 pointer-events-none select-none">
-            <span className="font-bold tracking-widest uppercase text-[10px] animate-pulse">Scroll to explore</span>
-            <div className="w-5 h-8 rounded-full border border-slate-700 flex justify-center p-1">
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-xs text-[#80868B] z-10 pointer-events-none select-none">
+            <span className="font-semibold tracking-widest uppercase text-[10px]">Scroll to explore</span>
+            <div className="w-5 h-8 rounded-full border border-[#DADCE0] flex justify-center p-1">
               <motion.div 
                 animate={{ y: [0, 8, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="w-1 h-1.5 bg-indigo-500 rounded-full"
+                className="w-1 h-1.5 bg-[#1A73E8] rounded-full"
               />
             </div>
           </div>
         </section>
 
-
         {/* ============================================================
-            2. HIGH-IMPACT METRICS & STATS SECTION (Smaller, Homepage style)
+            2. STATS SECTION
            ============================================================ */}
-        <section className="py-12 relative z-20">
+        <section className="py-10 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-xl p-8 md:p-12 shadow-2xl overflow-hidden">
-              <div className="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
-              <div className="absolute bottom-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative z-10 text-center">
-                
-                {/* Stat 1 */}
-                <div className="flex flex-col items-center justify-center space-y-2 group">
-                  <div className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:text-indigo-400 group-hover:drop-shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all duration-300 font-space">
-                    99.99%
+            <div className="bg-white rounded-2xl border border-[#DADCE0] shadow-sm p-8 md:p-10">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center">
+                {[
+                  { value: "99.99%", label: "System Uptime", color: "#1A73E8" },
+                  { value: "85%", label: "Time Reduction", color: "#A142F4" },
+                  { value: "0", label: "Security Breaches", color: "#0D652D" }
+                ].map((stat, i) => (
+                  <div key={i} className="flex flex-col items-center justify-center space-y-1.5 group">
+                    <div 
+                      className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight group-hover:opacity-85 transition-all duration-200 font-sans"
+                      style={{ color: stat.color }}
+                    >
+                      {stat.value}
+                    </div>
+                    <div className="text-xs md:text-sm text-[#5F6368] font-medium uppercase tracking-widest">
+                      {stat.label}
+                    </div>
                   </div>
-                  <div className="text-xs md:text-sm text-slate-400 font-bold uppercase tracking-widest group-hover:text-slate-350 transition-colors">
-                    System Uptime
-                  </div>
-                </div>
-
-                {/* Stat 2 */}
-                <div className="flex flex-col items-center justify-center space-y-2 group">
-                  <div className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:text-purple-400 group-hover:drop-shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all duration-300 font-space">
-                    85%
-                  </div>
-                  <div className="text-xs md:text-sm text-slate-400 font-bold uppercase tracking-widest group-hover:text-slate-350 transition-colors">
-                    Time Reduction
-                  </div>
-                </div>
-
-                {/* Stat 3 */}
-                <div className="flex flex-col items-center justify-center space-y-2 group">
-                  <div className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:text-blue-400 group-hover:drop-shadow-[0_0_20px_rgba(96,165,250,0.4)] transition-all duration-300 font-space">
-                    0
-                  </div>
-                  <div className="text-xs md:text-sm text-slate-400 font-bold uppercase tracking-widest group-hover:text-slate-350 transition-colors">
-                    Security Breaches
-                  </div>
-                </div>
-
+                ))}
               </div>
             </div>
           </div>
         </section>
 
-
         {/* ============================================================
-            2b. WHY CHOOSE IMS SECTION (Similar size to stats panel)
+            2b. WHY CHOOSE IMS SECTION
            ============================================================ */}
-        <section className="py-12 relative z-20">
+        <section className="py-10 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div className="relative rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-xl p-8 md:p-12 shadow-2xl overflow-hidden">
-              <div className="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-              <div className="absolute bottom-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-              
-              <div className="text-center mb-10 relative z-10">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/35 text-purple-400 text-xs font-bold uppercase tracking-widest mb-3">
+            <div className="bg-white rounded-2xl border border-[#DADCE0] shadow-sm p-8 md:p-10">
+              <div className="text-center mb-8">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3E8FD] border border-[#E4CCFA] text-[#A142F4] text-xs font-medium uppercase tracking-widest mb-3">
                   Core Value Propositions
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-black text-white font-space">
+                <h3 className="text-2xl sm:text-3xl font-bold text-[#202124]">
                   Why Choose IMS
                 </h3>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-                
-                {/* Prop 1 */}
-                <div className="p-6 rounded-2xl bg-slate-950/45 border border-white/5 hover:border-purple-500/30 transition-all duration-300 flex flex-col items-start space-y-3 group">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 font-bold">
-                    <Lock className="w-5 h-5" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {[
+                  { icon: Lock, title: "Air-Gapped Setup", desc: "Run completely offline within local defense containers." },
+                  { icon: Database, title: "Isolated DB Nodes", desc: "Isolated database cores featuring Row Level Security." },
+                  { icon: Zap, title: "Automatic Decrements", desc: "Logistics flows auto sync to asset databases instantly." },
+                  { icon: Activity, title: "Immutable History", desc: "Chronological activity sync audit registers." }
+                ].map((prop, i) => (
+                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#DADCE0] hover:border-[#BDC1C6] hover:shadow-sm transition-all duration-200 flex flex-col items-start space-y-2.5 group">
+                    <div className="w-9 h-9 rounded-lg bg-[#F3E8FD] border border-[#E4CCFA] flex items-center justify-center text-[#A142F4]">
+                      <prop.icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-[#202124] group-hover:text-[#A142F4] transition-colors">{prop.title}</h4>
+                      <p className="text-xs text-[#5F6368] mt-0.5">{prop.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-black text-white group-hover:text-purple-400 transition-colors">Air-Gapped Setup</h4>
-                    <p className="text-xs text-slate-400 font-light mt-1">Run completely offline within local defense containers.</p>
-                  </div>
-                </div>
-
-                {/* Prop 2 */}
-                <div className="p-6 rounded-2xl bg-slate-950/45 border border-white/5 hover:border-purple-500/30 transition-all duration-300 flex flex-col items-start space-y-3 group">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 font-bold">
-                    <Database className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-black text-white group-hover:text-purple-400 transition-colors">Isolated DB Nodes</h4>
-                    <p className="text-xs text-slate-400 font-light mt-1">Isolated database cores featuring strict Row Level Security (RLS).</p>
-                  </div>
-                </div>
-
-                {/* Prop 3 */}
-                <div className="p-6 rounded-2xl bg-slate-950/45 border border-white/5 hover:border-purple-500/30 transition-all duration-300 flex flex-col items-start space-y-3 group">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 font-bold">
-                    <Zap className="w-5 h-5 animate-pulse" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-black text-white group-hover:text-purple-400 transition-colors">Automatic Decrements</h4>
-                    <p className="text-xs text-slate-400 font-light mt-1">Packaging module syncs dispatch counts to stock instantly.</p>
-                  </div>
-                </div>
-
-                {/* Prop 4 */}
-                <div className="p-6 rounded-2xl bg-slate-950/45 border border-white/5 hover:border-purple-500/30 transition-all duration-300 flex flex-col items-start space-y-3 group">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 font-bold">
-                    <Activity className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-black text-white group-hover:text-purple-400 transition-colors">Immutable History</h4>
-                    <p className="text-xs text-slate-400 font-light mt-1">Every material movement tracked chronologically.</p>
-                  </div>
-                </div>
-
+                ))}
               </div>
-
             </div>
-
           </div>
         </section>
 
-
         {/* ============================================================
-            2c. WHO USES IMS SECTION (Similar size to stats panel)
+            2c. WHO USES IMS SECTION
            ============================================================ */}
-        <section className="py-12 relative z-20">
+        <section className="py-10 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div className="relative rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-xl p-8 md:p-12 shadow-2xl overflow-hidden">
-              <div className="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-              <div className="absolute bottom-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-              
-              <div className="text-center mb-10 relative z-10">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/35 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-3">
+            <div className="bg-white rounded-2xl border border-[#DADCE0] shadow-sm p-8 md:p-10">
+              <div className="text-center mb-8">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F0FE] border border-[#D2E3FC] text-[#1A73E8] text-xs font-medium uppercase tracking-widest mb-3">
                   Target Sectors
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-black text-white font-space">
+                <h3 className="text-2xl sm:text-3xl font-bold text-[#202124]">
                   Built for Secure Enterprise & Defense
                 </h3>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                
-                {/* Sector 1 */}
-                <div className="p-6 rounded-2xl bg-slate-950/45 border border-white/5 hover:border-cyan-500/30 transition-all duration-300 flex items-center space-x-4 group">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {["Indian Defense Institutions", "Security Infrastructure Teams", "Heavy Material Warehouses"].map((sector, i) => (
+                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#DADCE0] hover:border-[#1A73E8]/30 transition-all duration-200 flex items-center space-x-3 group">
+                    <div className="w-7 h-7 rounded-md bg-[#E8F0FE] border border-[#D2E3FC] flex items-center justify-center text-[#1A73E8] shrink-0">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-xs font-semibold text-[#202124] group-hover:text-[#1A73E8] transition-colors uppercase tracking-wider">{sector}</span>
                   </div>
-                  <span className="text-xs font-black text-white group-hover:text-cyan-400 transition-colors uppercase tracking-wider">Indian Defense Institutions</span>
-                </div>
-
-                {/* Sector 2 */}
-                <div className="p-6 rounded-2xl bg-slate-950/45 border border-white/5 hover:border-cyan-500/30 transition-all duration-300 flex items-center space-x-4 group">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-black text-white group-hover:text-cyan-400 transition-colors uppercase tracking-wider">Security Infrastructure Teams</span>
-                </div>
-
-                {/* Sector 3 */}
-                <div className="p-6 rounded-2xl bg-slate-950/45 border border-white/5 hover:border-cyan-500/30 transition-all duration-300 flex items-center space-x-4 group">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-black text-white group-hover:text-cyan-400 transition-colors uppercase tracking-wider">Heavy Material Warehouses</span>
-                </div>
-
+                ))}
               </div>
 
-              {/* Second row of 2 centered items on desktop */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 mt-6 max-w-4xl mx-auto">
-                
-                {/* Sector 4 */}
-                <div className="p-6 rounded-2xl bg-slate-950/45 border border-white/5 hover:border-cyan-500/30 transition-all duration-300 flex items-center space-x-4 group">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 max-w-4xl mx-auto">
+                {["Military Logistics Centers", "On-Premise Enterprise Facilities"].map((sector, i) => (
+                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#DADCE0] hover:border-[#1A73E8]/30 transition-all duration-200 flex items-center space-x-3 group">
+                    <div className="w-7 h-7 rounded-md bg-[#E8F0FE] border border-[#D2E3FC] flex items-center justify-center text-[#1A73E8] shrink-0">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-xs font-semibold text-[#202124] group-hover:text-[#1A73E8] transition-colors uppercase tracking-wider">{sector}</span>
                   </div>
-                  <span className="text-xs font-black text-white group-hover:text-cyan-400 transition-colors uppercase tracking-wider">Military Logistics Centers</span>
-                </div>
-
-                {/* Sector 5 */}
-                <div className="p-6 rounded-2xl bg-slate-950/45 border border-white/5 hover:border-cyan-500/30 transition-all duration-300 flex items-center space-x-4 group">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-black text-white group-hover:text-cyan-400 transition-colors uppercase tracking-wider">On-Premise Enterprise Facilities</span>
-                </div>
-
+                ))}
               </div>
-
             </div>
-
           </div>
         </section>
 
-
         {/* ============================================================
-            3. INTERACTIVE LOGISTICS SAVINGS CALCULATOR
+            3. AUDIT ESTIMATOR CALCULATOR
            ============================================================ */}
-        <section className="py-24 border-t border-white/5 bg-[#050b14]/35">
+        <section className="py-20 border-t border-[#DADCE0]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Logistics Calculator</span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2 mb-4 font-space">IMS Savings & Time Estimator</h2>
-              <p className="text-slate-400 max-w-2xl mx-auto">Estimate your time savings and audit cost reductions based on system scale.</p>
+            <div className="text-center mb-14">
+              <span className="text-xs font-medium uppercase tracking-widest text-[#1A73E8]">Logistics Calculator</span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#202124] mt-2 mb-3">IMS Savings & Time Estimator</h2>
+              <p className="text-[#5F6368] max-w-2xl mx-auto text-sm">Estimate your time savings and audit cost reductions based on system scale.</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-5xl mx-auto items-center">
               
               {/* Sliders Form Card */}
-              <div className="p-8 md:p-10 rounded-[2rem] bg-slate-900/50 border border-white/10 backdrop-blur-lg shadow-xl space-y-8 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-cyan-400" />
-                <h3 className="text-xl font-black text-white mb-6 tracking-tight flex items-center gap-2">
-                  <Sliders className="w-5 h-5 text-indigo-400" />
+              <div className="p-8 rounded-2xl bg-white border border-[#DADCE0] shadow-sm space-y-6 relative overflow-hidden">
+                <h3 className="text-lg font-bold text-[#202124] mb-4 flex items-center gap-2">
+                  <Sliders className="w-5 h-5 text-[#1A73E8]" />
                   Scale Setup
                 </h3>
 
                 {/* Slider 1 */}
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-slate-400">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-xs font-semibold text-[#5F6368]">
                     <span>Number of Inventory Assets</span>
-                    <span className="text-indigo-400 font-mono text-sm">{calcAssets.toLocaleString()} Items</span>
+                    <span className="text-[#1A73E8] font-mono text-sm font-bold">{calcAssets.toLocaleString()} Items</span>
                   </div>
                   <input 
                     type="range" 
@@ -532,19 +419,19 @@ export default function ImsPage() {
                     step="1000"
                     value={calcAssets} 
                     onChange={(e) => setCalcAssets(parseInt(e.target.value))}
-                    className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500" 
+                    className="w-full h-1 bg-[#F1F3F4] rounded-lg appearance-none cursor-pointer accent-[#1A73E8]" 
                   />
-                  <div className="flex justify-between text-[10px] text-slate-600 font-bold">
+                  <div className="flex justify-between text-[10px] text-[#80868B]">
                     <span>1,000 items</span>
                     <span>100,000 items</span>
                   </div>
                 </div>
 
                 {/* Slider 2 */}
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-slate-400">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-xs font-semibold text-[#5F6368]">
                     <span>Admin Operator Seats</span>
-                    <span className="text-cyan-400 font-mono text-sm">{calcAdmins} Operator{calcAdmins > 1 ? 's' : ''}</span>
+                    <span className="text-[#A142F4] font-mono text-sm font-bold">{calcAdmins} Operator{calcAdmins > 1 ? 's' : ''}</span>
                   </div>
                   <input 
                     type="range" 
@@ -553,9 +440,9 @@ export default function ImsPage() {
                     step="1"
                     value={calcAdmins} 
                     onChange={(e) => setCalcAdmins(parseInt(e.target.value))}
-                    className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400" 
+                    className="w-full h-1 bg-[#F1F3F4] rounded-lg appearance-none cursor-pointer accent-[#A142F4]" 
                   />
-                  <div className="flex justify-between text-[10px] text-slate-600 font-bold">
+                  <div className="flex justify-between text-[10px] text-[#80868B]">
                     <span>1 Operator</span>
                     <span>50 Operators</span>
                   </div>
@@ -563,35 +450,33 @@ export default function ImsPage() {
               </div>
 
               {/* Dynamic Outputs Card */}
-              <div className="space-y-6">
+              <div className="space-y-4">
                 
                 {/* Panel 1 */}
-                <div className="p-6 rounded-2xl bg-[#0a1128]/50 border border-indigo-500/20 relative overflow-hidden flex items-center gap-6">
-                  <div className="absolute inset-y-0 left-0 w-1 bg-indigo-500" />
-                  <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
-                    <Hourglass className="w-7 h-7 text-indigo-400" />
+                <div className="p-5 rounded-xl bg-[#E8F0FE] border border-[#1A73E8]/20 flex items-center gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-white border border-[#D2E3FC] flex items-center justify-center shrink-0">
+                    <Hourglass className="w-6 h-6 text-[#1A73E8]" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Est. Hours Saved / Year</span>
-                    <div className="text-3xl font-black text-white tracking-tight mt-0.5">
+                    <span className="text-[10px] font-semibold text-[#5F6368] uppercase tracking-widest">Est. Hours Saved / Year</span>
+                    <div className="text-2xl font-bold text-[#202124] mt-0.5">
                       ~ {estTimeSaved.toLocaleString()} hours
                     </div>
-                    <p className="text-xs text-slate-400 leading-normal mt-1 font-light">Calculated against manual verification workflows.</p>
+                    <p className="text-[11px] text-[#5F6368] leading-normal mt-0.5">Calculated against manual verification workflows.</p>
                   </div>
                 </div>
 
                 {/* Panel 2 */}
-                <div className="p-6 rounded-2xl bg-[#081525]/50 border border-cyan-500/20 relative overflow-hidden flex items-center gap-6">
-                  <div className="absolute inset-y-0 left-0 w-1 bg-cyan-400" />
-                  <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-7 h-7 text-cyan-400" />
+                <div className="p-5 rounded-xl bg-[#E6F4EA] border border-[#CEEAD6] flex items-center gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-white border border-[#CEEAD6] flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-6 h-6 text-[#0D652D]" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Est. Annual Audit Cost Saved</span>
-                    <div className="text-3xl font-black text-white tracking-tight mt-0.5">
+                    <span className="text-[10px] font-semibold text-[#5F6368] uppercase tracking-widest">Est. Annual Audit Cost Saved</span>
+                    <div className="text-2xl font-bold text-[#202124] mt-0.5">
                       ₹ {estCostSaved.toLocaleString()}
                     </div>
-                    <p className="text-xs text-slate-400 leading-normal mt-1 font-light">Includes reductions in audit processing overhead.</p>
+                    <p className="text-[11px] text-[#5F6368] leading-normal mt-0.5">Includes reductions in audit processing overhead.</p>
                   </div>
                 </div>
 
@@ -601,28 +486,27 @@ export default function ImsPage() {
           </div>
         </section>
 
-
         {/* ============================================================
-            4. DYNAMIC MODULE SELECTOR & PARAMETER SHOWCASE (TABS)
+            4. SYSTEM ARCHITECTURE MODULES
            ============================================================ */}
-        <section id="modules" className="py-24 border-t border-white/5">
+        <section id="modules" className="py-20 border-t border-[#DADCE0]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-500">System Architecture</span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2 mb-4 font-space">Custom Modular Capabilities</h2>
-              <p className="text-slate-400 max-w-2xl mx-auto">Toggle the tabs below to view detailed specifications and licensing tiers for each module.</p>
+            <div className="text-center mb-14">
+              <span className="text-xs font-medium uppercase tracking-widest text-[#1A73E8]">System Architecture</span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#202124] mt-2 mb-3">Custom Modular Capabilities</h2>
+              <p className="text-[#5F6368] max-w-2xl mx-auto text-sm">Toggle the tabs below to view detailed specifications and licensing tiers for each module.</p>
             </div>
 
             {/* Selector tabs */}
-            <div className="flex justify-center border-b border-white/5 mb-12 max-w-lg mx-auto overflow-x-auto gap-2">
+            <div className="flex justify-center border-b border-[#DADCE0] mb-10 max-w-lg mx-auto overflow-x-auto gap-1">
               {(["core", "flow", "dispatch"] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveModuleTab(tab)}
-                  className={`px-6 py-4 text-xs font-black uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${
+                  className={`px-5 py-3.5 text-xs font-semibold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${
                     activeModuleTab === tab
-                      ? "border-indigo-500 text-indigo-400"
-                      : "border-transparent text-slate-500 hover:text-slate-300"
+                      ? "border-[#1A73E8] text-[#1A73E8]"
+                      : "border-transparent text-[#5F6368] hover:text-[#202124]"
                   }`}
                 >
                   {MODULE_DETAILS[tab].name}
@@ -634,133 +518,119 @@ export default function ImsPage() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeModuleTab}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.4 }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-6xl mx-auto items-stretch bg-slate-900/20 border border-white/5 p-8 md:p-10 rounded-[2.5rem] backdrop-blur-sm"
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.3 }}
+                className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-stretch bg-white border border-[#DADCE0] p-8 md:p-10 rounded-2xl shadow-sm"
               >
                 
                 {/* Details Column */}
-                <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
+                <div className="lg:col-span-7 flex flex-col justify-between space-y-5">
                   <div>
-                    <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-6">
-                      <ModuleIcon className="w-7 h-7 text-indigo-400" />
+                    <div className="w-12 h-12 rounded-xl bg-[#E8F0FE] border border-[#D2E3FC] flex items-center justify-center mb-5">
+                      <ModuleIcon className="w-6 h-6 text-[#1A73E8]" />
                     </div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-slate-500">{activeModule.tagline}</span>
-                    <h3 className="text-3xl font-black text-white mt-1 mb-4 font-space">{activeModule.name}</h3>
-                    <p className="text-slate-450 leading-relaxed font-light mb-8 text-base">{activeModule.desc}</p>
+                    <span className="text-xs font-medium uppercase tracking-widest text-[#5F6368]">{activeModule.tagline}</span>
+                    <h3 className="text-2xl font-bold text-[#202124] mt-1 mb-3">{activeModule.name}</h3>
+                    <p className="text-[#5F6368] leading-relaxed text-sm mb-6">{activeModule.desc}</p>
 
-                    <h4 className="text-xs font-black uppercase tracking-widest text-white mb-4">Core capabilities</h4>
-                    <ul className="space-y-3">
+                    <h4 className="text-xs font-semibold uppercase tracking-widest text-[#202124] mb-3">Core capabilities</h4>
+                    <ul className="space-y-2.5">
                       {activeModule.capabilities.map((cap, i) => (
-                        <li key={i} className="flex items-center gap-3 text-sm">
-                          <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0" />
-                          <span className="text-slate-350">{cap}</span>
+                        <li key={i} className="flex items-center gap-2.5 text-sm">
+                          <CheckCircle2 className="w-4 h-4 text-[#1A73E8] shrink-0" />
+                          <span className="text-[#5F6368]">{cap}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="pt-6 border-t border-white/5">
+                  <div className="pt-5 border-t border-[#DADCE0]">
                     <Link
                       href="/request-proposal"
-                      className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider text-indigo-400 hover:text-white transition-colors group"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-[#1A73E8] hover:text-[#1765CC] transition-colors group"
                     >
                       Request module deployment
-                      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>
                 </div>
 
                 {/* Technical Specs Panels */}
-                <div className="lg:col-span-5 flex flex-col justify-center gap-4">
-                  <div className="p-6 rounded-2xl bg-slate-950/40 border border-white/5">
-                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">System Complexity</span>
-                    <span className="text-lg font-bold text-white mt-1 block font-mono">{activeModule.specs.complexity}</span>
-                  </div>
-                  <div className="p-6 rounded-2xl bg-slate-950/40 border border-white/5">
-                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Core Database Engine</span>
-                    <span className="text-lg font-bold text-white mt-1 block font-mono">{activeModule.specs.engine}</span>
-                  </div>
-                  <div className="p-6 rounded-2xl bg-slate-950/40 border border-white/5">
-                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Average Throughput</span>
-                    <span className="text-lg font-bold text-white mt-1 block font-mono">{activeModule.specs.throughput}</span>
-                  </div>
+                <div className="lg:col-span-5 flex flex-col justify-center gap-3">
+                  {[
+                    { label: "System Complexity", value: activeModule.specs.complexity },
+                    { label: "Core Database Engine", value: activeModule.specs.engine },
+                    { label: "Average Throughput", value: activeModule.specs.throughput },
+                  ].map((spec, i) => (
+                    <div key={i} className="p-5 rounded-xl bg-[#F8F9FA] border border-[#DADCE0]">
+                      <span className="text-[9px] font-medium text-[#80868B] uppercase tracking-widest block">{spec.label}</span>
+                      <span className="text-base font-semibold text-[#202124] mt-1 block font-mono">{spec.value}</span>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Pricing Tiers Section */}
-                <div className="lg:col-span-12 border-t border-white/5 pt-10 mt-6">
-                  <h4 className="text-sm font-black uppercase tracking-widest text-white mb-6 font-space">
+                <div className="lg:col-span-12 border-t border-[#DADCE0] pt-8 mt-4">
+                  <h4 className="text-sm font-semibold uppercase tracking-widest text-[#202124] mb-5">
                     Select your {activeModule.name} Licensing Tier
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {activeModule.pricing.map((tier, idx) => {
-                      const hoverClass = 
-                        activeModuleTab === "core" ? "hover:border-indigo-500/40 shadow-[0_0_20px_rgba(99,102,241,0.05)]" :
-                        activeModuleTab === "flow" ? "hover:border-purple-500/40 shadow-[0_0_20px_rgba(168,85,247,0.05)]" :
-                        "hover:border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.05)]";
-                      
-                      const accentTextClass = 
-                        activeModuleTab === "core" ? "text-indigo-400" :
-                        activeModuleTab === "flow" ? "text-purple-400" :
-                        "text-blue-400";
-                      
-                      return (
-                        <div 
-                          key={idx}
-                          className={`p-6 rounded-3xl bg-slate-950/40 border border-white/5 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group ${hoverClass}`}
-                        >
-                          <div>
-                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">
-                              {activeModule.name}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    {activeModule.pricing.map((tier, idx) => (
+                      <div 
+                        key={idx}
+                        className="p-5 rounded-xl bg-[#FAFAF9] border border-[#DADCE0] hover:border-[#1A73E8]/30 hover:shadow-sm transition-all duration-200 flex flex-col justify-between"
+                      >
+                        <div>
+                          <span className="text-[10px] font-medium text-[#80868B] uppercase tracking-widest block mb-1">
+                            {activeModule.name}
+                          </span>
+                          <h5 className="text-sm font-bold text-[#202124] mb-2 font-sans">
+                            {tier.name}
+                          </h5>
+                          
+                          {/* Price */}
+                          <div className="flex items-baseline gap-1 mb-3">
+                            <span className="text-xl font-bold text-[#202124]">
+                              {tier.price}
                             </span>
-                            <h5 className="text-base font-black text-white mb-3 font-space">
-                              {tier.name}
-                            </h5>
-                            
-                            {/* Price */}
-                            <div className="flex items-baseline gap-1 mb-4">
-                              <span className="text-2xl font-black text-white font-space">
-                                {tier.price}
-                              </span>
-                              <span className="text-[10px] text-slate-500 font-medium font-sans">
-                                / month
-                              </span>
-                            </div>
-
-                            {/* Quotas */}
-                            <div className="space-y-1.5 mb-6 text-[11px] text-slate-400 border-y border-white/5 py-3.5 font-sans">
-                              <div className="flex justify-between">
-                                <span className="text-slate-500 font-semibold">Scale Quota:</span>
-                                <span className="text-white font-bold font-mono">{tier.assets}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-slate-500 font-semibold">Support / Integration:</span>
-                                <span className="text-white font-bold font-mono">{tier.admins}</span>
-                              </div>
-                            </div>
-
-                            {/* Features list */}
-                            <ul className="space-y-2 mb-6">
-                              {tier.features.map((feat, fIdx) => (
-                                <li key={fIdx} className="flex items-start gap-2 text-[11px] text-slate-450 leading-relaxed font-light">
-                                  <CheckCircle2 className={`w-3.5 h-3.5 ${accentTextClass} mt-0.5 shrink-0`} />
-                                  <span>{feat}</span>
-                                </li>
-                              ))}
-                            </ul>
+                            <span className="text-[10px] text-[#80868B] font-medium font-sans">
+                              / month
+                            </span>
                           </div>
 
-                          <Link 
-                            href="/request-proposal"
-                            className="w-full py-2.5 rounded-xl text-center text-[10px] font-black uppercase tracking-wider text-white bg-slate-900 border border-white/5 hover:border-white/10 hover:bg-slate-800 transition-all duration-300 block"
-                          >
-                            Choose Tier
-                          </Link>
+                          {/* Quotas */}
+                          <div className="space-y-1 mb-5 text-[11px] text-[#5F6368] border-y border-[#DADCE0] py-3 font-sans">
+                            <div className="flex justify-between">
+                              <span className="text-[#80868B] font-medium">Scale Quota:</span>
+                              <span className="text-[#202124] font-semibold font-mono">{tier.assets}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-[#80868B] font-medium">Support / Integration:</span>
+                              <span className="text-[#202124] font-semibold font-mono">{tier.admins}</span>
+                            </div>
+                          </div>
+
+                          {/* Features list */}
+                          <ul className="space-y-1.5 mb-5">
+                            {tier.features.map((feat, fIdx) => (
+                              <li key={fIdx} className="flex items-start gap-2 text-[11px] text-[#5F6368] leading-relaxed">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[#1A73E8] mt-0.5 shrink-0" />
+                                <span>{feat}</span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
-                      );
-                    })}
+
+                        <Link 
+                          href="/request-proposal"
+                          className="w-full py-2.5 rounded-lg text-center text-[10px] font-semibold uppercase tracking-wider text-[#1A73E8] bg-white border border-[#DADCE0] hover:border-[#1A73E8]/40 hover:bg-[#E8F0FE] transition-all duration-200 block"
+                        >
+                          Choose Tier
+                        </Link>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
@@ -770,37 +640,42 @@ export default function ImsPage() {
           </div>
         </section>
 
-
         {/* ============================================================
             5. FAQ SECTION
            ============================================================ */}
-        <section className="py-24 border-t border-white/5 bg-[#02050b]">
+        <section className="py-20 border-t border-[#DADCE0]">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-white font-space">FAQ</h2>
+            <div className="text-center mb-14">
+              <h2 className="text-2xl font-bold text-[#202124]">FAQ</h2>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-3">
               {FAQS.map((faq, idx) => (
                 <div 
                   key={idx}
-                  className={`border ${openFaq === idx ? 'border-indigo-500/50 bg-[#0a1128]/40' : 'border-white/5 bg-[#0a1128]/10'} rounded-2xl overflow-hidden transition-all duration-300`}
+                  className={`border rounded-xl overflow-hidden transition-all duration-200 ${
+                    openFaq === idx
+                      ? "border-[#1A73E8]/30 bg-[#E8F0FE]/30"
+                      : "border-[#DADCE0] bg-white"
+                  }`}
                 >
                   <button 
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                    className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
+                    className="w-full px-5 py-4 flex items-center justify-between text-left focus:outline-none"
                   >
-                    <span className="text-base font-semibold text-white font-space">{faq.question}</span>
+                    <span className="text-sm font-medium text-[#202124]">{faq.question}</span>
                     {openFaq === idx ? (
-                      <Minus className="w-4 h-4 text-indigo-400 shrink-0" />
+                      <Minus className="w-4 h-4 text-[#1A73E8] shrink-0" />
                     ) : (
-                      <Plus className="w-4 h-4 text-slate-500 shrink-0" />
+                      <Plus className="w-4 h-4 text-[#80868B] shrink-0" />
                     )}
                   </button>
                   <div 
-                    className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${openFaq === idx ? 'max-h-96 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
+                    className={`px-5 overflow-hidden transition-all duration-300 ease-in-out ${
+                      openFaq === idx ? "max-h-96 pb-4 opacity-100" : "max-h-0 opacity-0"
+                    }`}
                   >
-                    <p className="text-sm text-slate-400 leading-relaxed font-light">
+                    <p className="text-sm text-[#5F6368] leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>
@@ -810,30 +685,25 @@ export default function ImsPage() {
           </div>
         </section>
 
-
         {/* ============================================================
-            6. FINAL GLOWING CALL TO ACTION
+            6. CALL TO ACTION
            ============================================================ */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto mb-20 relative">
-          <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600/10 via-purple-500/5 to-transparent rounded-[2.5rem] blur-xl pointer-events-none" />
-          <div className="relative p-12 md:p-16 rounded-[2.5rem] bg-slate-900/60 border border-white/10 text-center space-y-6 overflow-hidden shadow-2xl backdrop-blur-md">
-            
-            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none" />
-            
-            <span className="text-xs font-bold uppercase tracking-widest text-indigo-400">Secure Enterprise Architecture</span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight font-space max-w-2xl mx-auto">
+        <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mb-16">
+          <div className="relative p-10 md:p-14 rounded-2xl bg-[#1A73E8] text-center space-y-5 overflow-hidden">
+            <span className="text-xs font-semibold uppercase tracking-widest text-white/80">Secure Enterprise Architecture</span>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight max-w-2xl mx-auto">
               Ready to deploy your local IMS instance?
             </h2>
-            <p className="text-sm text-slate-400 max-w-md mx-auto font-light leading-relaxed">
+            <p className="text-sm text-white/70 max-w-md mx-auto leading-relaxed">
               Create a custom configuration schema to integrate IMS with your secure operational grids.
             </p>
             
-            <div className="pt-4">
+            <div className="pt-3">
               <Link 
                 href="/request-proposal"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase tracking-wider transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:shadow-[0_0_35px_rgba(99,102,241,0.45)] hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-[#F8F9FA] text-[#1A73E8] rounded-full font-semibold transition-all duration-200 shadow-sm text-sm"
               >
-                <span>Request Deployment Proposal</span>
+                Request Deployment Proposal
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

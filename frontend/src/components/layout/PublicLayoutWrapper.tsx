@@ -26,33 +26,30 @@ const startAmbientSynth = () => {
     const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
     audioCtx = new AudioContextClass();
     
-    // Create gain controller (soft volume)
     gainNode = audioCtx.createGain();
     gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 1.5); // Warm fade-in
+    gainNode.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 1.5); // Subtle low-volume pad
 
-    // Warm Lowpass Filter
     const filter = audioCtx.createBiquadFilter();
     filter.type = "lowpass";
     filter.frequency.setValueAtTime(130, audioCtx.currentTime);
 
-    // Osc 1 - Warm low-frequency drone (triangle wave at A1 = 55Hz)
+    // Osc 1 (triangle wave at A1 = 55Hz)
     osc1 = audioCtx.createOscillator();
     osc1.type = "triangle";
     osc1.frequency.setValueAtTime(55, audioCtx.currentTime);
 
-    // Osc 2 - Harmony pad (sine wave at E2 = 165Hz)
+    // Osc 2 (sine wave at E2 = 165Hz)
     osc2 = audioCtx.createOscillator();
     osc2.type = "sine";
     osc2.frequency.setValueAtTime(165, audioCtx.currentTime);
 
-    // Modulation LFO (breathing sweep effect)
+    // Modulation LFO
     lfo = audioCtx.createOscillator();
-    lfo.frequency.value = 0.08; // 12 seconds per cycle
+    lfo.frequency.value = 0.08;
     const lfoGain = audioCtx.createGain();
-    lfoGain.gain.value = 35; // sweep by 35Hz
+    lfoGain.gain.value = 35;
 
-    // Audio connections
     lfo.connect(lfoGain);
     lfoGain.connect(filter.frequency);
 
@@ -61,7 +58,6 @@ const startAmbientSynth = () => {
     filter.connect(gainNode);
     gainNode.connect(audioCtx.destination);
 
-    // Start oscillators
     osc1.start();
     osc2.start();
     lfo.start();
@@ -107,10 +103,10 @@ const stopAmbientSynth = () => {
 };
 
 // ============================================================
-// GLOBAL MOUSE GLOW ORB COMPONENT
+// GLOBAL MOUSE GLOW ORB (Light Theme Google Gradient style)
 // ============================================================
 function MouseGlow() {
-  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+  const [mousePos, setMousePos] = useState({ x: -200, y: -200 });
   const [opacity, setOpacity] = useState(0);
 
   useEffect(() => {
@@ -123,8 +119,8 @@ function MouseGlow() {
       setOpacity(0);
     };
 
-    window.addEventListener("mousemove", updateMousePos);
-    document.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("mousemove", updateMousePos, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", updateMousePos);
@@ -137,8 +133,9 @@ function MouseGlow() {
       className="hidden md:block fixed inset-0 pointer-events-none z-30 transition-opacity duration-300"
       style={{ opacity }}
     >
+      {/* Soft color-mixing light spotlight that trails the cursor and dynamically highlights the crème background */}
       <div 
-        className="w-[350px] h-[350px] bg-blue-500/5 blur-[80px] rounded-full absolute -translate-x-1/2 -translate-y-1/2 mix-blend-screen"
+        className="w-[400px] h-[400px] bg-gradient-to-r from-blue-500/8 via-purple-500/8 to-pink-500/8 blur-[100px] rounded-full absolute -translate-x-1/2 -translate-y-1/2"
         style={{ left: mousePos.x, top: mousePos.y }}
       />
     </div>
@@ -146,7 +143,7 @@ function MouseGlow() {
 }
 
 // ============================================================
-// AMBIENT TRACK PLAYER WIDGET
+// AMBIENT TRACK PLAYER WIDGET (Light Theme)
 // ============================================================
 function AmbientAudioPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -161,7 +158,6 @@ function AmbientAudioPlayer() {
     }
   };
 
-  // Turn off synth on page unmount
   useEffect(() => {
     return () => {
       stopAmbientSynth();
@@ -172,21 +168,21 @@ function AmbientAudioPlayer() {
     <div className="fixed bottom-6 left-6 z-40">
       <button 
         onClick={togglePlayback}
-        className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-[#030712]/85 hover:bg-[#070b19] backdrop-blur-md border border-white/10 hover:border-blue-500/30 transition-all duration-300 shadow-xl text-[10px] font-black font-mono tracking-wider text-slate-350 hover:text-white uppercase"
+        className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-white/90 hover:bg-[#F8F9FA] backdrop-blur-md border border-[#DADCE0] hover:border-[#BDC1C6] transition-all duration-300 shadow-sm hover:shadow-md text-[10px] font-bold tracking-wider text-[#5F6368] hover:text-[#202124] uppercase"
       >
         {isPlaying ? (
           <>
-            <Volume2 className="w-4 h-4 text-blue-400 animate-pulse" />
+            <Volume2 className="w-4 h-4 text-[#1A73E8] animate-pulse" />
             <div className="flex gap-0.5 items-end h-3 w-4 shrink-0 pb-0.5">
-              <div className="w-0.5 h-full bg-blue-400 origin-bottom animate-[soundwave_0.8s_infinite_ease-in-out]" />
-              <div className="w-0.5 h-full bg-blue-400 origin-bottom animate-[soundwave_0.6s_infinite_ease-in-out_0.2s]" />
-              <div className="w-0.5 h-full bg-blue-400 origin-bottom animate-[soundwave_0.9s_infinite_ease-in-out_0.4s]" />
+              <div className="w-0.5 h-full bg-[#1A73E8] origin-bottom animate-[soundwave_0.8s_infinite_ease-in-out]" />
+              <div className="w-0.5 h-full bg-[#1A73E8] origin-bottom animate-[soundwave_0.6s_infinite_ease-in-out_0.2s]" />
+              <div className="w-0.5 h-full bg-[#1A73E8] origin-bottom animate-[soundwave_0.9s_infinite_ease-in-out_0.4s]" />
             </div>
             <span>Ambient: On</span>
           </>
         ) : (
           <>
-            <VolumeX className="w-4 h-4 text-slate-500" />
+            <VolumeX className="w-4 h-4 text-[#80868B]" />
             <span>Ambient: Off</span>
           </>
         )}
@@ -196,7 +192,7 @@ function AmbientAudioPlayer() {
 }
 
 // ============================================================
-// MAIN WRAPPER COMPONENT
+// MAIN WRAPPER
 // ============================================================
 interface PublicLayoutWrapperProps {
   children: React.ReactNode;

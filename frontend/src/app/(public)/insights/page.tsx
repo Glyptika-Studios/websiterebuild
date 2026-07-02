@@ -34,15 +34,8 @@ const MOCK_POSTS = [
 
 export default function InsightsPage() {
   return (
-    <main className="min-h-screen bg-transparent text-slate-300 font-sans selection:bg-blue-500/30">
-      
-      {/* Background Elements */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-cyan-900/10 blur-[150px] rounded-full translate-x-1/2" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_20%,transparent_100%)] opacity-20" />
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 pb-32">
+    <main className="min-h-screen bg-[#FAFAF9]">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24">
         <PageHeader 
           badgeText="Our Insights" 
           badgeIcon={FileText}
@@ -56,4 +49,3 @@ export default function InsightsPage() {
     </main>
   );
 }
-

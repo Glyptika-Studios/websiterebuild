@@ -66,7 +66,6 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Map any old schema positions to full Position objects if needed
         allJobs = parsed.map((p: any) => ({
           id: p.id,
           title: p.title,
@@ -82,7 +81,6 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
       }
     }
 
-    // Lookup by id or slugified title
     const found = allJobs.find(j => {
       const slug = j.title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
       return j.id === id || slug === id;
@@ -94,8 +92,8 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-transparent text-slate-400 flex items-center justify-center font-space">
-        <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mr-3" />
+      <div className="min-h-screen bg-[#FAFAF9] text-[#5F6368] flex items-center justify-center">
+        <div className="w-5 h-5 border-2 border-[#1A73E8] border-t-transparent rounded-full animate-spin mr-3" />
         <span>Loading role details...</span>
       </div>
     );
@@ -103,10 +101,10 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
 
   if (!job) {
     return (
-      <div className="min-h-screen bg-transparent text-slate-350 flex flex-col items-center justify-center font-space px-4">
-        <h2 className="text-3xl font-black text-white mb-3">Role Not Found</h2>
-        <p className="text-slate-500 mb-8 max-w-sm text-center">This position has been filled or archiving limits apply.</p>
-        <Link href="/careers" className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-all flex items-center gap-2">
+      <div className="min-h-screen bg-[#FAFAF9] text-[#5F6368] flex flex-col items-center justify-center px-4">
+        <h2 className="text-2xl font-bold text-[#202124] mb-2">Role Not Found</h2>
+        <p className="text-[#5F6368] mb-6 max-w-sm text-center">This position has been filled or archiving limits apply.</p>
+        <Link href="/careers" className="px-5 py-2.5 bg-[#1A73E8] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-all duration-200 flex items-center gap-2 text-sm shadow-sm">
           <ArrowLeft className="w-4 h-4" /> Back to Careers
         </Link>
       </div>
@@ -117,69 +115,63 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
   const requirements = job.items.filter(item => item.kind === "requirement");
 
   return (
-    <main className="min-h-screen bg-transparent text-slate-300 font-sans selection:bg-blue-500/30 pb-32">
-      {/* Background Elements */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-900/10 blur-[150px] rounded-full -translate-y-1/3" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_20%,transparent_100%)] opacity-20" />
-      </div>
-
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-40">
+    <main className="min-h-screen bg-[#FAFAF9] pb-24 pt-36">
+      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Link */}
-        <Link href="/careers" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-white transition-colors mb-10 group">
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+        <Link href="/careers" className="inline-flex items-center gap-2 text-sm font-semibold text-[#5F6368] hover:text-[#202124] transition-colors mb-8 group">
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
           Back to Careers
         </Link>
 
         {/* Header Block */}
-        <div className="border-b border-white/10 pb-8 mb-10">
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-500/10 px-3.5 py-1.5 rounded-full border border-blue-500/20">
+        <div className="border-b border-[#DADCE0] pb-8 mb-8">
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1A73E8] bg-[#E8F0FE] px-3 py-1 rounded-full border border-[#D2E3FC]">
               {job.department}
             </span>
-            <span className={`text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full border ${
+            <span className={`text-[10px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full border ${
               job.active 
-                ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' 
-                : 'text-slate-500 bg-slate-500/10 border-slate-500/20'
+                ? 'text-[#0D652D] bg-[#E6F4EA] border-[#CEEAD6]' 
+                : 'text-[#5F6368] bg-[#F1F3F4] border-[#DADCE0]'
             }`}>
               {job.active ? "Accepting Applications" : "Closed"}
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight mb-6 font-space">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-4">
             {job.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-6 text-sm font-semibold text-slate-500">
-            <div className="flex items-center gap-1.5">
-              <MapPin className="w-4 h-4 text-slate-400" />
+          <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-[#5F6368]">
+            <div className="flex items-center gap-1">
+              <MapPin className="w-4 h-4 text-[#80868B]" />
               {job.location}
             </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-slate-800" />
-            <div className="flex items-center gap-1.5">
-              <Briefcase className="w-4 h-4 text-slate-400" />
+            <div className="w-1 h-1 rounded-full bg-[#BDC1C6]" />
+            <div className="flex items-center gap-1">
+              <Briefcase className="w-4 h-4 text-[#80868B]" />
               {job.employment_type}
             </div>
           </div>
         </div>
 
         {/* Role Introduction */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-4 font-space">About the Role</h2>
-          <p className="text-slate-350 text-base leading-relaxed font-light">
+        <div className="mb-10">
+          <h2 className="text-xl font-bold text-[#202124] mb-3">About the Role</h2>
+          <p className="text-[#5F6368] text-sm leading-relaxed">
             {job.description}
           </p>
         </div>
 
         {/* Responsibilities */}
         {responsibilities.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6 font-space">What You&apos;ll Do</h2>
-            <ul className="space-y-4">
+          <div className="mb-10">
+            <h2 className="text-xl font-bold text-[#202124] mb-4">What You&apos;ll Do</h2>
+            <ul className="space-y-3.5">
               {responsibilities.map((item, idx) => (
-                <li key={item.id || idx} className="flex items-start gap-3.5">
-                  <CheckCircle className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
-                  <span className="text-slate-300 text-sm leading-relaxed">{item.body}</span>
+                <li key={item.id || idx} className="flex items-start gap-2.5">
+                  <CheckCircle className="w-4 h-4 text-[#1A73E8] shrink-0 mt-0.5" />
+                  <span className="text-[#5F6368] text-sm leading-relaxed">{item.body}</span>
                 </li>
               ))}
             </ul>
@@ -188,13 +180,13 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
 
         {/* Requirements */}
         {requirements.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6 font-space">What We&apos;re Looking For</h2>
-            <ul className="space-y-4">
+          <div className="mb-10">
+            <h2 className="text-xl font-bold text-[#202124] mb-4">What We&apos;re Looking For</h2>
+            <ul className="space-y-3.5">
               {requirements.map((item, idx) => (
-                <li key={item.id || idx} className="flex items-start gap-3.5">
-                  <HelpCircle className="w-5 h-5 text-teal-400 shrink-0 mt-0.5" />
-                  <span className="text-slate-300 text-sm leading-relaxed">{item.body}</span>
+                <li key={item.id || idx} className="flex items-start gap-2.5">
+                  <HelpCircle className="w-4 h-4 text-[#A142F4] shrink-0 mt-0.5" />
+                  <span className="text-[#5F6368] text-sm leading-relaxed">{item.body}</span>
                 </li>
               ))}
             </ul>
@@ -203,14 +195,14 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
 
         {/* Application CTA */}
         {job.active && (
-          <div className="p-8 rounded-3xl bg-gradient-to-br from-[#050B14] to-[#0a1128] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+          <div className="p-8 rounded-2xl bg-white border border-[#DADCE0] flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
             <div>
-              <h3 className="text-xl font-bold text-white mb-1">Interested in this position?</h3>
-              <p className="text-slate-500 text-xs">Let&apos;s start engineering your career path with Glyptika.</p>
+              <h3 className="text-lg font-bold text-[#202124] mb-1">Interested in this position?</h3>
+              <p className="text-[#5F6368] text-xs">Let&apos;s start engineering your career path with Glyptika.</p>
             </div>
             <Link 
               href="/request-proposal"
-              className="px-8 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold tracking-wide transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] shrink-0"
+              className="px-6 py-3 bg-[#1A73E8] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-all duration-200 text-sm shadow-sm hover:shadow-md shrink-0"
             >
               Apply for Role
             </Link>

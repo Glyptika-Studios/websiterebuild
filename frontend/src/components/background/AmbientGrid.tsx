@@ -3,29 +3,18 @@
 import React, { useEffect, useRef } from "react";
 
 interface AmbientGridProps {
-  progress: number;       // 0 → 1 scroll progress
+  progress: number;
   reducedMotion: boolean;
 }
 
-/**
- * AmbientGrid — renders a faint orthographic blueprint grid on a fixed canvas.
- *
- * Opacity narrative (keyed to scroll progress):
- *   0.00 → hero:     ~5%  (almost invisible, calming)
- *   0.25 → services: ~15% (blueprint lines emerging)
- *   0.55 → portfolio:~12% (settling, richer depth)
- *   0.80 → lab:      ~18% (most defined)
- *   1.00 → footer:   ~6%  (fading, quiet close)
- */
-
 function mapGridOpacity(progress: number): number {
-  // Multi-stop interpolation
+  // Multi-stop interpolation for grid visibility
   const stops = [
-    { p: 0.00, o: 0.05 },
-    { p: 0.25, o: 0.15 },
-    { p: 0.55, o: 0.12 },
-    { p: 0.80, o: 0.18 },
-    { p: 1.00, o: 0.06 },
+    { p: 0.00, o: 0.04 },
+    { p: 0.25, o: 0.10 },
+    { p: 0.55, o: 0.07 },
+    { p: 0.80, o: 0.12 },
+    { p: 1.00, o: 0.05 },
   ];
 
   for (let i = 1; i < stops.length; i++) {
@@ -39,7 +28,7 @@ function mapGridOpacity(progress: number): number {
 
 export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const opacityRef = useRef(0.05);
+  const opacityRef = useRef(0.04);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -57,7 +46,7 @@ export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProp
     window.addEventListener("resize", resize, { passive: true });
 
     const SPACING    = 80;          // px between grid lines
-    const LINE_COLOR = "rgba(100, 160, 255, 1)"; // blue-tinted lines
+    const LINE_COLOR = "rgba(26, 115, 232, 1)"; // Google blue tinted grid lines
 
     const draw = () => {
       const W = canvas.width;
@@ -65,7 +54,7 @@ export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProp
 
       ctx.clearRect(0, 0, W, H);
 
-      const targetOpacity = reducedMotion ? 0.05 : mapGridOpacity(opacityRef.current);
+      const targetOpacity = reducedMotion ? 0.03 : mapGridOpacity(opacityRef.current);
       ctx.strokeStyle = LINE_COLOR;
       ctx.lineWidth   = 0.5;
       ctx.globalAlpha = targetOpacity;
@@ -98,8 +87,6 @@ export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProp
     };
   }, [reducedMotion]);
 
-
-  // Drive opacity via a ref to avoid restarting the rAF loop on every scroll
   useEffect(() => {
     opacityRef.current = progress;
   }, [progress]);
@@ -110,7 +97,7 @@ export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProp
       aria-hidden="true"
       className="fixed inset-0 w-full h-full pointer-events-none"
       style={{
-        zIndex: 2,
+        zIndex: 1,
         willChange: "opacity",
       }}
     />
