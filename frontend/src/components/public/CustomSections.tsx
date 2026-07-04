@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Move3d, HardHat, TrendingDown, Clock, Layers, Rocket } from "lucide-react";
 
 const FEATURED_PROJECTS = [
@@ -48,17 +48,6 @@ function ProjectRow({ project }: { project: (typeof FEATURED_PROJECTS)[0] }) {
   const Icon = project.imageIcon;
   const rowRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: rowRef,
-    offset: ["start 0.9", "center 0.5"],
-  });
-
-  const textY = useTransform(scrollYProgress, [0, 1], [40, 0]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-  const mediaScale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
-  const mediaY = useTransform(scrollYProgress, [0, 1], [30, 0]);
-  const mediaOpacity = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
-
   return (
     <div
       ref={rowRef}
@@ -68,7 +57,10 @@ function ProjectRow({ project }: { project: (typeof FEATURED_PROJECTS)[0] }) {
     >
       {/* Text Column */}
       <motion.div
-        style={{ y: textY, opacity: textOpacity }}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full lg:w-1/2 space-y-6"
       >
         <div>
@@ -113,7 +105,10 @@ function ProjectRow({ project }: { project: (typeof FEATURED_PROJECTS)[0] }) {
 
       {/* Media Column */}
       <motion.div
-        style={{ y: mediaY, opacity: mediaOpacity, scale: mediaScale }}
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
         className="w-full lg:w-1/2 relative"
       >
         <div

@@ -8,13 +8,13 @@ interface AmbientGridProps {
 }
 
 function mapGridOpacity(progress: number): number {
-  // Multi-stop interpolation for grid visibility
+  // Multi-stop interpolation for subtle grid line visibility (6% to 12% opacity)
   const stops = [
-    { p: 0.00, o: 0.04 },
-    { p: 0.25, o: 0.10 },
-    { p: 0.55, o: 0.07 },
-    { p: 0.80, o: 0.12 },
-    { p: 1.00, o: 0.05 },
+    { p: 0.00, o: 0.08 },
+    { p: 0.25, o: 0.12 },
+    { p: 0.55, o: 0.09 },
+    { p: 0.80, o: 0.14 },
+    { p: 1.00, o: 0.10 },
   ];
 
   for (let i = 1; i < stops.length; i++) {
@@ -28,7 +28,7 @@ function mapGridOpacity(progress: number): number {
 
 export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const opacityRef = useRef(0.04);
+  const opacityRef = useRef(0.08);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -45,8 +45,8 @@ export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProp
     resize();
     window.addEventListener("resize", resize, { passive: true });
 
-    const SPACING    = 80;          // px between grid lines
-    const LINE_COLOR = "rgba(26, 115, 232, 1)"; // Google blue tinted grid lines
+    const SPACING    = 72; // Spacing in px (reduced from 96px to 72px for slightly smaller boxes)
+    const LINE_COLOR = "rgba(37, 99, 235, 1)"; // Google blue grid lines
 
     const draw = () => {
       const W = canvas.width;
@@ -54,9 +54,11 @@ export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProp
 
       ctx.clearRect(0, 0, W, H);
 
-      const targetOpacity = reducedMotion ? 0.03 : mapGridOpacity(opacityRef.current);
+      const targetOpacity = reducedMotion ? 0.06 : mapGridOpacity(opacityRef.current);
+      
+      // Draw grid lines
       ctx.strokeStyle = LINE_COLOR;
-      ctx.lineWidth   = 0.5;
+      ctx.lineWidth   = 2.5; // Thicker weight for soft, subtle grid line aesthetic
       ctx.globalAlpha = targetOpacity;
 
       // Vertical lines
@@ -99,6 +101,8 @@ export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProp
       style={{
         zIndex: 1,
         willChange: "opacity",
+        WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 45%, transparent 88%)",
+        maskImage: "radial-gradient(circle at 50% 50%, black 45%, transparent 88%)",
       }}
     />
   );

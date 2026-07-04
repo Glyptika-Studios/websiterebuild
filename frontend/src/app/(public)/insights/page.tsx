@@ -34,7 +34,7 @@ const MOCK_POSTS = [
 
 export default function InsightsPage() {
   return (
-    <main className="min-h-screen bg-[#FAFAF9]">
+    <main className="min-h-screen bg-transparent">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24">
         <PageHeader 
           badgeText="Our Insights" 

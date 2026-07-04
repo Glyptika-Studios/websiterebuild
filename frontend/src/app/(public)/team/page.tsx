@@ -32,7 +32,7 @@ const MOCK_TEAM = [
 
 export default function TeamPage() {
   return (
-    <main className="min-h-screen bg-[#FAFAF9]">
+    <main className="min-h-screen bg-transparent">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24">
         <PageHeader
           badgeText="Our Team"
@@ -50,25 +50,25 @@ export default function TeamPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative bg-white border border-[#DADCE0] hover:border-[#BDC1C6] rounded-2xl p-8 transition-all duration-200 text-center flex flex-col items-center hover:shadow-md cursor-default"
+              className="group relative bg-white border border-[#E5E7EB] hover:border-[#BDC1C6] rounded-2xl p-8 transition-all duration-200 text-center flex flex-col items-center hover:shadow-md cursor-default"
             >
               {/* Profile Image */}
-              <div className="w-32 h-32 rounded-full overflow-hidden border border-[#DADCE0] group-hover:border-[#1A73E8] transition-colors mb-6 relative">
+              <div className="w-32 h-32 rounded-full overflow-hidden border border-[#E5E7EB] group-hover:border-[#2563EB] transition-colors mb-6 relative">
                 <Image src={member.image} alt={member.name} fill sizes="128px" style={{ objectFit: "cover" }} />
               </div>
 
               <h3 className="text-2xl font-semibold text-[#202124] mb-1">{member.name}</h3>
-              <p className="text-[#1A73E8] font-medium text-sm uppercase tracking-wider mb-4">{member.role}</p>
+              <p className="text-[#2563EB] font-medium text-sm uppercase tracking-wider mb-4">{member.role}</p>
 
               <p className="text-[#5F6368] text-sm leading-relaxed mb-6">
                 {member.bio}
               </p>
 
               <div className="flex gap-3 mt-auto">
-                <a href="#" className="w-9 h-9 rounded-full bg-white border border-[#DADCE0] flex items-center justify-center text-[#5F6368] hover:text-[#1A73E8] hover:border-[#1A73E8]/40 transition-all duration-200 shadow-sm">
+                <a href="#" className="w-9 h-9 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center text-[#5F6368] hover:text-[#2563EB] hover:border-[#2563EB]/40 transition-all duration-200 shadow-sm">
                   <Globe className="w-4 h-4" />
                 </a>
-                <a href="#" className="w-9 h-9 rounded-full bg-white border border-[#DADCE0] flex items-center justify-center text-[#5F6368] hover:text-[#1A73E8] hover:border-[#1A73E8]/40 transition-all duration-200 shadow-sm">
+                <a href="#" className="w-9 h-9 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center text-[#5F6368] hover:text-[#2563EB] hover:border-[#2563EB]/40 transition-all duration-200 shadow-sm">
                   <Mail className="w-4 h-4" />
                 </a>
               </div>

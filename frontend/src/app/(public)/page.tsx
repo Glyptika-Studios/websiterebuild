@@ -9,9 +9,21 @@ export default function Home() {
     <>
       <main className="flex flex-col w-full bg-transparent min-h-screen">
         <Hero />
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 -my-10 relative z-20">
+          <div className="matrix-divider" />
+        </div>
         <Stats />
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 -my-10 relative z-20">
+          <div className="matrix-divider" />
+        </div>
         <Services />
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 -my-10 relative z-20">
+          <div className="matrix-divider" />
+        </div>
         <CustomSections />
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 -my-10 relative z-20">
+          <div className="matrix-divider" />
+        </div>
         <ContactTeaser />
       </main>
     </>

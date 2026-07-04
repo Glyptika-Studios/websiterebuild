@@ -168,15 +168,15 @@ function AmbientAudioPlayer() {
     <div className="fixed bottom-6 left-6 z-40">
       <button 
         onClick={togglePlayback}
-        className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-white/90 hover:bg-[#F8F9FA] backdrop-blur-md border border-[#DADCE0] hover:border-[#BDC1C6] transition-all duration-300 shadow-sm hover:shadow-md text-[10px] font-bold tracking-wider text-[#5F6368] hover:text-[#202124] uppercase"
+        className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white border border-[#2563EB] text-[#2563EB] hover:bg-[#F3F7FF] transition-all duration-250 shadow-sm hover:shadow-md text-[10px] font-bold tracking-wider uppercase"
       >
         {isPlaying ? (
           <>
-            <Volume2 className="w-4 h-4 text-[#1A73E8] animate-pulse" />
+            <Volume2 className="w-4 h-4 text-[#2563EB] animate-pulse" />
             <div className="flex gap-0.5 items-end h-3 w-4 shrink-0 pb-0.5">
-              <div className="w-0.5 h-full bg-[#1A73E8] origin-bottom animate-[soundwave_0.8s_infinite_ease-in-out]" />
-              <div className="w-0.5 h-full bg-[#1A73E8] origin-bottom animate-[soundwave_0.6s_infinite_ease-in-out_0.2s]" />
-              <div className="w-0.5 h-full bg-[#1A73E8] origin-bottom animate-[soundwave_0.9s_infinite_ease-in-out_0.4s]" />
+              <div className="w-0.5 h-full bg-[#2563EB] origin-bottom animate-[soundwave_0.8s_infinite_ease-in-out]" />
+              <div className="w-0.5 h-full bg-[#2563EB] origin-bottom animate-[soundwave_0.6s_infinite_ease-in-out_0.2s]" />
+              <div className="w-0.5 h-full bg-[#2563EB] origin-bottom animate-[soundwave_0.9s_infinite_ease-in-out_0.4s]" />
             </div>
             <span>Ambient: On</span>
           </>
@@ -213,7 +213,9 @@ export default function PublicLayoutWrapper({ children }: PublicLayoutWrapperPro
       <Header />
       <MouseGlow />
       <AmbientAudioPlayer />
-      {children}
+      <div className="relative z-10 flex flex-col min-h-screen">
+        {children}
+      </div>
       <Footer />
       <ScrollToTop />
     </>

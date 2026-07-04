@@ -20,9 +20,6 @@ body {
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
-    /* Dotted design grid pattern */
-    background-image: radial-gradient(#DADCE0 1.2px, transparent 1.2px);
-    background-size: 32px 32px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -46,40 +43,75 @@ html {
     gap: 0.25rem;
 }
 
-.anchor-link {
-    position: relative;
-    transition: color 0.3s ease;
-    z-index: 1;
-}
-
-/* Base pill background that transitions on hover / active */
-.anchor-link::after {
+.anchor-nav-list::after {
     content: "";
-    position: absolute;
-    inset: 2px 4px;
     border-radius: 9999px;
-    background: linear-gradient(135deg, rgba(26, 115, 232, 0.08) 0%, rgba(161, 66, 244, 0.08) 100%);
-    border: 1px solid rgba(26, 115, 232, 0.2);
+    position: absolute;
+    top: anchor(--test top);
+    left: anchor(--test left);
+    right: anchor(--test right);
+    bottom: anchor(--test bottom);
     opacity: 0;
-    transform: scale(0.92);
-    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease;
+    pointer-events: none;
     z-index: -1;
+    background: linear-gradient(135deg, rgba(26, 115, 232, 0.08) 0%, rgba(161, 66, 244, 0.08) 100%);
+    border: 1px solid rgba(26, 115, 232, 0.20);
+    transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Hover State */
-.anchor-link:hover::after {
-    opacity: 1;
-    transform: scale(1);
+.anchor-nav-list:has(.anchor-link:hover)::after {
     background: linear-gradient(135deg, rgba(26, 115, 232, 0.12) 0%, rgba(161, 66, 244, 0.12) 100%);
-    border-color: rgba(26, 115, 232, 0.35);
+    border-color: rgba(26, 115, 232, 0.25);
 }
 
-/* Active State */
-.anchor-link[data-active="true"]::after {
+.anchor-nav-list:has(.anchor-link[data-active="true"])::after,
+.anchor-nav-list:has(.anchor-link:hover)::after {
     opacity: 1;
-    transform: scale(1);
-    background: linear-gradient(135deg, rgba(26, 115, 232, 0.14) 0%, rgba(161, 66, 244, 0.14) 100%);
-    border-color: rgba(26, 115, 232, 0.45);
+}
+
+.anchor-nav-list:not(:hover) .anchor-link[data-active="true"] {
+    anchor-name: --test;
+}
+
+.anchor-link:hover {
+    anchor-name: --test;
+}
+
+/* Fallback for browsers that do not support anchor positioning */
+@supports not (position-anchor: --any) {
+    .anchor-link:hover {
+        background: linear-gradient(135deg, rgba(26, 115, 232, 0.08) 0%, rgba(161, 66, 244, 0.08) 100%);
+        border-radius: 9999px;
+    }
+    .anchor-link[data-active="true"] {
+        background: linear-gradient(135deg, rgba(26, 115, 232, 0.12) 0%, rgba(161, 66, 244, 0.12) 100%);
+        border-radius: 9999px;
+    }
+}
+
+/* ==================== PREMIUM DRAFT MARKERS ==================== */
+.matrix-divider {
+    position: relative;
+    border-top: 1.5px dashed rgba(229, 231, 235, 0.95);
+    margin: 4rem 0;
+}
+
+.matrix-divider::before, .matrix-divider::after {
+    content: "+";
+    position: absolute;
+    top: -10px;
+    font-size: 15px;
+    font-family: monospace;
+    color: rgba(37, 99, 235, 0.5);
+    font-weight: bold;
+}
+
+.matrix-divider::before {
+    left: 8%;
+}
+
+.matrix-divider::after {
+    right: 8%;
 }
 
 /* ==================== SCROLL REVEAL UTILITIES ==================== */
@@ -119,6 +151,15 @@ html {
 @keyframes soundwave {
   0%, 100% { transform: scaleY(0.3); }
   50% { transform: scaleY(1.1); }
+}
+
+@keyframes border-glow-sweep {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
 }
 
 /* ==================== REDUCED MOTION ==================== */

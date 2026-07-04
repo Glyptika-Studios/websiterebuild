@@ -21,17 +21,17 @@ export default function Hero() {
   const cardsY = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
   const serviceCards = [
-    { title: "3D Modeling", desc: "Photorealistic assets & animations", color: "#1A73E8" },
-    { title: "VR Simulation", desc: "Defense & commercial training", color: "#0D652D" },
-    { title: "AI Automation", desc: "AI-powered workflow tools", color: "#A142F4" },
-    { title: "IMS", desc: "ERM for Indian Defense institutions", color: "#E37400" },
+    { title: "3D Modeling", desc: "Photorealistic assets & animations", color: "#2563EB" },
+    { title: "VR Simulation", desc: "Defense & commercial training", color: "#2563EB" },
+    { title: "AI Automation", desc: "AI-powered workflow tools", color: "#2563EB" },
+    { title: "IMS", desc: "ERM for Indian Defense institutions", color: "#2563EB" },
   ];
 
   return (
     <section
       ref={sectionRef}
       className="relative w-full overflow-hidden pt-40 pb-28 md:pt-48 md:pb-32 flex flex-col justify-center min-h-screen"
-      style={{ background: "#F8F9FA" }}
+      style={{ background: "radial-gradient(circle at top, rgba(238, 245, 255, 0.65) 0%, transparent 60%)" }}
     >
       {/* Looping Background Video for Home Screen Hero */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
@@ -72,13 +72,13 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#202124] tracking-tight mb-5 leading-[1.1]">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111827] tracking-tight mb-5 leading-[1.1]">
               Building the Technology Of Tomorrow <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#1A73E8] via-[#8B5CF6] to-[#EC4899] pb-1 block">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#3B82F6] to-[#0F172A] pb-1 block">
                 3D · VR · AI · Automation
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-[#5F6368] max-w-3xl mx-auto mb-12 font-normal leading-relaxed">
+            <p className="text-lg md:text-xl text-[#6B7280] max-w-3xl mx-auto mb-12 font-normal leading-relaxed">
               Creating Customised, Efficient, Affordable, and Accessible technology to empower tomorrow with AI/ML enabled Automations and a Creative touch.
             </p>
           </motion.div>
@@ -92,14 +92,14 @@ export default function Hero() {
           >
             <Link
               href="#services"
-              className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-semibold text-white bg-[#1A73E8] hover:bg-[#1765CC] shadow-sm hover:shadow-md transition-all duration-200"
+              className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_10px_24px_rgba(37,99,235,0.20)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
             >
               <Search className="w-4 h-4" />
               Explore Services
             </Link>
             <Link
               href="#products"
-              className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-semibold text-[#1A73E8] bg-white border border-[#DADCE0] hover:bg-[#F1F3F4] hover:border-[#BDC1C6] shadow-sm transition-all duration-200"
+              className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold text-[#2563EB] bg-white border border-[#2563EB] hover:bg-[#F3F7FF] shadow-sm hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
             >
               <Layers className="w-4 h-4" />
               View Products
@@ -121,7 +121,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.55 + idx * 0.06 }}
                 whileHover={{ y: -2 }}
-                className="group flex flex-col items-center justify-center text-center gap-2 p-5 rounded-2xl bg-white/95 backdrop-blur-sm border border-[#DADCE0] shadow-sm hover:shadow-md hover:border-[#BDC1C6] transition-all duration-200 cursor-default"
+                className="group flex flex-col items-center justify-center text-center gap-2.5 p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 cursor-default"
               >
                 <span
                   className="text-sm font-semibold transition-colors duration-200"

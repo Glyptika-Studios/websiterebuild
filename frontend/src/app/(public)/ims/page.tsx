@@ -202,22 +202,34 @@ export default function ImsPage() {
   const ModuleIcon = activeModule.icon;
 
   return (
-    <main className="min-h-screen bg-[#FAFAF9] overflow-x-hidden relative">
+    <main className="min-h-screen bg-transparent overflow-x-hidden relative">
       <div className="relative z-10">
         
         {/* ============================================================
             1. HERO SECTION
            ============================================================ */}
-        <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-[#DADCE0]"
-          style={{ background: "linear-gradient(180deg, #FFFFFF 0%, #F1F3F4 100%)" }}
-        >
+        <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-[#E5E7EB]">
+          {/* Looping BG Video */}
+          <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
+            <video 
+              src="/ims_bgvid.mp4" 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              className="absolute inset-0 w-full h-full object-cover opacity-45"
+            />
+            {/* Glossy Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#FAFBFC]/10 via-[#FAFBFC]/40 to-[#FAFBFC]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FAFBFC]/30 via-transparent to-[#FAFBFC]/30" />
+          </div>
           <div className="relative z-10 max-w-7xl mx-auto text-center flex flex-col items-center">
             {/* Tech Badge */}
             <motion.div
               initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8F0FE] border border-[#D2E3FC] text-[#1A73E8] text-xs font-semibold uppercase tracking-widest mb-8"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] text-[#2563EB] text-xs font-semibold uppercase tracking-widest mb-8"
             >
               <ShieldCheck className="w-3.5 h-3.5 animate-pulse" />
               Defense-Grade Inventory System
@@ -228,10 +240,10 @@ export default function ImsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#202124] tracking-tight leading-[1.1] mb-5 max-w-4xl"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#111827] tracking-tight leading-[1.1] mb-5 max-w-4xl"
             >
               IMS Portal: <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#1A73E8] via-[#8B5CF6] to-[#EC4899] pb-1 block">Next-Gen Logistics.</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#EC4899] pb-1 block">Next-Gen Logistics.</span>
             </motion.h1>
 
             {/* Description */}
@@ -239,7 +251,7 @@ export default function ImsPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg sm:text-xl text-[#5F6368] max-w-3xl leading-relaxed mb-10"
+              className="text-lg sm:text-xl text-[#6B7280] max-w-3xl leading-relaxed mb-10"
             >
               Automated logistics management custom-engineered for defense institutions and secure enterprises. Eliminate inventory leaks with air-gapped PostgreSQL cores, packaging registries, and immutable logs.
             </motion.p>
@@ -253,14 +265,14 @@ export default function ImsPage() {
             >
               <Link
                 href="/request-proposal"
-                className="px-7 py-3.5 bg-[#1A73E8] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm"
+                className="px-7 py-3.5 bg-[#2563EB] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm"
               >
                 Request Custom Demo
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <a
                 href="#modules"
-                className="px-7 py-3.5 bg-white hover:bg-[#F8F9FA] text-[#202124] rounded-full font-medium border border-[#DADCE0] hover:border-[#BDC1C6] transition-all duration-200 text-sm"
+                className="px-7 py-3.5 bg-white hover:bg-[#F8F9FA] text-[#111827] rounded-full font-medium border border-[#E5E7EB] hover:border-[#BDC1C6] transition-all duration-200 text-sm"
               >
                 View System Modules
               </a>
@@ -268,13 +280,13 @@ export default function ImsPage() {
           </div>
 
           {/* Interactive Scroll Down Prompt */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-xs text-[#80868B] z-10 pointer-events-none select-none">
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-xs text-[#6B7280] z-10 pointer-events-none select-none">
             <span className="font-semibold tracking-widest uppercase text-[10px]">Scroll to explore</span>
-            <div className="w-5 h-8 rounded-full border border-[#DADCE0] flex justify-center p-1">
+            <div className="w-5 h-8 rounded-full border border-[#E5E7EB] flex justify-center p-1">
               <motion.div 
                 animate={{ y: [0, 8, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="w-1 h-1.5 bg-[#1A73E8] rounded-full"
+                className="w-1 h-1.5 bg-[#2563EB] rounded-full"
               />
             </div>
           </div>
@@ -285,10 +297,10 @@ export default function ImsPage() {
            ============================================================ */}
         <section className="py-10 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-[#DADCE0] shadow-sm p-8 md:p-10">
+            <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-10">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center">
                 {[
-                  { value: "99.99%", label: "System Uptime", color: "#1A73E8" },
+                  { value: "99.99%", label: "System Uptime", color: "#2563EB" },
                   { value: "85%", label: "Time Reduction", color: "#A142F4" },
                   { value: "0", label: "Security Breaches", color: "#0D652D" }
                 ].map((stat, i) => (
@@ -299,7 +311,7 @@ export default function ImsPage() {
                     >
                       {stat.value}
                     </div>
-                    <div className="text-xs md:text-sm text-[#5F6368] font-medium uppercase tracking-widest">
+                    <div className="text-xs md:text-sm text-[#6B7280] font-medium uppercase tracking-widest">
                       {stat.label}
                     </div>
                   </div>
@@ -314,12 +326,12 @@ export default function ImsPage() {
            ============================================================ */}
         <section className="py-10 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-[#DADCE0] shadow-sm p-8 md:p-10">
+            <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-10">
               <div className="text-center mb-8">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3E8FD] border border-[#E4CCFA] text-[#A142F4] text-xs font-medium uppercase tracking-widest mb-3">
                   Core Value Propositions
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-bold text-[#202124]">
+                <h3 className="text-2xl sm:text-3xl font-bold text-[#111827]">
                   Why Choose IMS
                 </h3>
               </div>
@@ -331,13 +343,13 @@ export default function ImsPage() {
                   { icon: Zap, title: "Automatic Decrements", desc: "Logistics flows auto sync to asset databases instantly." },
                   { icon: Activity, title: "Immutable History", desc: "Chronological activity sync audit registers." }
                 ].map((prop, i) => (
-                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#DADCE0] hover:border-[#BDC1C6] hover:shadow-sm transition-all duration-200 flex flex-col items-start space-y-2.5 group">
+                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#E5E7EB] hover:border-[#BDC1C6] hover:shadow-sm transition-all duration-200 flex flex-col items-start space-y-2.5 group">
                     <div className="w-9 h-9 rounded-lg bg-[#F3E8FD] border border-[#E4CCFA] flex items-center justify-center text-[#A142F4]">
                       <prop.icon className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-[#202124] group-hover:text-[#A142F4] transition-colors">{prop.title}</h4>
-                      <p className="text-xs text-[#5F6368] mt-0.5">{prop.desc}</p>
+                      <h4 className="text-sm font-semibold text-[#111827] group-hover:text-[#A142F4] transition-colors">{prop.title}</h4>
+                      <p className="text-xs text-[#6B7280] mt-0.5">{prop.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -351,34 +363,34 @@ export default function ImsPage() {
            ============================================================ */}
         <section className="py-10 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-[#DADCE0] shadow-sm p-8 md:p-10">
+            <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-10">
               <div className="text-center mb-8">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F0FE] border border-[#D2E3FC] text-[#1A73E8] text-xs font-medium uppercase tracking-widest mb-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] text-[#2563EB] text-xs font-medium uppercase tracking-widest mb-3">
                   Target Sectors
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-bold text-[#202124]">
+                <h3 className="text-2xl sm:text-3xl font-bold text-[#111827]">
                   Built for Secure Enterprise & Defense
                 </h3>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {["Indian Defense Institutions", "Security Infrastructure Teams", "Heavy Material Warehouses"].map((sector, i) => (
-                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#DADCE0] hover:border-[#1A73E8]/30 transition-all duration-200 flex items-center space-x-3 group">
-                    <div className="w-7 h-7 rounded-md bg-[#E8F0FE] border border-[#D2E3FC] flex items-center justify-center text-[#1A73E8] shrink-0">
+                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#E5E7EB] hover:border-[#2563EB]/30 transition-all duration-200 flex items-center space-x-3 group">
+                    <div className="w-7 h-7 rounded-md bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center text-[#2563EB] shrink-0">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-xs font-semibold text-[#202124] group-hover:text-[#1A73E8] transition-colors uppercase tracking-wider">{sector}</span>
+                    <span className="text-xs font-semibold text-[#111827] group-hover:text-[#2563EB] transition-colors uppercase tracking-wider">{sector}</span>
                   </div>
                 ))}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 max-w-4xl mx-auto">
                 {["Military Logistics Centers", "On-Premise Enterprise Facilities"].map((sector, i) => (
-                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#DADCE0] hover:border-[#1A73E8]/30 transition-all duration-200 flex items-center space-x-3 group">
-                    <div className="w-7 h-7 rounded-md bg-[#E8F0FE] border border-[#D2E3FC] flex items-center justify-center text-[#1A73E8] shrink-0">
+                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#E5E7EB] hover:border-[#2563EB]/30 transition-all duration-200 flex items-center space-x-3 group">
+                    <div className="w-7 h-7 rounded-md bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center text-[#2563EB] shrink-0">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-xs font-semibold text-[#202124] group-hover:text-[#1A73E8] transition-colors uppercase tracking-wider">{sector}</span>
+                    <span className="text-xs font-semibold text-[#111827] group-hover:text-[#2563EB] transition-colors uppercase tracking-wider">{sector}</span>
                   </div>
                 ))}
               </div>
@@ -389,28 +401,28 @@ export default function ImsPage() {
         {/* ============================================================
             3. AUDIT ESTIMATOR CALCULATOR
            ============================================================ */}
-        <section className="py-20 border-t border-[#DADCE0]">
+        <section className="py-32 border-t border-[#E5E7EB]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <span className="text-xs font-medium uppercase tracking-widest text-[#1A73E8]">Logistics Calculator</span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#202124] mt-2 mb-3">IMS Savings & Time Estimator</h2>
-              <p className="text-[#5F6368] max-w-2xl mx-auto text-sm">Estimate your time savings and audit cost reductions based on system scale.</p>
+            <div className="text-center mb-12">
+              <span className="text-xs font-medium uppercase tracking-widest text-[#2563EB]">Logistics Calculator</span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] mt-2 mb-3">IMS Savings & Time Estimator</h2>
+              <p className="text-[#6B7280] max-w-2xl mx-auto text-sm">Estimate your time savings and audit cost reductions based on system scale.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-5xl mx-auto items-center">
               
               {/* Sliders Form Card */}
-              <div className="p-8 rounded-2xl bg-white border border-[#DADCE0] shadow-sm space-y-6 relative overflow-hidden">
-                <h3 className="text-lg font-bold text-[#202124] mb-4 flex items-center gap-2">
-                  <Sliders className="w-5 h-5 text-[#1A73E8]" />
+              <div className="p-8 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] space-y-6 relative overflow-hidden">
+                <h3 className="text-lg font-bold text-[#111827] mb-4 flex items-center gap-2">
+                  <Sliders className="w-5 h-5 text-[#2563EB]" />
                   Scale Setup
                 </h3>
 
                 {/* Slider 1 */}
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs font-semibold text-[#5F6368]">
+                  <div className="flex justify-between items-center text-xs font-semibold text-[#6B7280]">
                     <span>Number of Inventory Assets</span>
-                    <span className="text-[#1A73E8] font-mono text-sm font-bold">{calcAssets.toLocaleString()} Items</span>
+                    <span className="text-[#2563EB] font-mono text-sm font-bold">{calcAssets.toLocaleString()} Items</span>
                   </div>
                   <input 
                     type="range" 
@@ -419,9 +431,9 @@ export default function ImsPage() {
                     step="1000"
                     value={calcAssets} 
                     onChange={(e) => setCalcAssets(parseInt(e.target.value))}
-                    className="w-full h-1 bg-[#F1F3F4] rounded-lg appearance-none cursor-pointer accent-[#1A73E8]" 
+                    className="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#2563EB]" 
                   />
-                  <div className="flex justify-between text-[10px] text-[#80868B]">
+                  <div className="flex justify-between text-[10px] text-[#6B7280]">
                     <span>1,000 items</span>
                     <span>100,000 items</span>
                   </div>
@@ -429,9 +441,9 @@ export default function ImsPage() {
 
                 {/* Slider 2 */}
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs font-semibold text-[#5F6368]">
+                  <div className="flex justify-between items-center text-xs font-semibold text-[#6B7280]">
                     <span>Admin Operator Seats</span>
-                    <span className="text-[#A142F4] font-mono text-sm font-bold">{calcAdmins} Operator{calcAdmins > 1 ? 's' : ''}</span>
+                    <span className="text-[#2563EB] font-mono text-sm font-bold">{calcAdmins} Operator{calcAdmins > 1 ? 's' : ''}</span>
                   </div>
                   <input 
                     type="range" 
@@ -440,9 +452,9 @@ export default function ImsPage() {
                     step="1"
                     value={calcAdmins} 
                     onChange={(e) => setCalcAdmins(parseInt(e.target.value))}
-                    className="w-full h-1 bg-[#F1F3F4] rounded-lg appearance-none cursor-pointer accent-[#A142F4]" 
+                    className="w-full h-1 bg-[#F1F3F4] rounded-lg appearance-none cursor-pointer accent-[#2563EB]" 
                   />
-                  <div className="flex justify-between text-[10px] text-[#80868B]">
+                  <div className="flex justify-between text-[10px] text-[#6B7280]">
                     <span>1 Operator</span>
                     <span>50 Operators</span>
                   </div>
@@ -453,30 +465,30 @@ export default function ImsPage() {
               <div className="space-y-4">
                 
                 {/* Panel 1 */}
-                <div className="p-5 rounded-xl bg-[#E8F0FE] border border-[#1A73E8]/20 flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-xl bg-white border border-[#D2E3FC] flex items-center justify-center shrink-0">
-                    <Hourglass className="w-6 h-6 text-[#1A73E8]" />
+                <div className="p-5 rounded-xl bg-[#F3F7FF] border border-[#DCEBFF] flex items-center gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-white border border-[#E5E7EB] flex items-center justify-center shrink-0">
+                    <Hourglass className="w-6 h-6 text-[#2563EB]" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-semibold text-[#5F6368] uppercase tracking-widest">Est. Hours Saved / Year</span>
-                    <div className="text-2xl font-bold text-[#202124] mt-0.5">
+                    <span className="text-[10px] font-semibold text-[#6B7280] uppercase tracking-widest">Est. Hours Saved / Year</span>
+                    <div className="text-2xl font-bold text-[#111827] mt-0.5">
                       ~ {estTimeSaved.toLocaleString()} hours
                     </div>
-                    <p className="text-[11px] text-[#5F6368] leading-normal mt-0.5">Calculated against manual verification workflows.</p>
+                    <p className="text-[11px] text-[#6B7280] leading-normal mt-0.5">Calculated against manual verification workflows.</p>
                   </div>
                 </div>
 
                 {/* Panel 2 */}
-                <div className="p-5 rounded-xl bg-[#E6F4EA] border border-[#CEEAD6] flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-xl bg-white border border-[#CEEAD6] flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-6 h-6 text-[#0D652D]" />
+                <div className="p-5 rounded-xl bg-[#F3F7FF] border border-[#DCEBFF] flex items-center gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-white border border-[#E5E7EB] flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-6 h-6 text-[#2563EB]" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-semibold text-[#5F6368] uppercase tracking-widest">Est. Annual Audit Cost Saved</span>
-                    <div className="text-2xl font-bold text-[#202124] mt-0.5">
+                    <span className="text-[10px] font-semibold text-[#6B7280] uppercase tracking-widest">Est. Annual Audit Cost Saved</span>
+                    <div className="text-2xl font-bold text-[#111827] mt-0.5">
                       ₹ {estCostSaved.toLocaleString()}
                     </div>
-                    <p className="text-[11px] text-[#5F6368] leading-normal mt-0.5">Includes reductions in audit processing overhead.</p>
+                    <p className="text-[11px] text-[#6B7280] leading-normal mt-0.5">Includes reductions in audit processing overhead.</p>
                   </div>
                 </div>
 
@@ -489,24 +501,24 @@ export default function ImsPage() {
         {/* ============================================================
             4. SYSTEM ARCHITECTURE MODULES
            ============================================================ */}
-        <section id="modules" className="py-20 border-t border-[#DADCE0]">
+        <section id="modules" className="py-32 border-t border-[#E5E7EB]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <span className="text-xs font-medium uppercase tracking-widest text-[#1A73E8]">System Architecture</span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#202124] mt-2 mb-3">Custom Modular Capabilities</h2>
-              <p className="text-[#5F6368] max-w-2xl mx-auto text-sm">Toggle the tabs below to view detailed specifications and licensing tiers for each module.</p>
+            <div className="text-center mb-12">
+              <span className="text-xs font-medium uppercase tracking-widest text-[#2563EB]">System Architecture</span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] mt-2 mb-3">Custom Modular Capabilities</h2>
+              <p className="text-[#6B7280] max-w-2xl mx-auto text-sm">Toggle the tabs below to view detailed specifications and licensing tiers for each module.</p>
             </div>
 
             {/* Selector tabs */}
-            <div className="flex justify-center border-b border-[#DADCE0] mb-10 max-w-lg mx-auto overflow-x-auto gap-1">
+            <div className="flex justify-center mb-10 max-w-lg mx-auto overflow-x-auto gap-2 bg-[#F3F7FF] p-1.5 rounded-2xl border border-[#DCEBFF]">
               {(["core", "flow", "dispatch"] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveModuleTab(tab)}
-                  className={`px-5 py-3.5 text-xs font-semibold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${
+                  className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 whitespace-nowrap ${
                     activeModuleTab === tab
-                      ? "border-[#1A73E8] text-[#1A73E8]"
-                      : "border-transparent text-[#5F6368] hover:text-[#202124]"
+                      ? "bg-[#2563EB] text-white shadow-[0_4px_12px_rgba(37,99,235,0.2)]"
+                      : "text-[#2563EB] hover:bg-[#E8F0FE]"
                   }`}
                 >
                   {MODULE_DETAILS[tab].name}
@@ -522,34 +534,34 @@ export default function ImsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-stretch bg-white border border-[#DADCE0] p-8 md:p-10 rounded-2xl shadow-sm"
+                className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-stretch bg-white border border-[#E5E7EB] p-8 md:p-10 rounded-2xl shadow-sm"
               >
                 
                 {/* Details Column */}
                 <div className="lg:col-span-7 flex flex-col justify-between space-y-5">
                   <div>
-                    <div className="w-12 h-12 rounded-xl bg-[#E8F0FE] border border-[#D2E3FC] flex items-center justify-center mb-5">
-                      <ModuleIcon className="w-6 h-6 text-[#1A73E8]" />
+                    <div className="w-12 h-12 rounded-xl bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center mb-5">
+                      <ModuleIcon className="w-6 h-6 text-[#2563EB]" />
                     </div>
-                    <span className="text-xs font-medium uppercase tracking-widest text-[#5F6368]">{activeModule.tagline}</span>
-                    <h3 className="text-2xl font-bold text-[#202124] mt-1 mb-3">{activeModule.name}</h3>
-                    <p className="text-[#5F6368] leading-relaxed text-sm mb-6">{activeModule.desc}</p>
+                    <span className="text-xs font-medium uppercase tracking-widest text-[#6B7280]">{activeModule.tagline}</span>
+                    <h3 className="text-2xl font-bold text-[#111827] mt-1 mb-3">{activeModule.name}</h3>
+                    <p className="text-[#6B7280] leading-relaxed text-sm mb-6">{activeModule.desc}</p>
 
-                    <h4 className="text-xs font-semibold uppercase tracking-widest text-[#202124] mb-3">Core capabilities</h4>
+                    <h4 className="text-xs font-semibold uppercase tracking-widest text-[#111827] mb-3">Core capabilities</h4>
                     <ul className="space-y-2.5">
                       {activeModule.capabilities.map((cap, i) => (
                         <li key={i} className="flex items-center gap-2.5 text-sm">
-                          <CheckCircle2 className="w-4 h-4 text-[#1A73E8] shrink-0" />
-                          <span className="text-[#5F6368]">{cap}</span>
+                          <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+                          <span className="text-[#6B7280]">{cap}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="pt-5 border-t border-[#DADCE0]">
+                  <div className="pt-5 border-t border-[#E5E7EB]">
                     <Link
                       href="/request-proposal"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-[#1A73E8] hover:text-[#1765CC] transition-colors group"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-[#2563EB] hover:text-[#1765CC] transition-colors group"
                     >
                       Request module deployment
                       <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -564,73 +576,81 @@ export default function ImsPage() {
                     { label: "Core Database Engine", value: activeModule.specs.engine },
                     { label: "Average Throughput", value: activeModule.specs.throughput },
                   ].map((spec, i) => (
-                    <div key={i} className="p-5 rounded-xl bg-[#F8F9FA] border border-[#DADCE0]">
-                      <span className="text-[9px] font-medium text-[#80868B] uppercase tracking-widest block">{spec.label}</span>
-                      <span className="text-base font-semibold text-[#202124] mt-1 block font-mono">{spec.value}</span>
+                    <div key={i} className="p-5 rounded-xl bg-[#F8F9FA] border border-[#E5E7EB]">
+                      <span className="text-[9px] font-medium text-[#6B7280] uppercase tracking-widest block">{spec.label}</span>
+                      <span className="text-base font-semibold text-[#111827] mt-1 block font-mono">{spec.value}</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Pricing Tiers Section */}
-                <div className="lg:col-span-12 border-t border-[#DADCE0] pt-8 mt-4">
-                  <h4 className="text-sm font-semibold uppercase tracking-widest text-[#202124] mb-5">
+                <div className="lg:col-span-12 border-t border-[#E5E7EB] pt-8 mt-4">
+                  <h4 className="text-sm font-semibold uppercase tracking-widest text-[#111827] mb-5">
                     Select your {activeModule.name} Licensing Tier
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    {activeModule.pricing.map((tier, idx) => (
-                      <div 
-                        key={idx}
-                        className="p-5 rounded-xl bg-[#FAFAF9] border border-[#DADCE0] hover:border-[#1A73E8]/30 hover:shadow-sm transition-all duration-200 flex flex-col justify-between"
-                      >
-                        <div>
-                          <span className="text-[10px] font-medium text-[#80868B] uppercase tracking-widest block mb-1">
-                            {activeModule.name}
-                          </span>
-                          <h5 className="text-sm font-bold text-[#202124] mb-2 font-sans">
-                            {tier.name}
-                          </h5>
-                          
-                          {/* Price */}
-                          <div className="flex items-baseline gap-1 mb-3">
-                            <span className="text-xl font-bold text-[#202124]">
-                              {tier.price}
-                            </span>
-                            <span className="text-[10px] text-[#80868B] font-medium font-sans">
-                              / month
-                            </span>
-                          </div>
-
-                          {/* Quotas */}
-                          <div className="space-y-1 mb-5 text-[11px] text-[#5F6368] border-y border-[#DADCE0] py-3 font-sans">
-                            <div className="flex justify-between">
-                              <span className="text-[#80868B] font-medium">Scale Quota:</span>
-                              <span className="text-[#202124] font-semibold font-mono">{tier.assets}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-[#80868B] font-medium">Support / Integration:</span>
-                              <span className="text-[#202124] font-semibold font-mono">{tier.admins}</span>
-                            </div>
-                          </div>
-
-                          {/* Features list */}
-                          <ul className="space-y-1.5 mb-5">
-                            {tier.features.map((feat, fIdx) => (
-                              <li key={fIdx} className="flex items-start gap-2 text-[11px] text-[#5F6368] leading-relaxed">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-[#1A73E8] mt-0.5 shrink-0" />
-                                <span>{feat}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <Link 
-                          href="/request-proposal"
-                          className="w-full py-2.5 rounded-lg text-center text-[10px] font-semibold uppercase tracking-wider text-[#1A73E8] bg-white border border-[#DADCE0] hover:border-[#1A73E8]/40 hover:bg-[#E8F0FE] transition-all duration-200 block"
+                    {activeModule.pricing.map((tier, idx) => {
+                      const isPremium = tier.name.toLowerCase().includes("standard") || tier.name.toLowerCase().includes("pro");
+                      const headerBg = isPremium 
+                        ? "bg-gradient-to-r from-[#E8F0FE] via-[#D2E3FC] to-[#F3E8FD] border-b border-[#C5D8F9]" 
+                        : "bg-gradient-to-r from-[#F1F3F4] via-[#F8FAFC] to-[#E8EAED] border-b border-[#DADCE0]";
+                      return (
+                        <div 
+                          key={idx}
+                          className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15, 23, 42, 0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15, 23, 42, 0.08)] transition-all duration-250 flex flex-col justify-between overflow-hidden"
                         >
-                          Choose Tier
-                        </Link>
-                      </div>
-                    ))}
+                          <div>
+                            <div className={`-mx-6 -mt-6 p-6 ${headerBg} mb-6`}>
+                              <span className="text-[10px] font-medium text-[#6B7280] uppercase tracking-widest block mb-1">
+                                {activeModule.name}
+                              </span>
+                              <h5 className="text-sm font-bold text-[#111827] font-sans">
+                                {tier.name}
+                              </h5>
+                            </div>
+                            
+                            {/* Price */}
+                            <div className="flex items-baseline gap-1 mb-3">
+                              <span className="text-xl font-bold text-[#111827]">
+                                {tier.price}
+                              </span>
+                              <span className="text-[10px] text-[#6B7280] font-medium font-sans">
+                                / month
+                              </span>
+                            </div>
+
+                            {/* Quotas */}
+                            <div className="space-y-1 mb-5 text-[11px] text-[#6B7280] border-y border-[#E5E7EB] py-3 font-sans">
+                              <div className="flex justify-between">
+                                <span className="text-[#6B7280] font-medium">Scale Quota:</span>
+                                <span className="text-[#111827] font-semibold font-mono">{tier.assets}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-[#6B7280] font-medium">Support / Integration:</span>
+                                <span className="text-[#111827] font-semibold font-mono">{tier.admins}</span>
+                              </div>
+                            </div>
+
+                            {/* Features list */}
+                            <ul className="space-y-1.5 mb-5">
+                              {tier.features.map((feat, fIdx) => (
+                                <li key={fIdx} className="flex items-start gap-2 text-[11px] text-[#6B7280] leading-relaxed">
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] mt-0.5 shrink-0" />
+                                  <span>{feat}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <Link 
+                            href="/request-proposal"
+                            className="w-full py-3 rounded-xl text-center text-xs font-semibold uppercase tracking-wider text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_6px_20px_rgba(37,99,235,0.15)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.25)] hover:-translate-y-0.5 transition-all duration-250 block"
+                          >
+                            Choose Tier
+                          </Link>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -643,10 +663,10 @@ export default function ImsPage() {
         {/* ============================================================
             5. FAQ SECTION
            ============================================================ */}
-        <section className="py-20 border-t border-[#DADCE0]">
+        <section className="py-32 border-t border-[#E5E7EB]">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <h2 className="text-2xl font-bold text-[#202124]">FAQ</h2>
+            <div className="text-center mb-12">
+              <h2 className="text-2xl font-bold text-[#111827]">FAQ</h2>
             </div>
             
             <div className="space-y-3">
@@ -655,19 +675,19 @@ export default function ImsPage() {
                   key={idx}
                   className={`border rounded-xl overflow-hidden transition-all duration-200 ${
                     openFaq === idx
-                      ? "border-[#1A73E8]/30 bg-[#E8F0FE]/30"
-                      : "border-[#DADCE0] bg-white"
+                      ? "border-[#2563EB]/30 bg-[#F3F7FF]/30"
+                      : "border-[#E5E7EB] bg-white"
                   }`}
                 >
                   <button 
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                     className="w-full px-5 py-4 flex items-center justify-between text-left focus:outline-none"
                   >
-                    <span className="text-sm font-medium text-[#202124]">{faq.question}</span>
+                    <span className="text-sm font-medium text-[#111827]">{faq.question}</span>
                     {openFaq === idx ? (
-                      <Minus className="w-4 h-4 text-[#1A73E8] shrink-0" />
+                      <Minus className="w-4 h-4 text-[#2563EB] shrink-0" />
                     ) : (
-                      <Plus className="w-4 h-4 text-[#80868B] shrink-0" />
+                      <Plus className="w-4 h-4 text-[#6B7280] shrink-0" />
                     )}
                   </button>
                   <div 
@@ -675,7 +695,7 @@ export default function ImsPage() {
                       openFaq === idx ? "max-h-96 pb-4 opacity-100" : "max-h-0 opacity-0"
                     }`}
                   >
-                    <p className="text-sm text-[#5F6368] leading-relaxed">
+                    <p className="text-sm text-[#6B7280] leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>
@@ -688,8 +708,8 @@ export default function ImsPage() {
         {/* ============================================================
             6. CALL TO ACTION
            ============================================================ */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mb-16">
-          <div className="relative p-10 md:p-14 rounded-2xl bg-[#1A73E8] text-center space-y-5 overflow-hidden">
+        <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mb-12">
+          <div className="relative p-10 md:p-14 rounded-2xl bg-[#2563EB] text-center space-y-5 overflow-hidden">
             <span className="text-xs font-semibold uppercase tracking-widest text-white/80">Secure Enterprise Architecture</span>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight max-w-2xl mx-auto">
               Ready to deploy your local IMS instance?
@@ -701,7 +721,7 @@ export default function ImsPage() {
             <div className="pt-3">
               <Link 
                 href="/request-proposal"
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-[#F8F9FA] text-[#1A73E8] rounded-full font-semibold transition-all duration-200 shadow-sm text-sm"
+                className="inline-flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-[#F8F9FA] text-[#2563EB] rounded-full font-semibold transition-all duration-200 shadow-sm text-sm"
               >
                 Request Deployment Proposal
                 <ArrowRight className="w-4 h-4" />

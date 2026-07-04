@@ -70,7 +70,7 @@ export default function RequestProposal() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FAFAF9]">
+    <main className="min-h-screen bg-transparent">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 flex flex-col lg:flex-row gap-12">
         
         {/* Left Side: Context & Info */}
@@ -80,46 +80,46 @@ export default function RequestProposal() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8F0FE] border border-[#D2E3FC] text-[#1A73E8] text-xs font-semibold uppercase tracking-widest mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] text-[#2563EB] text-xs font-semibold uppercase tracking-widest mb-6">
               <Sparkles className="w-3.5 h-3.5" />
               Start Your Project
             </div>
             
-            <h1 className="text-3xl md:text-4xl font-bold text-[#202124] tracking-tight mb-5 leading-tight">
+            <h1 className="text-3xl md:text-4xl font-bold text-[#111827] tracking-tight mb-5 leading-tight">
               Let&apos;s architect <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#1A73E8] via-[#8B5CF6] to-[#EC4899] pb-0.5 inline-block">your future.</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#EC4899] pb-0.5 inline-block">your future.</span>
             </h1>
             
-            <p className="text-base text-[#5F6368] leading-relaxed mb-8 max-w-md">
+            <p className="text-base text-[#6B7280] leading-relaxed mb-8 max-w-md">
               Whether you need immersive VR environments, high-fidelity 3D assets, or automated workflows, our team is ready to deliver precision-engineered solutions tailored for your enterprise.
             </p>
 
             <div className="space-y-5">
               <div className="flex gap-4 items-start">
-                <div className="w-8 h-8 rounded-full bg-[#E8F0FE] border border-[#D2E3FC] flex items-center justify-center shrink-0">
-                  <span className="text-[#1A73E8] font-bold text-sm">1</span>
+                <div className="w-8 h-8 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center shrink-0">
+                  <span className="text-[#2563EB] font-bold text-sm">1</span>
                 </div>
                 <div>
-                  <h4 className="text-[#202124] font-semibold text-sm mb-0.5">Tell us your vision</h4>
-                  <p className="text-xs text-[#5F6368]">Provide details about your project, goals, and technical requirements.</p>
+                  <h4 className="text-[#111827] font-semibold text-sm mb-0.5">Tell us your vision</h4>
+                  <p className="text-xs text-[#6B7280]">Provide details about your project, goals, and technical requirements.</p>
                 </div>
               </div>
               <div className="flex gap-4 items-start">
-                <div className="w-8 h-8 rounded-full bg-[#E8F0FE] border border-[#D2E3FC] flex items-center justify-center shrink-0">
-                  <span className="text-[#1A73E8] font-bold text-sm">2</span>
+                <div className="w-8 h-8 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center shrink-0">
+                  <span className="text-[#2563EB] font-bold text-sm">2</span>
                 </div>
                 <div>
-                  <h4 className="text-[#202124] font-semibold text-sm mb-0.5">Receive a custom proposal</h4>
-                  <p className="text-xs text-[#5F6368]">Our team will architect a tailored solution including timelines and budget estimates.</p>
+                  <h4 className="text-[#111827] font-semibold text-sm mb-0.5">Receive a custom proposal</h4>
+                  <p className="text-xs text-[#6B7280]">Our team will architect a tailored solution including timelines and budget estimates.</p>
                 </div>
               </div>
               <div className="flex gap-4 items-start">
-                <div className="w-8 h-8 rounded-full bg-[#E8F0FE] border border-[#D2E3FC] flex items-center justify-center shrink-0">
-                  <span className="text-[#1A73E8] font-bold text-sm">3</span>
+                <div className="w-8 h-8 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center shrink-0">
+                  <span className="text-[#2563EB] font-bold text-sm">3</span>
                 </div>
                 <div>
-                  <h4 className="text-[#202124] font-semibold text-sm mb-0.5">Kickoff & Execution</h4>
-                  <p className="text-xs text-[#5F6368]">We begin engineering your digital reality with full transparency and milestone updates.</p>
+                  <h4 className="text-[#111827] font-semibold text-sm mb-0.5">Kickoff & Execution</h4>
+                  <p className="text-xs text-[#6B7280]">We begin engineering your digital reality with full transparency and milestone updates.</p>
                 </div>
               </div>
             </div>
@@ -132,20 +132,20 @@ export default function RequestProposal() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="bg-white border border-[#DADCE0] rounded-2xl p-6 md:p-10 shadow-sm relative overflow-hidden"
+            className="bg-white border border-[#E5E7EB] rounded-2xl p-6 md:p-10 shadow-sm relative overflow-hidden"
           >
             {isSuccess ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <div className="w-16 h-16 bg-[#E6F4EA] border border-[#CEEAD6] rounded-full flex items-center justify-center mb-6">
                   <CheckCircle2 className="w-8 h-8 text-[#0D652D]" />
                 </div>
-                <h2 className="text-2xl font-bold text-[#202124] mb-3">Proposal Requested!</h2>
-                <p className="text-[#5F6368] mb-8 max-w-sm text-sm">
+                <h2 className="text-2xl font-bold text-[#111827] mb-3">Proposal Requested!</h2>
+                <p className="text-[#6B7280] mb-8 max-w-sm text-sm">
                   Thank you for reaching out. Our team will review your requirements and get back to you within 24-48 business hours.
                 </p>
                 <button
                   onClick={() => setIsSuccess(false)}
-                  className="px-6 py-2.5 bg-[#FAFAF9] hover:bg-[#F1F3F4] text-[#202124] font-semibold rounded-full border border-[#DADCE0] hover:border-[#BDC1C6] transition-all duration-200 text-sm"
+                  className="px-6 py-3 bg-white hover:bg-[#F3F7FF] text-[#2563EB] font-bold rounded-xl border border-[#2563EB] transition-all duration-200 text-sm hover:-translate-y-0.5"
                 >
                   Submit Another Request
                 </button>
@@ -155,40 +155,40 @@ export default function RequestProposal() {
                 
                 {/* Personal Details */}
                 <div className="space-y-4">
-                  <h3 className="text-base font-semibold text-[#202124] border-b border-[#DADCE0] pb-2">1. Your Details</h3>
+                  <h3 className="text-base font-semibold text-[#111827] border-b border-[#E5E7EB] pb-2">1. Your Details</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-[#5F6368]">First Name *</label>
-                      <input required type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} className="w-full bg-[#FAFAF9] border border-[#DADCE0] rounded-lg px-3 py-2 text-sm text-[#202124] focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8]/20 transition-all placeholder:text-[#BDC1C6]" placeholder="John" />
+                      <label className="text-xs font-semibold text-[#6B7280]">First Name *</label>
+                      <input required type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} className="w-full bg-[#FAFBFC] border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all placeholder:text-[#BDC1C6]" placeholder="John" />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-[#5F6368]">Last Name *</label>
-                      <input required type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} className="w-full bg-[#FAFAF9] border border-[#DADCE0] rounded-lg px-3 py-2 text-sm text-[#202124] focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8]/20 transition-all placeholder:text-[#BDC1C6]" placeholder="Doe" />
+                      <label className="text-xs font-semibold text-[#6B7280]">Last Name *</label>
+                      <input required type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} className="w-full bg-[#FAFBFC] border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all placeholder:text-[#BDC1C6]" placeholder="Doe" />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-[#5F6368]">Email Address *</label>
-                      <input required type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full bg-[#FAFAF9] border border-[#DADCE0] rounded-lg px-3 py-2 text-sm text-[#202124] focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8]/20 transition-all placeholder:text-[#BDC1C6]" placeholder="john@company.com" />
+                      <label className="text-xs font-semibold text-[#6B7280]">Email Address *</label>
+                      <input required type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full bg-[#FAFBFC] border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all placeholder:text-[#BDC1C6]" placeholder="john@company.com" />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-[#5F6368]">Company Name</label>
-                      <input type="text" name="company" value={formData.company} onChange={handleInputChange} className="w-full bg-[#FAFAF9] border border-[#DADCE0] rounded-lg px-3 py-2 text-sm text-[#202124] focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8]/20 transition-all placeholder:text-[#BDC1C6]" placeholder="Acme Corp" />
+                      <label className="text-xs font-semibold text-[#6B7280]">Company Name</label>
+                      <input type="text" name="company" value={formData.company} onChange={handleInputChange} className="w-full bg-[#FAFBFC] border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all placeholder:text-[#BDC1C6]" placeholder="Acme Corp" />
                     </div>
                   </div>
                 </div>
 
                 {/* Project Details */}
                 <div className="space-y-4">
-                  <h3 className="text-base font-semibold text-[#202124] border-b border-[#DADCE0] pb-2">2. Project Requirements</h3>
+                  <h3 className="text-base font-semibold text-[#111827] border-b border-[#E5E7EB] pb-2">2. Project Requirements</h3>
                   
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-[#5F6368]">Project Description *</label>
-                    <textarea required name="description" value={formData.description} onChange={handleInputChange} rows={3} className="w-full bg-[#FAFAF9] border border-[#DADCE0] rounded-lg px-3 py-2 text-sm text-[#202124] focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8]/20 transition-all resize-none placeholder:text-[#BDC1C6]" placeholder="Tell us about the scope, objectives, and specific deliverables you need..." />
+                    <label className="text-xs font-semibold text-[#6B7280]">Project Description *</label>
+                    <textarea required name="description" value={formData.description} onChange={handleInputChange} rows={3} className="w-full bg-[#FAFBFC] border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all resize-none placeholder:text-[#BDC1C6]" placeholder="Tell us about the scope, objectives, and specific deliverables you need..." />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-[#5F6368]">Estimated Budget</label>
-                      <select name="budget" value={formData.budget} onChange={handleInputChange} className="w-full bg-[#FAFAF9] border border-[#DADCE0] rounded-lg px-3 py-2 text-sm text-[#202124] focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8]/20 transition-all">
+                      <label className="text-xs font-semibold text-[#6B7280]">Estimated Budget</label>
+                      <select name="budget" value={formData.budget} onChange={handleInputChange} className="w-full bg-[#FAFBFC] border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all">
                         <option value="">Select a range</option>
                         <option value="under_10k">Under $10,000</option>
                         <option value="10k_50k">$10,000 - $50,000</option>
@@ -197,8 +197,8 @@ export default function RequestProposal() {
                       </select>
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-[#5F6368]">Desired Timeline</label>
-                      <select name="timeline" value={formData.timeline} onChange={handleInputChange} className="w-full bg-[#FAFAF9] border border-[#DADCE0] rounded-lg px-3 py-2 text-sm text-[#202124] focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8]/20 transition-all">
+                      <label className="text-xs font-semibold text-[#6B7280]">Desired Timeline</label>
+                      <select name="timeline" value={formData.timeline} onChange={handleInputChange} className="w-full bg-[#FAFBFC] border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all">
                         <option value="">Select timeline</option>
                         <option value="asap">ASAP (within 1 month)</option>
                         <option value="1_3_months">1-3 Months</option>
@@ -211,11 +211,11 @@ export default function RequestProposal() {
 
                 {/* Services & Products Interested In */}
                 <div className="space-y-4">
-                  <h3 className="text-base font-semibold text-[#202124] border-b border-[#DADCE0] pb-2">3. Areas of Interest</h3>
+                  <h3 className="text-base font-semibold text-[#111827] border-b border-[#E5E7EB] pb-2">3. Areas of Interest</h3>
                   
                   <div className="space-y-3">
                     <div>
-                      <label className="text-xs font-semibold text-[#5F6368] mb-2 block">Services (Select multiple)</label>
+                      <label className="text-xs font-semibold text-[#6B7280] mb-2 block">Services (Select multiple)</label>
                       <div className="flex flex-wrap gap-2">
                         {DUMMY_SERVICES.map(svc => {
                           const isSelected = selectedServices.includes(svc.id);
@@ -224,10 +224,10 @@ export default function RequestProposal() {
                               key={svc.id}
                               type="button"
                               onClick={() => toggleSelection(svc.id, "services")}
-                              className={`px-4 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 ${
+                              className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 ${
                                 isSelected 
-                                  ? 'bg-[#E8F0FE] border-[#1A73E8] text-[#1A73E8] shadow-sm' 
-                                  : 'bg-white border-[#DADCE0] text-[#5F6368] hover:border-[#BDC1C6] hover:text-[#202124]'
+                                  ? 'bg-[#2563EB] border-[#2563EB] text-white shadow-sm' 
+                                  : 'bg-[#F3F7FF] border-[#DCEBFF] text-[#2563EB] hover:bg-[#E8F0FE]'
                               }`}
                             >
                               {svc.label}
@@ -238,7 +238,7 @@ export default function RequestProposal() {
                     </div>
 
                     <div>
-                      <label className="text-xs font-semibold text-[#5F6368] mb-2 block">Products (Select multiple)</label>
+                      <label className="text-xs font-semibold text-[#6B7280] mb-2 block">Products (Select multiple)</label>
                       <div className="flex flex-wrap gap-2">
                         {DUMMY_PRODUCTS.map(prod => {
                           const isSelected = selectedProducts.includes(prod.id);
@@ -247,10 +247,10 @@ export default function RequestProposal() {
                               key={prod.id}
                               type="button"
                               onClick={() => toggleSelection(prod.id, "products")}
-                              className={`px-4 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 ${
+                              className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 ${
                                 isSelected 
-                                  ? 'bg-[#F3E8FD] border-[#A142F4] text-[#A142F4] shadow-sm' 
-                                  : 'bg-white border-[#DADCE0] text-[#5F6368] hover:border-[#BDC1C6] hover:text-[#202124]'
+                                  ? 'bg-[#A142F4] border-[#A142F4] text-white shadow-sm' 
+                                  : 'bg-[#FAF5FF] border-[#F3E8FD] text-[#A142F4] hover:bg-[#F3E8FD]'
                               }`}
                             >
                               {prod.label}
@@ -267,7 +267,7 @@ export default function RequestProposal() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#1A73E8] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group text-sm shadow-sm hover:shadow-md"
+                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#2563EB] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group text-sm shadow-sm hover:shadow-md"
                   >
                     {isSubmitting ? (
                       <>
@@ -281,7 +281,7 @@ export default function RequestProposal() {
                       </>
                     )}
                   </button>
-                  <p className="text-center text-[10px] text-[#80868B] mt-3">
+                  <p className="text-center text-[10px] text-[#6B7280] mt-3">
                     Your data is secure. We will never share your information with third parties.
                   </p>
                 </div>

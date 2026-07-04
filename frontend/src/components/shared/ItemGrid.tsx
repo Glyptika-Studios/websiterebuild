@@ -54,51 +54,51 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.08 }}
             onClick={(e) => handleCardClick(e, item)}
-            className={`w-full md:w-[calc(50%-12px)] ${lgWidth} group relative bg-white border border-[#DADCE0] hover:border-[#BDC1C6] rounded-2xl p-7 transition-all duration-200 flex flex-col shadow-sm hover:shadow-md ${
+            className={`w-full md:w-[calc(50%-12px)] ${lgWidth} group relative bg-white border border-[#E5E7EB] rounded-[20px] p-7 transition-all duration-250 flex flex-col shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] ${
               type !== "posts" ? "cursor-pointer" : ""
             }`}
           >
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-5">
                 {item.category && (
-                  <span className="text-xs font-medium uppercase tracking-wider text-[#1A73E8] bg-[#E8F0FE] px-3 py-1 rounded-full border border-[#D2E3FC]">
+                  <span className="text-xs font-medium uppercase tracking-wider text-[#2563EB] bg-[#F3F7FF] px-3 py-1 rounded-full border border-[#DCEBFF]">
                     {item.category}
                   </span>
                 )}
-                <Icon className="w-5 h-5 text-[#BDC1C6] group-hover:text-[#1A73E8] transition-colors ml-auto" />
+                <Icon className="w-5 h-5 text-[#6B7280]/40 group-hover:text-[#2563EB] transition-colors ml-auto" />
               </div>
 
-              <h3 className="text-xl font-semibold text-[#202124] mb-2 group-hover:text-[#1A73E8] transition-colors leading-tight">
+              <h3 className="text-xl font-semibold text-[#111827] mb-2 group-hover:text-[#2563EB] transition-colors leading-tight">
                 {item.title}
               </h3>
 
               {item.date && (
-                <p className="text-xs text-[#80868B] mb-2 font-medium uppercase tracking-widest">{item.date}</p>
+                <p className="text-xs text-[#6B7280] mb-2 font-medium uppercase tracking-widest">{item.date}</p>
               )}
 
               {item.description && (
-                <p className="text-[#5F6368] text-sm leading-relaxed mb-6 line-clamp-3">
+                <p className="text-[#6B7280] text-sm leading-relaxed mb-6 line-clamp-3">
                   {item.description}
                 </p>
               )}
             </div>
 
             {item.href && (
-              <div className="relative z-10 mt-auto pt-4 border-t border-[#DADCE0]">
+              <div className="relative z-10 mt-auto pt-4 border-t border-[#E5E7EB] flex">
                 {type === "posts" ? (
                   <Link
                     href={item.href}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-[#5F6368] group-hover:text-[#1A73E8] transition-colors"
+                    className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-xs font-semibold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] hover:bg-[#2563EB] hover:text-white transition-all duration-300 shadow-sm"
                   >
                     Read Article
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 ) : (
                   <span
-                    className="inline-flex items-center gap-2 text-sm font-medium text-[#5F6368] group-hover:text-[#1A73E8] transition-colors"
+                    className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-xs font-semibold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] group-hover:bg-[#2563EB] group-hover:text-white transition-all duration-300 shadow-sm"
                   >
                     View Details
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </span>
                 )}
               </div>
@@ -124,11 +124,11 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 16 }}
               transition={{ duration: 0.25 }}
-              className="relative w-full max-w-lg bg-white border border-[#DADCE0] rounded-2xl p-7 shadow-xl z-10 flex flex-col space-y-5"
+              className="relative w-full max-w-lg bg-white border border-[#E5E7EB] rounded-[20px] p-7 shadow-xl z-10 flex flex-col space-y-5"
             >
               <button
                 onClick={() => setSelectedItem(null)}
-                className="absolute top-5 right-5 text-[#80868B] hover:text-[#202124] transition-colors p-1"
+                className="absolute top-5 right-5 text-[#6B7280] hover:text-[#111827] transition-colors p-1"
                 aria-label="Close details modal"
               >
                 <X className="w-5 h-5" />
@@ -136,24 +136,24 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
 
               <div>
                 {selectedItem.category && (
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1A73E8] bg-[#E8F0FE] px-2.5 py-1 rounded-full border border-[#D2E3FC] w-fit block mb-3">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#2563EB] bg-[#F3F7FF] px-2.5 py-1 rounded-full border border-[#DCEBFF] w-fit block mb-3">
                     {selectedItem.category}
                   </span>
                 )}
-                <h4 className="text-xl font-bold text-[#202124] leading-tight">
+                <h4 className="text-xl font-bold text-[#111827] leading-tight">
                   {selectedItem.title}
                 </h4>
               </div>
 
-              <div className="text-[#5F6368] text-sm leading-relaxed border-t border-[#DADCE0] pt-4">
+              <div className="text-[#6B7280] text-sm leading-relaxed border-t border-[#E5E7EB] pt-4">
                 {selectedItem.description || "Bespoke custom-engineered solution designed to optimize security, time efficiency, and operational accuracy."}
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-[#DADCE0]">
+              <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-[#E5E7EB]">
                 <Link
                   href="/request-proposal"
                   onClick={() => setSelectedItem(null)}
-                  className="px-6 py-3 bg-[#1A73E8] hover:bg-[#1765CC] text-white rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-200 text-center flex-1"
+                  className="px-6 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_10px_24px_rgba(37,99,235,0.15)] text-white rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-200 text-center flex-1 hover:-translate-y-0.5 active:translate-y-0"
                 >
                   Enquire / Get Details
                 </Link>
@@ -162,7 +162,7 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
                   <Link
                     href={selectedItem.href}
                     onClick={() => setSelectedItem(null)}
-                    className="px-6 py-3 bg-[#F1F3F4] hover:bg-[#E8EAED] text-[#202124] border border-[#DADCE0] rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-200 text-center flex-1"
+                    className="px-6 py-3 bg-white hover:bg-[#F3F7FF] text-[#2563EB] border border-[#2563EB] rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-200 text-center flex-1 hover:-translate-y-0.5 active:translate-y-0"
                   >
                     View Product Page
                   </Link>

@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -39,9 +40,13 @@ export default function Header() {
         }`}
       >
         <div
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           className={`relative rounded-full px-6 py-3 flex items-center justify-between transition-all duration-500 overflow-hidden group ${
             isScrolled
-              ? "backdrop-blur-md bg-white/60 border border-[#1A73E8]/35 shadow-[0_4px_20px_rgba(0,0,0,0.03),0_0_15px_rgba(26,115,232,0.12),inset_0_1px_0_rgba(255,255,255,0.7)] hover:-translate-y-0.5 hover:border-[#1A73E8]/50 hover:shadow-[0_8px_30px_rgba(0,0,0,0.05),0_0_25px_rgba(26,115,232,0.2),inset_0_1px_0_rgba(255,255,255,0.9)]"
+              ? "backdrop-blur-md bg-white/50 border border-[#E5E7EB] shadow-[0_8px_20px_rgba(15,23,42,0.04)] hover:-translate-y-0.5"
+              : isHovered
+              ? "backdrop-blur-md bg-white/50 border border-[#E5E7EB] shadow-[0_4px_15px_rgba(15,23,42,0.02)] hover:-translate-y-0.5"
               : "bg-transparent border border-transparent"
           }`}
         >
@@ -51,14 +56,14 @@ export default function Header() {
           {/* Logo */}
           <div className="flex-shrink-0 relative z-10">
             <Link href="/" className="flex items-center gap-3 group/logo">
-              <div className="relative w-9 h-9 overflow-hidden rounded-lg shadow-sm border border-[#DADCE0] group-hover/logo:border-[#1A73E8]/50 transition-colors">
+              <div className="relative w-9 h-9 overflow-hidden rounded-lg shadow-sm border border-[#E5E7EB] group-hover/logo:border-[#2563EB]/50 transition-colors">
                 <Image src="/logo.jpg" alt="Glyptika Logo" fill className="object-cover" />
               </div>
               <div className="hidden sm:flex flex-col">
-                <span className="text-base font-bold text-[#202124] tracking-tight leading-tight group-hover/logo:text-[#1A73E8] transition-colors">
+                <span className="text-base font-bold text-[#111827] tracking-tight leading-tight group-hover/logo:text-[#2563EB] transition-colors">
                   Glyptika Studios
                 </span>
-                <span className="text-[10px] font-semibold text-[#1A73E8] uppercase tracking-widest leading-none mt-0.5">
+                <span className="text-[10px] font-semibold text-[#2563EB] uppercase tracking-widest leading-none mt-0.5">
                   A Creative Tech Startup
                 </span>
               </div>
@@ -77,8 +82,8 @@ export default function Header() {
                       data-active={isActive}
                       className={`anchor-link flex items-center px-4 py-2.5 rounded-full text-sm font-semibold tracking-tight transition-colors duration-300 ${
                         isActive
-                          ? "text-[#1A73E8]"
-                          : "text-[#5F6368] hover:text-[#202124]"
+                          ? "text-[#2563EB]"
+                          : "text-[#6B7280] hover:text-[#111827]"
                       }`}
                     >
                       {link.name}
@@ -93,7 +98,7 @@ export default function Header() {
           <div className="flex items-center gap-3 relative z-10">
             <Link
               href="/request-proposal"
-              className="hidden sm:inline-block px-5 py-2 text-sm font-semibold rounded-full text-white bg-[#1A73E8] hover:bg-[#1765CC] border border-[#1A73E8]/40 hover:border-[#1A73E8]/60 shadow-[0_0_12px_rgba(26,115,232,0.15)] hover:shadow-[0_0_20px_rgba(26,115,232,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 leading-none whitespace-nowrap"
+              className="hidden sm:inline-block px-5 py-2.5 text-sm font-semibold rounded-xl text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_10px_24px_rgba(37,99,235,0.15)] hover:-translate-y-0.5 transition-all duration-200 leading-none whitespace-nowrap"
             >
               Request Proposal
             </Link>
@@ -101,7 +106,7 @@ export default function Header() {
             <button
               onClick={() => setIsMobileMenuOpen(true)}
               type="button"
-              className="xl:hidden p-2 rounded-full text-[#5F6368] hover:text-[#202124] hover:bg-white/20 border border-[#DADCE0] transition-all duration-300 focus:outline-none"
+              className="xl:hidden p-2 rounded-full text-[#6B7280] hover:text-[#111827] hover:bg-white/20 border border-[#E5E7EB] transition-all duration-300 focus:outline-none"
               aria-label="Open mobile menu"
             >
               <div className="flex flex-col gap-[5px] w-5 h-4 justify-center">
@@ -130,19 +135,19 @@ export default function Header() {
       >
         <div>
           {/* Mobile Header */}
-          <div className="flex justify-between items-center px-6 py-5 border-b border-[#DADCE0]">
+          <div className="flex justify-between items-center px-6 py-5 border-b border-[#E5E7EB]">
             <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3">
-              <div className="relative w-8 h-8 overflow-hidden rounded-lg border border-[#DADCE0]">
+              <div className="relative w-8 h-8 overflow-hidden rounded-lg border border-[#E5E7EB]">
                 <Image src="/logo.jpg" alt="Glyptika Logo" fill className="object-cover" />
               </div>
               <div className="flex flex-col">
-                <span className="text-base font-bold text-[#202124] tracking-tight leading-tight">Glyptika Studios</span>
-                <span className="text-[10px] font-semibold text-[#1A73E8] uppercase tracking-widest leading-none mt-0.5">A Creative Tech Startup</span>
+                <span className="text-base font-bold text-[#111827] tracking-tight leading-tight">Glyptika Studios</span>
+                <span className="text-[10px] font-semibold text-[#2563EB] uppercase tracking-widest leading-none mt-0.5">A Creative Tech Startup</span>
               </div>
             </Link>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="w-10 h-10 rounded-full bg-white/20 border border-[#DADCE0] flex items-center justify-center text-[#5F6368] hover:text-[#202124] hover:bg-white/40 transition-all duration-200"
+              className="w-10 h-10 rounded-full bg-white/20 border border-[#E5E7EB] flex items-center justify-center text-[#6B7280] hover:text-[#111827] hover:bg-white/40 transition-all duration-200"
               aria-label="Close mobile menu"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -150,7 +155,7 @@ export default function Header() {
               </svg>
             </button>
           </div>
-          
+
           {/* Mobile Nav */}
           <ul className="px-4 py-6 flex flex-col gap-1 list-none">
             {navLinks.map((link) => {
@@ -162,8 +167,8 @@ export default function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`flex items-center px-4 py-3.5 rounded-xl text-base font-medium transition-colors duration-200 ${
                       isActive
-                        ? "bg-[#E8F0FE] text-[#1A73E8]"
-                        : "text-[#5F6368] hover:bg-white/20 hover:text-[#202124]"
+                        ? "bg-[#E8F0FE] text-[#2563EB]"
+                        : "text-[#6B7280] hover:bg-white/20 hover:text-[#111827]"
                     }`}
                   >
                     {link.name}
@@ -175,11 +180,11 @@ export default function Header() {
         </div>
 
         {/* Mobile CTA Footer */}
-        <div className="p-5 border-t border-[#DADCE0]">
+        <div className="p-5 border-t border-[#E5E7EB]">
           <Link
             href="/request-proposal"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="block w-full py-3.5 rounded-xl text-center font-semibold text-white bg-[#1A73E8] hover:bg-[#1765CC] transition-all duration-200"
+            className="block w-full py-3.5 rounded-xl text-center font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] transition-all duration-200"
           >
             Request Proposal
           </Link>
