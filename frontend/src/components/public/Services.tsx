@@ -53,10 +53,10 @@ function ServiceCard({ service }: { service: (typeof SERVICES_DATA)[0] }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ 
-        borderColor: isHovered ? "#2563EB" : "#E5E7EB",
+        borderColor: isHovered ? "rgba(37, 99, 235, 0.4)" : "#DCE3EC",
         boxShadow: isHovered 
-          ? "0 18px 48px rgba(15, 23, 42, 0.08)"
-          : "0 12px 32px rgba(15, 23, 42, 0.06)"
+          ? "0 24px 48px rgba(37, 99, 235, 0.12)"
+          : "0 16px 36px rgba(15, 23, 42, 0.05)"
       }}
       className="group relative rounded-[20px] p-8 flex flex-col h-full cursor-default bg-white border transition-all duration-250"
     >
@@ -68,20 +68,20 @@ function ServiceCard({ service }: { service: (typeof SERVICES_DATA)[0] }) {
           <Icon className="w-6 h-6 text-[#2563EB]" />
         </div>
         <div
-          className="px-3 py-1 rounded-full text-xs font-medium"
+          className="px-3 py-1 rounded-full text-sm font-semibold"
           style={{ backgroundColor: service.tagBg, border: `1px solid ${service.tagBorder}`, color: service.color }}
         >
           {service.tag}
         </div>
       </div>
 
-      <h3 className="text-lg font-semibold text-[#111827] mb-3 leading-snug">{service.title}</h3>
-      <p className="text-[#6B7280] text-sm leading-relaxed flex-grow">
+      <h3 className="text-2xl font-bold text-[#111827] mb-3 leading-snug">{service.title}</h3>
+      <p className="text-[#6B7280] text-base md:text-lg leading-relaxed flex-grow">
         {service.description}
       </p>
 
-      <div className="mt-6 flex items-center text-xs font-medium text-[#6B7280] group-hover:text-[#2563EB] transition-colors duration-250 w-max">
-        <span className="relative text-xs">
+      <div className="mt-6 flex items-center text-sm font-semibold text-[#6B7280] group-hover:text-[#2563EB] transition-colors duration-250 w-max">
+        <span className="relative text-sm">
           Explore Capability
           <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-[#2563EB] group-hover:w-full transition-all duration-250" />
         </span>
@@ -95,7 +95,7 @@ function ServiceCard({ service }: { service: (typeof SERVICES_DATA)[0] }) {
 
 export default function Services() {
   return (
-    <section id="services" className="relative w-full py-32 overflow-hidden">
+    <section id="services" className="relative w-full py-32 overflow-hidden bg-gradient-to-b from-transparent via-[#F4F7FC]/70 to-transparent border-y border-[#E5E8EB]/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
@@ -105,7 +105,7 @@ export default function Services() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center justify-center px-4 py-1.5 mb-5 rounded-full text-xs font-medium uppercase tracking-widest bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF]"
+            className="inline-flex items-center justify-center px-4 py-1.5 mb-5 rounded-full text-sm font-semibold uppercase tracking-widest bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF]"
           >
             Service Division
           </motion.div>
@@ -115,7 +115,7 @@ export default function Services() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#111827] mb-5 tracking-tight"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#111827] mb-5 tracking-tight leading-tight"
           >
             Elite 3D &amp; VR Services
           </motion.h2>
@@ -125,7 +125,7 @@ export default function Services() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-[#6B7280] text-lg font-normal leading-relaxed max-w-2xl"
+            className="text-[#6B7280] text-xl md:text-2xl font-normal leading-relaxed max-w-2xl"
           >
             Precision-engineered 3D modeling, immersive VR experiences, and cutting-edge visualization for commercial, government, and defense clients.
           </motion.p>

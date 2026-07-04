@@ -18,6 +18,7 @@ const FEATURED_PROJECTS = [
       { label: "Cost Saved", value: "99.98%", icon: TrendingDown },
     ],
     imageIcon: Move3d,
+    imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&auto=format&fit=crop&q=80",
     alignment: "left" as const,
     color: "#1A73E8",
     tagBg: "#E8F0FE",
@@ -36,6 +37,7 @@ const FEATURED_PROJECTS = [
       { label: "Deployment", value: "Full VR", icon: Rocket },
     ],
     imageIcon: HardHat,
+    imageUrl: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=1200&auto=format&fit=crop&q=80",
     alignment: "right" as const,
     color: "#A142F4",
     tagBg: "#F3E8FD",
@@ -45,7 +47,6 @@ const FEATURED_PROJECTS = [
 
 function ProjectRow({ project }: { project: (typeof FEATURED_PROJECTS)[0] }) {
   const isLeft = project.alignment === "left";
-  const Icon = project.imageIcon;
   const rowRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -64,7 +65,7 @@ function ProjectRow({ project }: { project: (typeof FEATURED_PROJECTS)[0] }) {
         className="w-full lg:w-1/2 space-y-6"
       >
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: project.color }}>
+          <p className="text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: project.color }}>
             {project.subtitle}
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#202124] tracking-tight leading-tight">
@@ -72,9 +73,9 @@ function ProjectRow({ project }: { project: (typeof FEATURED_PROJECTS)[0] }) {
           </h2>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           {project.content.map((p, i) => (
-            <p key={i} className="text-sm text-[#5F6368] leading-relaxed">{p}</p>
+            <p key={i} className="text-base md:text-lg text-[#5F6368] leading-relaxed">{p}</p>
           ))}
         </div>
 
@@ -85,7 +86,7 @@ function ProjectRow({ project }: { project: (typeof FEATURED_PROJECTS)[0] }) {
             return (
               <div
                 key={mIdx}
-                className="group p-5 rounded-xl flex items-center gap-4 bg-white border border-[#DADCE0] shadow-sm hover:shadow-md hover:border-[#BDC1C6] transition-all duration-200"
+                className="group p-5 rounded-xl flex items-center gap-4 bg-white border border-[#DCE3EC] shadow-[0_8px_24px_rgba(15,23,42,0.04)] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:border-[#BDC1C6] transition-all duration-200"
               >
                 <div
                   className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
@@ -94,8 +95,8 @@ function ProjectRow({ project }: { project: (typeof FEATURED_PROJECTS)[0] }) {
                   <MetricIcon className="w-5 h-5" style={{ color: project.color }} />
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-[#202124] tracking-tight">{metric.value}</div>
-                  <div className="text-xs text-[#5F6368] uppercase tracking-wider font-medium">{metric.label}</div>
+                  <div className="text-xl md:text-2xl font-black text-[#202124] tracking-tight">{metric.value}</div>
+                  <div className="text-sm text-[#5F6368] uppercase tracking-wider font-semibold">{metric.label}</div>
                 </div>
               </div>
             );
@@ -109,23 +110,16 @@ function ProjectRow({ project }: { project: (typeof FEATURED_PROJECTS)[0] }) {
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-        className="w-full lg:w-1/2 relative"
+        className="w-full lg:w-1/2 relative font-sans"
       >
         <div
-          className="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden flex items-center justify-center bg-[#F1F3F4] border border-[#DADCE0] shadow-sm"
+          className="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden bg-white border border-[#DCE3EC] shadow-[0_12px_32px_rgba(15,23,42,0.05)] hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(0,0,0,0.08)] transition-all duration-300"
         >
-          {/* Floating icon */}
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="relative z-10 w-36 h-36 rounded-2xl flex items-center justify-center bg-white border border-[#DADCE0] shadow-md"
-          >
-            <Icon
-              className="w-16 h-16"
-              strokeWidth={1.2}
-              style={{ color: project.color }}
-            />
-          </motion.div>
+          <img
+            src={project.imageUrl}
+            alt={project.title}
+            className="w-full h-full object-cover"
+          />
         </div>
       </motion.div>
     </div>
@@ -134,7 +128,7 @@ function ProjectRow({ project }: { project: (typeof FEATURED_PROJECTS)[0] }) {
 
 export default function CustomSections() {
   return (
-    <section className="relative w-full py-24 overflow-hidden">
+    <section className="relative w-full py-32 overflow-hidden bg-[#FAFBFD]/80 border-y border-[#E5E8EB]/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section badge */}
@@ -144,7 +138,7 @@ export default function CustomSections() {
           viewport={{ once: true }}
           className="flex justify-center mb-16"
         >
-          <div className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-widest bg-[#E8F0FE] text-[#1A73E8] border border-[#D2E3FC]">
+          <div className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold uppercase tracking-widest bg-[#E8F0FE] text-[#1A73E8] border border-[#D2E3FC]">
             Featured Work
           </div>
         </motion.div>

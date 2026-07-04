@@ -37,7 +37,7 @@ export default function Stats() {
   return (
     <section className="relative w-full py-8 z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl border border-[#DADCE0] shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-[#DCE3EC] shadow-[0_12px_32px_rgba(15,23,42,0.05)] overflow-hidden">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 p-8 md:p-10">
             {MOCK_STATS.map((stat, index) => (
               <motion.div
