@@ -280,7 +280,7 @@ export default function XplorPage() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] text-[#2563EB] text-xs font-semibold uppercase tracking-widest mb-8"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] text-[#2563EB] text-sm font-semibold uppercase tracking-widest mb-8"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#2563EB] animate-pulse" />
               Flagship Spatial Engine
@@ -291,7 +291,7 @@ export default function XplorPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#111827] tracking-tight leading-[1.1] mb-6 max-w-4xl"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#111827] tracking-tight leading-tight mb-6 max-w-5xl"
             >
               Transform CAD blueprints <br />
               into <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#EC4899] pb-1 block">Immersive Reality.</span>
@@ -302,7 +302,7 @@ export default function XplorPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg sm:text-xl text-[#6B7280] max-w-3xl leading-relaxed mb-12 font-light"
+              className="text-xl sm:text-2xl text-[#6B7280] max-w-4xl leading-relaxed mb-12 font-normal"
             >
               Democratizing & automating spatial visualization. Convert static 2D floor plans into fully interactive 3D WebGL scenes and standalone VR walkthroughs instantly.
             </motion.p>
@@ -316,7 +316,7 @@ export default function XplorPage() {
             >
               <Link
                 href="/request-proposal"
-                className="px-8 py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl font-semibold transition-all duration-200 shadow-[0_10px_24px_rgba(37,99,235,0.20)] hover:-translate-y-0.5 flex items-center gap-2 text-sm"
+                className="px-8 py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl font-bold transition-all duration-200 shadow-[0_10px_24px_rgba(37,99,235,0.20)] hover:-translate-y-0.5 flex items-center gap-2 text-base"
               >
                 <span>Book a Live Demo</span>
                 <ArrowRight className="w-4 h-4" />
@@ -324,7 +324,7 @@ export default function XplorPage() {
               
               <a
                 href="#modules"
-                className="px-8 py-4 bg-white hover:bg-[#F3F7FF] text-[#2563EB] rounded-xl font-semibold border border-[#2563EB] transition-all duration-200 text-sm hover:-translate-y-0.5"
+                className="px-8 py-4 bg-white hover:bg-[#F3F7FF] text-[#2563EB] rounded-xl font-bold border border-[#2563EB] transition-all duration-200 text-base hover:-translate-y-0.5"
               >
                 Explore Modules
               </a>
@@ -332,8 +332,8 @@ export default function XplorPage() {
           </div>
 
           {/* Interactive Scroll Down Prompt */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-xs text-[#6B7280] z-10 pointer-events-none select-none">
-            <span className="font-semibold tracking-widest uppercase text-[10px]">Scroll to explore</span>
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-sm text-[#6B7280] z-10 pointer-events-none select-none">
+            <span className="font-bold tracking-widest uppercase text-xs">Scroll to explore</span>
             <div className="w-5 h-8 rounded-full border border-[#E5E7EB] flex justify-center p-1">
               <motion.div 
                 animate={{ y: [0, 8, 0] }}
@@ -698,10 +698,7 @@ export default function XplorPage() {
                   </h4>
                   <div className={`grid grid-cols-1 md:grid-cols-3 ${activeModule.pricing.length === 4 ? "lg:grid-cols-4" : ""} gap-6`}>
                     {activeModule.pricing.map((tier, idx) => {
-                      const isPremium = tier.name.toLowerCase().includes("standard") || tier.name.toLowerCase().includes("pro");
-                      const headerBg = isPremium 
-                        ? "bg-gradient-to-r from-[#E8F0FE] via-[#D2E3FC] to-[#F3E8FD] border-b border-[#C5D8F9]" 
-                        : "bg-gradient-to-r from-[#F1F3F4] via-[#F8FAFC] to-[#E8EAED] border-b border-[#DADCE0]";
+                      const headerBg = "bg-gradient-to-r from-[#E8F0FE] via-[#D2E3FC] to-[#F3E8FD] border-b border-[#C5D8F9]";
                       return (
                         <div 
                           key={idx}

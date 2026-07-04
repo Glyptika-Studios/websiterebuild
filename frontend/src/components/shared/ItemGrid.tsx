@@ -61,23 +61,23 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-5">
                 {item.category && (
-                  <span className="text-xs font-medium uppercase tracking-wider text-[#2563EB] bg-[#F3F7FF] px-3 py-1 rounded-full border border-[#DCEBFF]">
+                  <span className="text-sm font-semibold uppercase tracking-wider text-[#2563EB] bg-[#F3F7FF] px-3 py-1 rounded-full border border-[#DCEBFF]">
                     {item.category}
                   </span>
                 )}
                 <Icon className="w-5 h-5 text-[#6B7280]/40 group-hover:text-[#2563EB] transition-colors ml-auto" />
               </div>
 
-              <h3 className="text-xl font-semibold text-[#111827] mb-2 group-hover:text-[#2563EB] transition-colors leading-tight">
+              <h3 className="text-2xl font-bold text-[#111827] mb-2 group-hover:text-[#2563EB] transition-colors leading-tight">
                 {item.title}
               </h3>
 
               {item.date && (
-                <p className="text-xs text-[#6B7280] mb-2 font-medium uppercase tracking-widest">{item.date}</p>
+                <p className="text-sm text-[#6B7280] mb-2 font-semibold uppercase tracking-widest">{item.date}</p>
               )}
 
               {item.description && (
-                <p className="text-[#6B7280] text-sm leading-relaxed mb-6 line-clamp-3">
+                <p className="text-[#6B7280] text-base md:text-lg leading-relaxed mb-6 line-clamp-3">
                   {item.description}
                 </p>
               )}
@@ -88,14 +88,14 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
                 {type === "posts" ? (
                   <Link
                     href={item.href}
-                    className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-xs font-semibold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] hover:bg-[#2563EB] hover:text-white transition-all duration-300 shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-sm font-bold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] hover:bg-[#2563EB] hover:text-white transition-all duration-300 shadow-sm"
                   >
                     Read Article
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 ) : (
                   <span
-                    className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-xs font-semibold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] group-hover:bg-[#2563EB] group-hover:text-white transition-all duration-300 shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-sm font-bold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] group-hover:bg-[#2563EB] group-hover:text-white transition-all duration-300 shadow-sm"
                   >
                     View Details
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -136,7 +136,7 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
 
               <div>
                 {selectedItem.category && (
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#2563EB] bg-[#F3F7FF] px-2.5 py-1 rounded-full border border-[#DCEBFF] w-fit block mb-3">
+                  <span className="text-sm font-semibold uppercase tracking-wider text-[#2563EB] bg-[#F3F7FF] px-2.5 py-1 rounded-full border border-[#DCEBFF] w-fit block mb-3">
                     {selectedItem.category}
                   </span>
                 )}
@@ -145,7 +145,7 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
                 </h4>
               </div>
 
-              <div className="text-[#6B7280] text-sm leading-relaxed border-t border-[#E5E7EB] pt-4">
+              <div className="text-[#6B7280] text-base leading-relaxed border-t border-[#E5E7EB] pt-4">
                 {selectedItem.description || "Bespoke custom-engineered solution designed to optimize security, time efficiency, and operational accuracy."}
               </div>
 
@@ -153,7 +153,7 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
                 <Link
                   href="/request-proposal"
                   onClick={() => setSelectedItem(null)}
-                  className="px-6 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_10px_24px_rgba(37,99,235,0.15)] text-white rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-200 text-center flex-1 hover:-translate-y-0.5 active:translate-y-0"
+                  className="px-6 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_10px_24px_rgba(37,99,235,0.15)] text-white rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-200 text-center flex-1 hover:-translate-y-0.5 active:translate-y-0"
                 >
                   Enquire / Get Details
                 </Link>
@@ -162,7 +162,7 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
                   <Link
                     href={selectedItem.href}
                     onClick={() => setSelectedItem(null)}
-                    className="px-6 py-3 bg-white hover:bg-[#F3F7FF] text-[#2563EB] border border-[#2563EB] rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-200 text-center flex-1 hover:-translate-y-0.5 active:translate-y-0"
+                    className="px-6 py-3 bg-white hover:bg-[#F3F7FF] text-[#2563EB] border border-[#2563EB] rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-200 text-center flex-1 hover:-translate-y-0.5 active:translate-y-0"
                   >
                     View Product Page
                   </Link>

@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -40,15 +39,7 @@ export default function Header() {
         }`}
       >
         <div
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          className={`relative rounded-full px-6 py-3 flex items-center justify-between transition-all duration-500 overflow-hidden group ${
-            isScrolled
-              ? "backdrop-blur-md bg-white/50 border border-[#E5E7EB] shadow-[0_8px_20px_rgba(15,23,42,0.04)] hover:-translate-y-0.5"
-              : isHovered
-              ? "backdrop-blur-md bg-white/50 border border-[#E5E7EB] shadow-[0_4px_15px_rgba(15,23,42,0.02)] hover:-translate-y-0.5"
-              : "bg-transparent border border-transparent"
-          }`}
+          className="relative rounded-full px-6 py-3 flex items-center justify-between transition-all duration-500 overflow-hidden group backdrop-blur-md bg-white/50 border border-[#E5E7EB] shadow-[0_8px_20px_rgba(15,23,42,0.04)] hover:-translate-y-0.5"
         >
           {/* Glossy sweep animation */}
           <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-1000 ease-out pointer-events-none" />
@@ -63,7 +54,7 @@ export default function Header() {
                 <span className="text-base font-bold text-[#111827] tracking-tight leading-tight group-hover/logo:text-[#2563EB] transition-colors">
                   Glyptika Studios
                 </span>
-                <span className="text-[10px] font-semibold text-[#2563EB] uppercase tracking-widest leading-none mt-0.5">
+                <span className="text-xs font-bold text-[#2563EB] uppercase tracking-widest leading-none mt-0.5">
                   A Creative Tech Startup
                 </span>
               </div>
@@ -80,7 +71,7 @@ export default function Header() {
                     <Link
                       href={link.href}
                       data-active={isActive}
-                      className={`anchor-link flex items-center px-4 py-2.5 rounded-full text-sm font-semibold tracking-tight transition-colors duration-300 ${
+                      className={`anchor-link flex items-center px-4 py-2.5 rounded-full text-base font-bold tracking-tight transition-colors duration-300 ${
                         isActive
                           ? "text-[#2563EB]"
                           : "text-[#6B7280] hover:text-[#111827]"
@@ -98,7 +89,7 @@ export default function Header() {
           <div className="flex items-center gap-3 relative z-10">
             <Link
               href="/request-proposal"
-              className="hidden sm:inline-block px-5 py-2.5 text-sm font-semibold rounded-xl text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_10px_24px_rgba(37,99,235,0.15)] hover:-translate-y-0.5 transition-all duration-200 leading-none whitespace-nowrap"
+              className="hidden sm:inline-block px-5 py-2.5 text-base font-bold rounded-xl text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_10px_24px_rgba(37,99,235,0.15)] hover:-translate-y-0.5 transition-all duration-200 leading-none whitespace-nowrap"
             >
               Request Proposal
             </Link>
@@ -142,7 +133,7 @@ export default function Header() {
               </div>
               <div className="flex flex-col">
                 <span className="text-base font-bold text-[#111827] tracking-tight leading-tight">Glyptika Studios</span>
-                <span className="text-[10px] font-semibold text-[#2563EB] uppercase tracking-widest leading-none mt-0.5">A Creative Tech Startup</span>
+                <span className="text-xs font-bold text-[#2563EB] uppercase tracking-widest leading-none mt-0.5">A Creative Tech Startup</span>
               </div>
             </Link>
             <button

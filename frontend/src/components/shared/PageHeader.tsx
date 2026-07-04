@@ -19,7 +19,7 @@ export default function PageHeader({ badgeText, badgeIcon: BadgeIcon = Sparkles,
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] text-[#2563EB] text-xs font-medium uppercase tracking-widest mb-5"
+        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] text-[#2563EB] text-sm font-semibold uppercase tracking-widest mb-5"
       >
         <BadgeIcon className="w-3.5 h-3.5" />
         {badgeText}
@@ -30,7 +30,7 @@ export default function PageHeader({ badgeText, badgeIcon: BadgeIcon = Sparkles,
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.05 }}
-        className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#111827] mb-5 tracking-tight"
+        className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#111827] mb-5 tracking-tight leading-tight"
       >
         {title} {gradientTitle && <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#EC4899] pb-0.5 inline-block">{gradientTitle}</span>}
       </motion.h1>
@@ -40,7 +40,7 @@ export default function PageHeader({ badgeText, badgeIcon: BadgeIcon = Sparkles,
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="text-[#6B7280] text-lg font-normal leading-relaxed max-w-2xl"
+        className="text-[#6B7280] text-xl md:text-2xl font-normal leading-relaxed max-w-3xl"
       >
         {description}
       </motion.p>

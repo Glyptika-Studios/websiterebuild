@@ -229,7 +229,7 @@ export default function ImsPage() {
               initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] text-[#2563EB] text-xs font-semibold uppercase tracking-widest mb-8"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] text-[#2563EB] text-sm font-semibold uppercase tracking-widest mb-8"
             >
               <ShieldCheck className="w-3.5 h-3.5 animate-pulse" />
               Defense-Grade Inventory System
@@ -240,7 +240,7 @@ export default function ImsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#111827] tracking-tight leading-[1.1] mb-5 max-w-4xl"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#111827] tracking-tight leading-tight mb-5 max-w-5xl"
             >
               IMS Portal: <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#EC4899] pb-1 block">Next-Gen Logistics.</span>
@@ -251,7 +251,7 @@ export default function ImsPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg sm:text-xl text-[#6B7280] max-w-3xl leading-relaxed mb-10"
+              className="text-xl sm:text-2xl text-[#6B7280] max-w-4xl leading-relaxed mb-10"
             >
               Automated logistics management custom-engineered for defense institutions and secure enterprises. Eliminate inventory leaks with air-gapped PostgreSQL cores, packaging registries, and immutable logs.
             </motion.p>
@@ -265,14 +265,14 @@ export default function ImsPage() {
             >
               <Link
                 href="/request-proposal"
-                className="px-7 py-3.5 bg-[#2563EB] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm"
+                className="px-7 py-3.5 bg-[#2563EB] hover:bg-[#1765CC] text-white rounded-full font-bold transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-base"
               >
                 Request Custom Demo
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <a
                 href="#modules"
-                className="px-7 py-3.5 bg-white hover:bg-[#F8F9FA] text-[#111827] rounded-full font-medium border border-[#E5E7EB] hover:border-[#BDC1C6] transition-all duration-200 text-sm"
+                className="px-7 py-3.5 bg-white hover:bg-[#F8F9FA] text-[#111827] rounded-full font-bold border border-[#E5E7EB] hover:border-[#BDC1C6] transition-all duration-200 text-base"
               >
                 View System Modules
               </a>
@@ -280,8 +280,8 @@ export default function ImsPage() {
           </div>
 
           {/* Interactive Scroll Down Prompt */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-xs text-[#6B7280] z-10 pointer-events-none select-none">
-            <span className="font-semibold tracking-widest uppercase text-[10px]">Scroll to explore</span>
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-sm text-[#6B7280] z-10 pointer-events-none select-none">
+            <span className="font-bold tracking-widest uppercase text-xs">Scroll to explore</span>
             <div className="w-5 h-8 rounded-full border border-[#E5E7EB] flex justify-center p-1">
               <motion.div 
                 animate={{ y: [0, 8, 0] }}
@@ -404,9 +404,9 @@ export default function ImsPage() {
         <section className="py-32 border-t border-[#E5E7EB]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <span className="text-xs font-medium uppercase tracking-widest text-[#2563EB]">Logistics Calculator</span>
+              <span className="text-sm font-semibold uppercase tracking-widest text-[#2563EB]">Logistics Calculator</span>
               <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] mt-2 mb-3">IMS Savings & Time Estimator</h2>
-              <p className="text-[#6B7280] max-w-2xl mx-auto text-sm">Estimate your time savings and audit cost reductions based on system scale.</p>
+              <p className="text-[#6B7280] max-w-2xl mx-auto text-base">Estimate your time savings and audit cost reductions based on system scale.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-5xl mx-auto items-center">
@@ -420,7 +420,7 @@ export default function ImsPage() {
 
                 {/* Slider 1 */}
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs font-semibold text-[#6B7280]">
+                  <div className="flex justify-between items-center text-sm font-semibold text-[#6B7280]">
                     <span>Number of Inventory Assets</span>
                     <span className="text-[#2563EB] font-mono text-sm font-bold">{calcAssets.toLocaleString()} Items</span>
                   </div>
@@ -433,7 +433,7 @@ export default function ImsPage() {
                     onChange={(e) => setCalcAssets(parseInt(e.target.value))}
                     className="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#2563EB]" 
                   />
-                  <div className="flex justify-between text-[10px] text-[#6B7280]">
+                  <div className="flex justify-between text-xs text-[#6B7280] font-medium">
                     <span>1,000 items</span>
                     <span>100,000 items</span>
                   </div>
@@ -441,7 +441,7 @@ export default function ImsPage() {
 
                 {/* Slider 2 */}
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs font-semibold text-[#6B7280]">
+                  <div className="flex justify-between items-center text-sm font-semibold text-[#6B7280]">
                     <span>Admin Operator Seats</span>
                     <span className="text-[#2563EB] font-mono text-sm font-bold">{calcAdmins} Operator{calcAdmins > 1 ? 's' : ''}</span>
                   </div>
@@ -454,7 +454,7 @@ export default function ImsPage() {
                     onChange={(e) => setCalcAdmins(parseInt(e.target.value))}
                     className="w-full h-1 bg-[#F1F3F4] rounded-lg appearance-none cursor-pointer accent-[#2563EB]" 
                   />
-                  <div className="flex justify-between text-[10px] text-[#6B7280]">
+                  <div className="flex justify-between text-xs text-[#6B7280] font-medium">
                     <span>1 Operator</span>
                     <span>50 Operators</span>
                   </div>
@@ -470,11 +470,11 @@ export default function ImsPage() {
                     <Hourglass className="w-6 h-6 text-[#2563EB]" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-semibold text-[#6B7280] uppercase tracking-widest">Est. Hours Saved / Year</span>
+                    <span className="text-xs font-bold text-[#6B7280] uppercase tracking-widest">Est. Hours Saved / Year</span>
                     <div className="text-2xl font-bold text-[#111827] mt-0.5">
                       ~ {estTimeSaved.toLocaleString()} hours
                     </div>
-                    <p className="text-[11px] text-[#6B7280] leading-normal mt-0.5">Calculated against manual verification workflows.</p>
+                    <p className="text-xs text-[#6B7280] leading-normal mt-0.5">Calculated against manual verification workflows.</p>
                   </div>
                 </div>
 
@@ -484,11 +484,11 @@ export default function ImsPage() {
                     <CheckCircle2 className="w-6 h-6 text-[#2563EB]" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-semibold text-[#6B7280] uppercase tracking-widest">Est. Annual Audit Cost Saved</span>
+                    <span className="text-xs font-bold text-[#6B7280] uppercase tracking-widest">Est. Annual Audit Cost Saved</span>
                     <div className="text-2xl font-bold text-[#111827] mt-0.5">
                       ₹ {estCostSaved.toLocaleString()}
                     </div>
-                    <p className="text-[11px] text-[#6B7280] leading-normal mt-0.5">Includes reductions in audit processing overhead.</p>
+                    <p className="text-xs text-[#6B7280] leading-normal mt-0.5">Includes reductions in audit processing overhead.</p>
                   </div>
                 </div>
 
@@ -504,9 +504,9 @@ export default function ImsPage() {
         <section id="modules" className="py-32 border-t border-[#E5E7EB]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <span className="text-xs font-medium uppercase tracking-widest text-[#2563EB]">System Architecture</span>
+              <span className="text-sm font-semibold uppercase tracking-widest text-[#2563EB]">System Architecture</span>
               <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] mt-2 mb-3">Custom Modular Capabilities</h2>
-              <p className="text-[#6B7280] max-w-2xl mx-auto text-sm">Toggle the tabs below to view detailed specifications and licensing tiers for each module.</p>
+              <p className="text-[#6B7280] max-w-2xl mx-auto text-base">Toggle the tabs below to view detailed specifications and licensing tiers for each module.</p>
             </div>
 
             {/* Selector tabs */}
@@ -515,7 +515,7 @@ export default function ImsPage() {
                 <button
                   key={tab}
                   onClick={() => setActiveModuleTab(tab)}
-                  className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 whitespace-nowrap ${
+                  className={`px-5 py-2.5 text-sm font-bold uppercase tracking-wider rounded-xl transition-all duration-300 whitespace-nowrap ${
                     activeModuleTab === tab
                       ? "bg-[#2563EB] text-white shadow-[0_4px_12px_rgba(37,99,235,0.2)]"
                       : "text-[#2563EB] hover:bg-[#E8F0FE]"
@@ -590,10 +590,7 @@ export default function ImsPage() {
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {activeModule.pricing.map((tier, idx) => {
-                      const isPremium = tier.name.toLowerCase().includes("standard") || tier.name.toLowerCase().includes("pro");
-                      const headerBg = isPremium 
-                        ? "bg-gradient-to-r from-[#E8F0FE] via-[#D2E3FC] to-[#F3E8FD] border-b border-[#C5D8F9]" 
-                        : "bg-gradient-to-r from-[#F1F3F4] via-[#F8FAFC] to-[#E8EAED] border-b border-[#DADCE0]";
+                      const headerBg = "bg-gradient-to-r from-[#E8F0FE] via-[#D2E3FC] to-[#F3E8FD] border-b border-[#C5D8F9]";
                       return (
                         <div 
                           key={idx}
