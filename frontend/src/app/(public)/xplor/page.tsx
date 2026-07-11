@@ -35,17 +35,25 @@ interface MediaItem {
 interface PricingTier {
   name: string;
   price: string;
-  jobs: string;
+  jobsPerMonth: number;
   extraJob: string;
-  admins?: string;
-  screens?: string;
+  admins: number;
+  screens: number;
+  maxAdmins: number;
+  maxScreens: number;
+  extraAdminCost: string;
+  extraScreenCost: string;
+  furnitureUploads: number;
+  extraFurnitureCost: string;
   features: string[];
 }
 
 interface ModuleDetails {
   name: string;
   tagline: string;
+  shortTagline: string;
   desc: string;
+  bestFor: string;
   icon: LucideIcon;
   capabilities: string[];
   specs: {
@@ -86,8 +94,10 @@ const MOCK_GALLERY: MediaItem[] = [
 const MODULE_DETAILS: Record<string, ModuleDetails> = {
   neo: {
     name: "XPLOR NEO",
-    tagline: "Instant 2D to 3D Synthesis",
-    desc: "Our automated compiler that takes flat floor plans (.DWG, .DXF, or PDF) and renders a fully interactive 3D WebGL model within minutes.",
+    tagline: "2D to 3D + Real-Time 3D Editing",
+    shortTagline: "Instant 2D to 3D Synthesis",
+    desc: "Upload a 2D floor plan and instantly convert it into a 3D model. Modify dimensions, lighting, textures, and furniture layouts—all in real time. Export your 3D model when ready.",
+    bestFor: "Builders • Interior Designers • Modular Furniture Brands",
     icon: Cpu,
     capabilities: [
       "Procedural extrusion of wall systems",
@@ -104,30 +114,56 @@ const MODULE_DETAILS: Record<string, ModuleDetails> = {
       {
         name: "Neo Lite",
         price: "₹3,499",
-        jobs: "299 Jobs",
+        jobsPerMonth: 299,
         extraJob: "₹49",
+        admins: 1,
+        screens: 2,
+        maxAdmins: 1,
+        maxScreens: 2,
+        extraAdminCost: "—",
+        extraScreenCost: "—",
+        furnitureUploads: 50,
+        extraFurnitureCost: "₹25",
         features: ["Standard WebGL compiler", "Procedural Wall Extrusion", "2D Floor Plan Import", "Single admin seat"]
       },
       {
-        name: "Neo Standard",
+        name: "Neo",
         price: "₹9,999",
-        jobs: "999 Jobs",
+        jobsPerMonth: 999,
         extraJob: "₹44",
+        admins: 1,
+        screens: 4,
+        maxAdmins: 2,
+        maxScreens: 8,
+        extraAdminCost: "₹3,499",
+        extraScreenCost: "₹1,999",
+        furnitureUploads: 200,
+        extraFurnitureCost: "₹25",
         features: ["High-fidelity WebGL compiler", "Custom Material Library", "Multiple file format export", "Priority processing queue"]
       },
       {
         name: "Neo Pro",
         price: "₹17,999",
-        jobs: "1,999 Jobs",
+        jobsPerMonth: 1999,
         extraJob: "₹41",
+        admins: 2,
+        screens: 8,
+        maxAdmins: 4,
+        maxScreens: 14,
+        extraAdminCost: "₹3,149",
+        extraScreenCost: "₹1,749",
+        furnitureUploads: 450,
+        extraFurnitureCost: "₹21",
         features: ["Advanced procedurals", "Unlimited custom assets", "Dedicated API throughput", "24/7 Priority support"]
       }
     ]
   },
   adorno: {
     name: "XPLOR ADORNO",
-    tagline: "VR Walkthrough Compilation",
-    desc: "Converts configured 3D models into immersive VR walkthroughs compatible with mobile VR, Oculus Quest, and steam headsets.",
+    tagline: "2D to VR Walkthrough",
+    shortTagline: "VR Walkthrough Compilation",
+    desc: "Convert a 2D floor plan directly into a high-quality VR walkthrough with predefined lighting, materials, and furniture templates. Ideal for quick client demos.",
+    bestFor: "Real Estate Developers • Marketing Teams",
     icon: Eye,
     capabilities: [
       "Teleportation-based navigation setup",
@@ -144,36 +180,56 @@ const MODULE_DETAILS: Record<string, ModuleDetails> = {
       {
         name: "Adorno Lite",
         price: "₹2,499",
-        jobs: "149 Jobs",
+        jobsPerMonth: 149,
         extraJob: "₹69",
-        admins: "1 Admin",
-        screens: "1 Screen",
+        admins: 1,
+        screens: 1,
+        maxAdmins: 1,
+        maxScreens: 1,
+        extraAdminCost: "—",
+        extraScreenCost: "—",
+        furnitureUploads: 100,
+        extraFurnitureCost: "₹30",
         features: ["VR walkthrough compiler", "Standard lighting bake", "Oculus Go/Quest support", "Single display node"]
       },
       {
-        name: "Adorno Standard",
+        name: "Adorno",
         price: "₹6,499",
-        jobs: "499 Jobs",
+        jobsPerMonth: 499,
         extraJob: "₹59",
-        admins: "1 Admin",
-        screens: "2 Screens (Max 4)",
+        admins: 1,
+        screens: 2,
+        maxAdmins: 2,
+        maxScreens: 4,
+        extraAdminCost: "₹3,999",
+        extraScreenCost: "₹2,199",
+        furnitureUploads: 300,
+        extraFurnitureCost: "₹30",
         features: ["Bespoke lighting bakes", "Asset placement editor", "Quest/SteamVR support", "Up to 4 display nodes"]
       },
       {
         name: "Adorno Pro",
         price: "₹14,999",
-        jobs: "1,599 Jobs",
+        jobsPerMonth: 1599,
         extraJob: "₹49",
-        admins: "1 Admin (Max 2)",
-        screens: "4 Screens (Max 8)",
+        admins: 1,
+        screens: 4,
+        maxAdmins: 2,
+        maxScreens: 8,
+        extraAdminCost: "₹3,749",
+        extraScreenCost: "₹1,999",
+        furnitureUploads: 600,
+        extraFurnitureCost: "₹25",
         features: ["Ultra-High Fidelity bakes", "Dynamic material swapping", "Dual admin seats", "Up to 8 display nodes"]
       }
     ]
   },
   apice: {
     name: "XPLOR APICE",
-    tagline: "Unified CAD ➔ 3D ➔ VR Pipeline",
-    desc: "Our enterprise package bundling real-time collaboration channels, dynamic asset pipelines, and custom API connectors under one roof.",
+    tagline: "Full Stack (2D → 3D → VR)",
+    shortTagline: "Unified CAD ➔ 3D ➔ VR Pipeline",
+    desc: "The complete workflow. Convert 2D to 3D, edit in real time, then publish as an immersive VR experience. Maximum creative control + maximum speed.",
+    bestFor: "Architects • Design Studios • High-End Brands",
     icon: Sparkles,
     capabilities: [
       "Multi-user real-time VR editing",
@@ -190,37 +246,61 @@ const MODULE_DETAILS: Record<string, ModuleDetails> = {
       {
         name: "Apice Lite",
         price: "₹4,499",
-        jobs: "299 Jobs",
+        jobsPerMonth: 299,
         extraJob: "₹74",
-        admins: "1 Admin",
-        screens: "2 Screens",
+        admins: 1,
+        screens: 2,
+        maxAdmins: 1,
+        maxScreens: 1,
+        extraAdminCost: "—",
+        extraScreenCost: "—",
+        furnitureUploads: 100,
+        extraFurnitureCost: "₹30",
         features: ["Unified pipeline access", "Basic real-time edit", "2 admin seats", "Email & Chat support"]
       },
       {
-        name: "Apice Standard",
+        name: "Apice",
         price: "₹11,499",
-        jobs: "999 Jobs",
+        jobsPerMonth: 999,
         extraJob: "₹64",
-        admins: "1 Admin (Max 2)",
-        screens: "4 Screens (Max 6)",
+        admins: 1,
+        screens: 4,
+        maxAdmins: 2,
+        maxScreens: 6,
+        extraAdminCost: "₹3,999",
+        extraScreenCost: "₹2,199",
+        furnitureUploads: 300,
+        extraFurnitureCost: "₹30",
         features: ["Multi-user collaboration", "Procedural texture sync", "4 display node streams", "Priority API access"]
       },
       {
         name: "Apice Pro",
         price: "₹20,999",
-        jobs: "1,999 Jobs",
+        jobsPerMonth: 1999,
         extraJob: "₹54",
-        admins: "2 Admins (Max 4)",
-        screens: "6 Screens (Max 10)",
+        admins: 2,
+        screens: 6,
+        maxAdmins: 4,
+        maxScreens: 10,
+        extraAdminCost: "₹3,749",
+        extraScreenCost: "₹1,999",
+        furnitureUploads: 600,
+        extraFurnitureCost: "₹25",
         features: ["Enterprise collaboration pipeline", "Dedicated asset server", "10 display node streams", "Dedicated support SLA"]
       },
       {
         name: "Apice Enterprise",
         price: "Free Trial",
-        jobs: "99 Jobs",
+        jobsPerMonth: 99,
         extraJob: "₹49",
-        admins: "1 Admin",
-        screens: "1 Screen",
+        admins: 1,
+        screens: 1,
+        maxAdmins: 1,
+        maxScreens: 1,
+        extraAdminCost: "—",
+        extraScreenCost: "—",
+        furnitureUploads: 90,
+        extraFurnitureCost: "₹49",
         features: ["Air-gapped on-premise containers", "Custom API connectors", "Uncapped throughput options", "Dedicated enterprise engineer"]
       }
     ]
@@ -268,55 +348,10 @@ function AnimatedCounter({ value, decimals = 0, suffix = "" }: { value: number; 
 
 export default function XplorPage() {
   const [activeMedia, setActiveMedia] = useState<MediaItem>(MOCK_GALLERY[0]);
-  const [activeModuleTab, setActiveModuleTab] = useState<"neo" | "adorno" | "apice">("neo");
+  const [activeModuleTab, setActiveModuleTab] = useState<"" | "neo" | "adorno" | "apice">("neo");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const mainRef = useRef<HTMLDivElement>(null);
-  const [gradientCSS, setGradientCSS] = useState<string>("");
-
-  // 3 alternating colors — subtle, flowing
-  const SECTION_COLORS = [
-    "191,219,254", // Soft blue (A)
-    "199,210,254", // Soft indigo (B)
-    "221,214,254", // Soft violet (C)
-  ];
-  const OPACITY = 0.35;
-
-  useEffect(() => {
-    const measure = () => {
-      const main = mainRef.current;
-      if (!main) return;
-      const sections = main.querySelectorAll<HTMLElement>(":scope > div > section");
-      if (!sections.length) return;
-      const totalH = main.scrollHeight;
-      if (totalH === 0) return;
-
-      // Place one color at each section's midpoint — CSS blends naturally between them
-      const stops: string[] = [];
-      sections.forEach((sec, i) => {
-        const mid = sec.offsetTop + sec.offsetHeight / 2;
-        const pct = (mid / totalH) * 100;
-        const color = SECTION_COLORS[i % SECTION_COLORS.length];
-        stops.push(`rgba(${color},${OPACITY}) ${pct.toFixed(1)}%`);
-      });
-
-      setGradientCSS(`linear-gradient(180deg, ${stops.join(", ")})`);
-    };
-
-    // Measure after layout + images load
-    measure();
-    const timer = setTimeout(measure, 1500);
-    window.addEventListener("resize", measure);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", measure);
-    };
-  }, []);
-
-  const activeModule = MODULE_DETAILS[activeModuleTab];
-  const ModuleIcon = activeModule.icon;
-
   return (
-    <main ref={mainRef} className="min-h-screen text-[#111827] font-sans selection:bg-[#2563EB]/30 overflow-x-hidden relative bg-white">
+    <main className="min-h-screen text-[#111827] font-sans selection:bg-[#2563EB]/30 overflow-x-hidden relative bg-white">
       <div className="relative z-10">
         <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-[#E5E7EB]">
           {/* Grid Background */}
@@ -652,177 +687,191 @@ export default function XplorPage() {
 
 
         {/* ============================================================
-            5. DYNAMIC MODULE SELECTOR & PARAMETER SHOWCASE
+            5. PRICING & MODULES SECTION
            ============================================================ */}
         <section id="modules" className="py-32 border-t border-[#E5E7EB]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#2563EB]">System Modules</span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-[#111827] mt-2 mb-4">Flexible Spatial Architecture</h2>
-              <p className="text-[#6B7280] max-w-2xl mx-auto">Scale XPLOR as your firm expands. Toggle the tabs below to view detailed specifications.</p>
+              <span className="text-xs font-bold uppercase tracking-widest text-[#2563EB]">Plans & Pricing</span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#111827] mt-2 mb-4">Choose Your XPLOR Module</h2>
+              <p className="text-[#6B7280] max-w-2xl mx-auto">Three specialized modules, each with flexible tiers. Click any module to explore pricing details.</p>
             </div>
 
-            {/* Selector tabs */}
-            <div className="flex justify-center mb-12 max-w-lg mx-auto overflow-x-auto gap-2 bg-[#F3F7FF] p-1.5 rounded-2xl border border-[#DCEBFF]">
-              {(["neo", "adorno", "apice"] as const).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveModuleTab(tab)}
-                  className={`px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 whitespace-nowrap ${activeModuleTab === tab
-                    ? "bg-[#2563EB] text-white shadow-[0_4px_12px_rgba(37,99,235,0.2)]"
-                    : "text-[#2563EB] hover:bg-[#E8F0FE]"
-                    }`}
-                >
-                  {MODULE_DETAILS[tab].name}
-                </button>
-              ))}
-            </div>
+            {/* Module Cards — collapsed / expanded accordion */}
+            <div className="space-y-4">
+              {(["neo", "adorno", "apice"] as const).map((moduleKey) => {
+                const mod = MODULE_DETAILS[moduleKey];
+                const ModIcon = mod.icon;
+                const isOpen = activeModuleTab === moduleKey;
+                const startingPrice = mod.pricing[0]?.price ?? "";
 
-            {/* Display module card */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeModuleTab}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.4 }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-6xl mx-auto items-stretch border border-white/50 p-8 md:p-10 rounded-2xl"
-                style={{ background: "rgba(255,255,255,0.80)", boxShadow: "0 12px 48px rgba(37,99,235,0.07), inset 0 1px 0 rgba(255,255,255,0.9)" }}
-              >
-
-                {/* Details Column */}
-                <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
-                  <div>
-                    <div className="w-14 h-14 rounded-2xl bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center mb-6">
-                      <ModuleIcon className="w-7 h-7 text-[#2563EB]" />
-                    </div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-[#6B7280]">{activeModule.tagline}</span>
-                    <h3 className="text-3xl font-bold text-[#111827] mt-1 mb-4">{activeModule.name}</h3>
-                    <p className="text-[#6B7280] leading-relaxed mb-8 text-base">{activeModule.desc}</p>
-
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-[#111827] mb-4">Core capabilities</h4>
-                    <ul className="space-y-3">
-                      {activeModule.capabilities.map((cap, i) => (
-                        <li key={i} className="flex items-center gap-3 text-sm">
-                          <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
-                          <span className="text-[#6B7280]">{cap}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="pt-6 border-t border-[#E5E7EB]">
-                    <Link
-                      href="/request-proposal"
-                      className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#2563EB] hover:text-[#1765CC] transition-colors group"
+                return (
+                  <div key={moduleKey} className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                    isOpen
+                      ? "border-[#2563EB]/30 shadow-[0_12px_48px_rgba(37,99,235,0.08)]"
+                      : "border-[#E5E7EB] hover:border-[#BDC1C6] hover:shadow-sm"
+                  }`} style={{ background: isOpen ? "rgba(243,247,255,0.5)" : "#fff" }}>
+                    {/* Collapsed header — always visible */}
+                    <button
+                      onClick={() => setActiveModuleTab(isOpen ? ("" as typeof activeModuleTab) : moduleKey)}
+                      className="w-full px-6 sm:px-8 py-6 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 text-left group"
                     >
-                      Request dynamic demo
-                      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </div>
-                </div>
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-300 ${
+                        isOpen ? "bg-[#2563EB] text-white" : "bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF]"
+                      }`}>
+                        <ModIcon className="w-6 h-6" />
+                      </div>
 
-                {/* Technical Specs Panels */}
-                <div className="lg:col-span-5 flex flex-col justify-center gap-4">
-                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-                    <span className="text-[9px] font-bold text-[#6B7280] uppercase tracking-widest block">Mesh Complexity</span>
-                    <span className="text-lg font-bold text-[#111827] mt-1 block font-mono">{activeModule.specs.complexity}</span>
-                  </div>
-                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-                    <span className="text-[9px] font-bold text-[#6B7280] uppercase tracking-widest block">Rendering Engine</span>
-                    <span className="text-lg font-bold text-[#111827] mt-1 block font-mono">{activeModule.specs.engine}</span>
-                  </div>
-                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-                    <span className="text-[9px] font-bold text-[#6B7280] uppercase tracking-widest block">Average Throughput</span>
-                    <span className="text-lg font-bold text-[#111827] mt-1 block font-mono">{activeModule.specs.throughput}</span>
-                  </div>
-                </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <h3 className="text-lg font-bold text-[#111827]">{mod.name}</h3>
+                          <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest hidden sm:inline">— {mod.tagline}</span>
+                        </div>
+                        <p className="text-xs text-[#6B7280] line-clamp-1">
+                          <Sparkles className="w-3 h-3 inline mr-1 text-[#2563EB]" />
+                          Best for: {mod.bestFor}
+                        </p>
+                      </div>
 
-                {/* Pricing Tiers Section */}
-                <div className="lg:col-span-12 border-t border-[#E5E7EB] pt-10 mt-6">
-                  <h4 className="text-sm font-bold uppercase tracking-widest text-[#111827] mb-6">
-                    Select your {activeModule.name} Pricing Tier
-                  </h4>
-                  <div className={`grid grid-cols-1 md:grid-cols-3 ${activeModule.pricing.length === 4 ? "lg:grid-cols-4" : ""} gap-6`}>
-                    {activeModule.pricing.map((tier, idx) => {
-                      const headerBg = "bg-gradient-to-r from-[#E8F0FE] via-[#D2E3FC] to-[#F3E8FD] border-b border-[#C5D8F9]";
-                      return (
-                        <div
-                          key={idx}
-                          className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col justify-between overflow-hidden"
-                        >
-                          <div>
-                            <div className={`-mx-6 -mt-6 p-6 ${headerBg} mb-6`}>
-                              <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest block mb-1">
-                                {activeModule.name}
-                              </span>
-                              <h5 className="text-base font-bold text-[#111827]">
-                                {tier.name}
-                              </h5>
-                            </div>
+                      <div className="flex items-center gap-4 shrink-0">
+                        <div className="text-right">
+                          <span className="text-[10px] uppercase tracking-wider text-[#6B7280] font-semibold block">Starting at</span>
+                          <span className="text-lg font-bold text-[#2563EB]">{startingPrice}<span className="text-xs text-[#6B7280] font-normal">/mo</span></span>
+                        </div>
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                          isOpen ? "bg-[#2563EB] text-white rotate-180" : "bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF]"
+                        }`}>
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                      </div>
+                    </button>
 
-                            {/* Price */}
-                            <div className="flex items-baseline gap-1 mb-4">
-                              <span className="text-2xl font-bold text-[#111827]">
-                                {tier.price}
-                              </span>
-                              {tier.price !== "Free Trial" && (
-                                <span className="text-[10px] text-[#6B7280] font-medium font-sans">
-                                  / month
-                                </span>
-                              )}
-                            </div>
+                    {/* Expanded content */}
+                    <div className={`transition-all duration-400 ease-in-out overflow-hidden ${
+                      isOpen ? "max-h-[3000px] opacity-100" : "max-h-0 opacity-0"
+                    }`}>
+                      <div className="px-6 sm:px-8 pb-8 pt-2">
+                        {/* Module description */}
+                        <p className="text-sm text-[#6B7280] leading-relaxed max-w-3xl mb-8">{mod.desc}</p>
 
-                            {/* Quotas */}
-                            <div className="space-y-1.5 mb-6 text-[11px] text-[#6B7280] border-y border-[#E5E7EB] py-3.5 font-sans">
-                              <div className="flex justify-between">
-                                <span className="text-[#6B7280] font-semibold">Jobs Allowance:</span>
-                                <span className="text-[#111827] font-bold font-mono">{tier.jobs}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-[#6B7280] font-semibold">Extra Job:</span>
-                                <span className="text-[#111827] font-bold font-mono">{tier.extraJob}</span>
-                              </div>
-                              {tier.admins && (
-                                <div className="flex justify-between">
-                                  <span className="text-[#6B7280] font-semibold">Seat Limit:</span>
-                                  <span className="text-[#111827] font-bold font-mono">{tier.admins}</span>
+                        {/* Pricing tier cards */}
+                        <div className={`grid grid-cols-1 md:grid-cols-${mod.pricing.length > 3 ? '4' : '3'} gap-5`}>
+                          {mod.pricing.map((tier, idx) => (
+                            <div
+                              key={idx}
+                              className="rounded-2xl bg-white border border-[#E5E7EB] overflow-hidden hover:-translate-y-1 hover:border-[#2563EB]/40 hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col"
+                            >
+                              {/* Tier header */}
+                              <div className="px-5 pt-5 pb-4 border-b border-[#E5E7EB]">
+                                <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-widest block mb-1">{mod.name}</span>
+                                <h5 className="text-base font-bold text-[#111827] mb-3">{tier.name}</h5>
+                                <div className="flex items-baseline gap-1">
+                                  <span className="text-2xl font-bold text-[#111827]">{tier.price}</span>
+                                  {tier.price !== "Free Trial" && (
+                                    <span className="text-xs text-[#6B7280]">/month</span>
+                                  )}
                                 </div>
-                              )}
-                              {tier.screens && (
-                                <div className="flex justify-between">
-                                  <span className="text-[#6B7280] font-semibold">Display Nodes:</span>
-                                  <span className="text-[#111827] font-bold font-mono">{tier.screens}</span>
-                                </div>
-                              )}
-                            </div>
+                              </div>
 
-                            {/* Features list */}
-                            <ul className="space-y-2 mb-6">
-                              {tier.features.map((feat, fIdx) => (
-                                <li key={fIdx} className="flex items-start gap-2 text-[11px] text-[#6B7280] leading-relaxed">
-                                  <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] mt-0.5 shrink-0" />
-                                  <span>{feat}</span>
+                              {/* Spec rows */}
+                              <div className="px-5 py-4 flex-1">
+                                <div className="space-y-2 text-[11px]">
+                                  {[
+                                    ["Jobs/month", tier.jobsPerMonth.toLocaleString()],
+                                    ["Extra Job", tier.extraJob],
+                                    ["Admins", tier.admins.toString()],
+                                    ["Screens", tier.screens.toString()],
+                                    ["Max Admins", tier.maxAdmins.toString()],
+                                    ["Max Screens", tier.maxScreens.toString()],
+                                    ["Extra Admin Cost", tier.extraAdminCost],
+                                    ["Extra Screen Cost", tier.extraScreenCost],
+                                    ["Furniture Uploads", tier.furnitureUploads.toString()],
+                                    ["Extra Furniture Cost", tier.extraFurnitureCost],
+                                  ].map(([label, val], rIdx) => (
+                                    <div key={rIdx} className="flex justify-between items-center py-1 border-b border-[#F3F4F6] last:border-b-0">
+                                      <span className="text-[#6B7280] font-medium">{label}</span>
+                                      <span className="text-[#111827] font-bold font-mono">{val}</span>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                {/* Features */}
+                                <div className="mt-4 pt-4 border-t border-[#E5E7EB]">
+                                  <span className="text-[9px] font-bold text-[#6B7280] uppercase tracking-widest block mb-2">Highlights</span>
+                                  <ul className="space-y-1.5">
+                                    {tier.features.map((feat, fIdx) => (
+                                      <li key={fIdx} className="flex items-start gap-1.5 text-[11px] text-[#6B7280]">
+                                        <CheckCircle2 className="w-3 h-3 text-[#2563EB] mt-0.5 shrink-0" />
+                                        <span>{feat}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </div>
+
+                              {/* CTA */}
+                              <div className="px-5 pb-5">
+                                <Link
+                                  href="/request-proposal"
+                                  className="w-full py-3 rounded-xl text-center text-xs font-bold uppercase tracking-wider text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_6px_20px_rgba(37,99,235,0.15)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.25)] hover:-translate-y-0.5 transition-all duration-250 block"
+                                >
+                                  Get Started →
+                                </Link>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Technical specs + capabilities */}
+                        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          {/* Capabilities */}
+                          <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB]">
+                            <h4 className="text-xs font-bold uppercase tracking-widest text-[#111827] mb-4">Core Capabilities</h4>
+                            <ul className="space-y-2.5">
+                              {mod.capabilities.map((cap, i) => (
+                                <li key={i} className="flex items-center gap-2.5 text-sm text-[#6B7280]">
+                                  <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+                                  {cap}
                                 </li>
                               ))}
                             </ul>
                           </div>
+                          {/* Technical specs */}
+                          <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB]">
+                            <h4 className="text-xs font-bold uppercase tracking-widest text-[#111827] mb-4">Technical Specifications</h4>
+                            <div className="space-y-4">
+                              <div>
+                                <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest block">Mesh Complexity</span>
+                                <span className="text-base font-bold text-[#111827] font-mono">{mod.specs.complexity}</span>
+                              </div>
+                              <div>
+                                <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest block">Rendering Engine</span>
+                                <span className="text-base font-bold text-[#111827] font-mono">{mod.specs.engine}</span>
+                              </div>
+                              <div>
+                                <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest block">Average Throughput</span>
+                                <span className="text-base font-bold text-[#111827] font-mono">{mod.specs.throughput}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
+                        {/* Demo link */}
+                        <div className="mt-6 pt-6 border-t border-[#E5E7EB] flex justify-center">
                           <Link
                             href="/request-proposal"
-                            className="w-full py-3 rounded-xl text-center text-xs font-bold uppercase tracking-wider text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_6px_20px_rgba(37,99,235,0.15)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.25)] hover:-translate-y-0.5 transition-all duration-250 block"
+                            className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#2563EB] hover:text-[#1765CC] transition-colors group"
                           >
-                            Choose Plan
+                            Request a {mod.name} demo
+                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                           </Link>
                         </div>
-                      );
-                    })}
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-              </motion.div>
-            </AnimatePresence>
-
+                );
+              })}
+            </div>
           </div>
         </section>
 
