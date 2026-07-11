@@ -77,7 +77,7 @@ export default function CareersPage() {
             {MOCK_JOBS.map((job) => (
               <div 
                 key={job.id}
-                className="group relative bg-white border border-[#E5E7EB] rounded-[20px] p-6 md:p-8 shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden"
+                className="group relative bg-white border border-[#E5E7EB] rounded-[20px] p-6 md:p-8 shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:bg-[#D2E3FC] hover:border-[#B4D0FB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden"
               >
                 <div className="flex-1 relative z-10">
                   <div className="flex items-center gap-3 mb-3">

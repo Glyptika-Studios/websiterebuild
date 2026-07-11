@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ChevronRight, Layers, LayoutGrid, FileText, X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 
 export interface GridItem {
   id: string;
@@ -21,16 +21,6 @@ interface ItemGridProps {
 
 export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
   const [selectedItem, setSelectedItem] = useState<GridItem | null>(null);
-
-  const getIcon = () => {
-    switch (type) {
-      case "products": return LayoutGrid;
-      case "posts": return FileText;
-      default: return Layers;
-    }
-  };
-
-  const Icon = getIcon();
 
   const handleCardClick = (e: React.MouseEvent, item: GridItem) => {
     if (type === "products" || type === "services") {
@@ -54,21 +44,12 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.08 }}
             onClick={(e) => handleCardClick(e, item)}
-            className={`w-full md:w-[calc(50%-12px)] ${lgWidth} group relative bg-white border border-[#E5E7EB] rounded-[20px] p-7 transition-all duration-250 flex flex-col shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] ${
+            className={`w-full md:w-[calc(50%-12px)] ${lgWidth} group relative bg-white hover:bg-[#D2E3FC] border border-[#E5E7EB] hover:border-[#B4D0FB] rounded-[20px] p-7 transition-all duration-300 flex flex-col shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(15,23,42,0.12)] ${
               type !== "posts" ? "cursor-pointer" : ""
             }`}
           >
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-5">
-                {item.category && (
-                  <span className="text-sm font-semibold uppercase tracking-wider text-[#2563EB] bg-[#F3F7FF] px-3 py-1 rounded-full border border-[#DCEBFF]">
-                    {item.category}
-                  </span>
-                )}
-                <Icon className="w-5 h-5 text-[#6B7280]/40 group-hover:text-[#2563EB] transition-colors ml-auto" />
-              </div>
-
-              <h3 className="text-2xl font-bold text-[#111827] mb-2 group-hover:text-[#2563EB] transition-colors leading-tight">
+              <h3 className="text-2xl font-bold text-[#111827] mb-2 leading-tight">
                 {item.title}
               </h3>
 
@@ -84,18 +65,18 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
             </div>
 
             {item.href && (
-              <div className="relative z-10 mt-auto pt-4 border-t border-[#E5E7EB] flex">
+              <div className="relative z-10 mt-auto pt-4 border-t border-[#E5E7EB] transition-colors duration-300 flex">
                 {type === "posts" ? (
                   <Link
                     href={item.href}
-                    className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-sm font-bold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] hover:bg-[#2563EB] hover:text-white transition-all duration-300 shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-sm font-bold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] hover:bg-[#2563EB] hover:border-[#2563EB] hover:text-white transition-all duration-300 shadow-sm"
                   >
                     Read Article
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 ) : (
                   <span
-                    className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-sm font-bold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] group-hover:bg-[#2563EB] group-hover:text-white transition-all duration-300 shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-sm font-bold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] group-hover:bg-[#2563EB] group-hover:border-[#2563EB] group-hover:text-white transition-all duration-300 shadow-sm"
                   >
                     View Details
                     <ChevronRight className="w-3.5 h-3.5" />

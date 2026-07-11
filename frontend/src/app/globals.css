@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-    --background: #F8F9FA;
+    --background: #FFFFFF;
     --foreground: #202124;
     --primary: #1A73E8;
     --secondary: #5F6368;
@@ -22,7 +22,12 @@ body {
     font-family: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -83,35 +88,11 @@ html {
         background: linear-gradient(135deg, rgba(26, 115, 232, 0.08) 0%, rgba(161, 66, 244, 0.08) 100%);
         border-radius: 9999px;
     }
+
     .anchor-link[data-active="true"] {
         background: linear-gradient(135deg, rgba(26, 115, 232, 0.12) 0%, rgba(161, 66, 244, 0.12) 100%);
         border-radius: 9999px;
     }
-}
-
-/* ==================== PREMIUM DRAFT MARKERS ==================== */
-.matrix-divider {
-    position: relative;
-    border-top: 1.5px dashed rgba(229, 231, 235, 0.95);
-    margin: 4rem 0;
-}
-
-.matrix-divider::before, .matrix-divider::after {
-    content: "+";
-    position: absolute;
-    top: -10px;
-    font-size: 15px;
-    font-family: monospace;
-    color: rgba(37, 99, 235, 0.5);
-    font-weight: bold;
-}
-
-.matrix-divider::before {
-    left: 8%;
-}
-
-.matrix-divider::after {
-    right: 8%;
 }
 
 /* ==================== SCROLL REVEAL UTILITIES ==================== */
@@ -120,6 +101,7 @@ html {
         opacity: 0;
         transform: translateY(24px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -131,6 +113,7 @@ html {
         opacity: 0;
         transform: scale(0.96);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -138,34 +121,36 @@ html {
 }
 
 @keyframes glowBreathe {
-  0%, 100% {
-    opacity: 0.85;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.04);
-  }
+
+    0%,
+    100% {
+        opacity: 0.85;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.04);
+    }
 }
 
 @keyframes soundwave {
-  0%, 100% { transform: scaleY(0.3); }
-  50% { transform: scaleY(1.1); }
+    0%, 100% { transform: scaleY(0.3); }
+    50% { transform: scaleY(1.1); }
 }
 
 @keyframes border-glow-sweep {
-  0% {
-    background-position: 0% 0%;
-  }
-  100% {
-    background-position: 100% 100%;
-  }
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
 }
 
 /* ==================== REDUCED MOTION ==================== */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
+    * {
+        animation-delay: 0s !important;
+        animation-duration: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0s !important;
+        scroll-behavior: auto !important;
+    }
 }

@@ -1,42 +1,48 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import React from "react";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { useEffect, useRef } from "react";
 
-const MOCK_STATS = [
-  { id: "stat-1", label: "Projects Delivered", value: 10, suffix: "+" },
-  { id: "stat-2", label: "Defense Projects", value: 4, suffix: "+" },
-  { id: "stat-3", label: "VR Environments", value: 25, suffix: "+" },
-  { id: "stat-4", label: "Proprietary Softwares", value: 3, suffix: "" },
+interface StatItem {
+  id: number;
+  value: number;
+  suffix: string;
+  label: string;
+}
+
+const MOCK_STATS: StatItem[] = [
+  { id: 1, value: 10, suffix: "+", label: "Projects Delivered" },
+  { id: 2, value: 4, suffix: "+", label: "Defense Projects" },
+  { id: 3, value: 25, suffix: "+", label: "VR Environments" },
+  { id: 4, value: 3, suffix: "", label: "Proprietary Softwares" },
 ];
 
 function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
-  const [count, setCount] = useState(0);
-  const nodeRef = useRef<HTMLSpanElement>(null);
-  const inView = useInView(nodeRef, { once: true, margin: "-50px" });
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+  const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (inView) {
-      const duration = 2000;
-      const startTime = performance.now();
-      const animate = (currentTime: number) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 4);
-        setCount(Math.floor(ease * value));
-        if (progress < 1) requestAnimationFrame(animate);
-      };
-      requestAnimationFrame(animate);
-    }
-  }, [inView, value]);
+    const controls = animate(count, value, { duration: 1.5, ease: "easeOut" });
+    return () => controls.stop();
+  }, [count, value]);
 
-  return <span ref={nodeRef}>{count}{suffix}</span>;
+  useEffect(() => {
+    return rounded.on("change", (latest) => {
+      if (ref.current) {
+        ref.current.textContent = latest.toString() + suffix;
+      }
+    });
+  }, [rounded, suffix]);
+
+  return <span ref={ref}>0{suffix}</span>;
 }
 
 export default function Stats() {
   return (
-    <section className="relative w-full py-8 z-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative w-full py-16 bg-transparent">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="bg-white rounded-2xl border border-[#DCE3EC] shadow-[0_12px_32px_rgba(15,23,42,0.05)] overflow-hidden">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 p-8 md:p-10">
             {MOCK_STATS.map((stat, index) => (

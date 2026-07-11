@@ -19,38 +19,36 @@ export default function ContactTeaser() {
   return (
     <section ref={sectionRef} className="relative w-full py-24 overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
         <motion.div
           style={{ y: cardY, opacity: cardOpacity }}
-          className="relative rounded-2xl p-10 md:p-16 text-center overflow-hidden bg-[#1A73E8]"
+          className="relative rounded-2xl p-10 md:p-16 text-center overflow-hidden bg-[#D2E3FC] border border-[#B4D0FB] shadow-sm"
         >
           {/* Content */}
           <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-5">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest text-white/90 bg-white/15 border border-white/20">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest text-[#2563EB] bg-[#2563EB]/10 border border-[#2563EB]/20">
               <Sparkles className="w-3 h-3" />
               Work With Us
             </div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#111827] tracking-tight">
               Request a Custom Proposal
             </h2>
 
-            <p className="text-base md:text-lg text-white/80 font-normal leading-relaxed max-w-2xl">
+            <p className="text-base md:text-lg text-[#374151] font-normal leading-relaxed max-w-2xl">
               Tell us about your project and our team will craft a fully customized proposal tailored to your goals, timeline, and budget.
             </p>
 
             {/* CTA button */}
             <Link
               href="/request-proposal"
-              className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-semibold text-[#1A73E8] bg-white hover:bg-[#F8F9FA] shadow-sm transition-all duration-200 mt-2"
+              className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-sm transition-all duration-200 mt-2"
             >
               <span>Request Proposal</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
         </motion.div>
-
       </div>
     </section>
   );

@@ -39,13 +39,13 @@ export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProp
     let rafId: number;
 
     const resize = () => {
-      canvas.width  = window.innerWidth;
+      canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
     resize();
     window.addEventListener("resize", resize, { passive: true });
 
-    const SPACING    = 72; // Spacing in px (reduced from 96px to 72px for slightly smaller boxes)
+    const SPACING = 72; // Spacing in px (reduced from 96px to 72px for slightly smaller boxes)
     const LINE_COLOR = "rgba(37, 99, 235, 1)"; // Google blue grid lines
 
     const draw = () => {
@@ -55,10 +55,10 @@ export default function AmbientGrid({ progress, reducedMotion }: AmbientGridProp
       ctx.clearRect(0, 0, W, H);
 
       const targetOpacity = reducedMotion ? 0.06 : mapGridOpacity(opacityRef.current);
-      
+
       // Draw grid lines
       ctx.strokeStyle = LINE_COLOR;
-      ctx.lineWidth   = 2.5; // Thicker weight for soft, subtle grid line aesthetic
+      ctx.lineWidth = 2.5; // Thicker weight for soft, subtle grid line aesthetic
       ctx.globalAlpha = targetOpacity;
 
       // Vertical lines

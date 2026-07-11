@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ShieldCheck, 
@@ -189,8 +189,27 @@ const FAQS = [
 export default function ImsPage() {
   const [activeModuleTab, setActiveModuleTab] = useState<"core" | "flow" | "dispatch">("core");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  
-  // Interactive Calculator States
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleLoadedMetadata = () => {
+      if (video.currentTime < 4) {
+        video.currentTime = 4;
+      }
+    };
+
+    video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    if (video.readyState >= 1 && video.currentTime < 4) {
+      video.currentTime = 4;
+    }
+
+    return () => {
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+    };
+  }, []);
   const [calcAssets, setCalcAssets] = useState<number>(5000);
   const [calcAdmins, setCalcAdmins] = useState<number>(3);
 
@@ -209,20 +228,24 @@ export default function ImsPage() {
             1. HERO SECTION
            ============================================================ */}
         <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-[#E5E7EB]">
-          {/* Looping BG Video */}
-          <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-            <video 
-              src="/ims_bgvid.mp4" 
-              autoPlay 
-              loop 
-              muted 
-              playsInline 
-              className="absolute inset-0 w-full h-full object-cover opacity-45"
-            />
-            {/* Glossy Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#FAFBFC]/10 via-[#FAFBFC]/40 to-[#FAFBFC]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FAFBFC]/30 via-transparent to-[#FAFBFC]/30" />
-          </div>
+          {/* Grid Background */}
+          <div 
+            className="absolute inset-0 w-full h-full z-0 pointer-events-none" 
+            style={{
+              backgroundImage: `url('/bgimage.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+          {/* Dot Matrix Overlay */}
+          <div 
+            className="absolute inset-0 w-full h-full z-0 pointer-events-none" 
+            style={{
+              backgroundImage: "radial-gradient(#CBD5E1 1.5px, transparent 1.5px)",
+              backgroundSize: "32px 32px",
+              opacity: 0.6
+            }}
+          />
           <div className="relative z-10 max-w-7xl mx-auto text-center flex flex-col items-center">
             {/* Tech Badge */}
             <motion.div
@@ -291,11 +314,12 @@ export default function ImsPage() {
             </div>
           </div>
         </section>
-
         {/* ============================================================
-            2. STATS SECTION
+            STATS, WHY CHOOSE, AND SECTORS WRAPPER WITH LIGHT BLUE BG
            ============================================================ */}
-        <section className="py-10 relative z-20">
+        <section className="bg-[#D2E3FC] py-16 relative z-20 border-y border-[#E5E7EB]">
+          {/* 2. STATS SECTION */}
+          <div className="py-6 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-10">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center">
@@ -319,12 +343,12 @@ export default function ImsPage() {
               </div>
             </div>
           </div>
-        </section>
+          </div>
 
         {/* ============================================================
             2b. WHY CHOOSE IMS SECTION
            ============================================================ */}
-        <section className="py-10 relative z-20">
+        <div className="py-6 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-10">
               <div className="text-center mb-8">
@@ -356,12 +380,12 @@ export default function ImsPage() {
               </div>
             </div>
           </div>
-        </section>
+          </div>
 
         {/* ============================================================
             2c. WHO USES IMS SECTION
            ============================================================ */}
-        <section className="py-10 relative z-20">
+        <div className="py-6 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-10">
               <div className="text-center mb-8">
@@ -396,7 +420,8 @@ export default function ImsPage() {
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
         {/* ============================================================
             3. AUDIT ESTIMATOR CALCULATOR
@@ -706,19 +731,19 @@ export default function ImsPage() {
             6. CALL TO ACTION
            ============================================================ */}
         <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mb-12">
-          <div className="relative p-10 md:p-14 rounded-2xl bg-[#2563EB] text-center space-y-5 overflow-hidden">
-            <span className="text-xs font-semibold uppercase tracking-widest text-white/80">Secure Enterprise Architecture</span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight max-w-2xl mx-auto">
+          <div className="relative p-10 md:p-14 rounded-2xl bg-[#D2E3FC] border border-[#B4D0FB] text-center space-y-5 overflow-hidden shadow-sm">
+            <span className="text-xs font-semibold uppercase tracking-widest text-[#2563EB] bg-[#2563EB]/10 border border-[#2563EB]/20 px-3 py-1 rounded-full inline-flex">Secure Enterprise Architecture</span>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#111827] leading-tight max-w-2xl mx-auto">
               Ready to deploy your local IMS instance?
             </h2>
-            <p className="text-sm text-white/70 max-w-md mx-auto leading-relaxed">
+            <p className="text-sm text-[#374151] max-w-md mx-auto leading-relaxed">
               Create a custom configuration schema to integrate IMS with your secure operational grids.
             </p>
             
             <div className="pt-3">
               <Link 
                 href="/request-proposal"
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-[#F8F9FA] text-[#2563EB] rounded-full font-semibold transition-all duration-200 shadow-sm text-sm"
+                className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-full font-semibold transition-all duration-200 shadow-sm text-sm"
               >
                 Request Deployment Proposal
                 <ArrowRight className="w-4 h-4" />
@@ -726,7 +751,6 @@ export default function ImsPage() {
             </div>
           </div>
         </section>
-
       </div>
     </main>
   );

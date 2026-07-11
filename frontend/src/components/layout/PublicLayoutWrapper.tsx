@@ -102,45 +102,7 @@ const stopAmbientSynth = () => {
   lfo = null;
 };
 
-// ============================================================
-// GLOBAL MOUSE GLOW ORB (Light Theme Google Gradient style)
-// ============================================================
-function MouseGlow() {
-  const [mousePos, setMousePos] = useState({ x: -200, y: -200 });
-  const [opacity, setOpacity] = useState(0);
 
-  useEffect(() => {
-    const updateMousePos = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-      setOpacity(1);
-    };
-
-    const handleMouseLeave = () => {
-      setOpacity(0);
-    };
-
-    window.addEventListener("mousemove", updateMousePos, { passive: true });
-    document.addEventListener("mouseleave", handleMouseLeave, { passive: true });
-
-    return () => {
-      window.removeEventListener("mousemove", updateMousePos);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
-
-  return (
-    <div 
-      className="hidden md:block fixed inset-0 pointer-events-none z-30 transition-opacity duration-300"
-      style={{ opacity }}
-    >
-      {/* Soft color-mixing light spotlight that trails the cursor and dynamically highlights the crème background */}
-      <div 
-        className="w-[400px] h-[400px] bg-gradient-to-r from-blue-500/8 via-purple-500/8 to-pink-500/8 blur-[100px] rounded-full absolute -translate-x-1/2 -translate-y-1/2"
-        style={{ left: mousePos.x, top: mousePos.y }}
-      />
-    </div>
-  );
-}
 
 // ============================================================
 // AMBIENT TRACK PLAYER WIDGET (Light Theme)
@@ -205,13 +167,11 @@ export default function PublicLayoutWrapper({ children }: PublicLayoutWrapperPro
   if (isAdminRoute) {
     return <>{children}</>;
   }
-
   return (
     <>
       <ScrollProgressLine />
       <ScrollBackgroundController />
       <Header />
-      <MouseGlow />
       <AmbientAudioPlayer />
       <div className="relative z-10 flex flex-col min-h-screen">
         {children}

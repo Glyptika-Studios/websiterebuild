@@ -46,9 +46,8 @@ export default function BeforeAfterSlider() {
   }, [isDragging]);
 
   return (
-    <section className="py-20 relative z-20 overflow-hidden border-t border-[#DADCE0]">
+    <section className="py-20 relative z-20 overflow-hidden border-t border-[#DADCE0] bg-[#D2E3FC]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
         {/* Section Header */}
         <div className="text-center mb-14">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#E8F0FE] border border-[#D2E3FC] text-[#1A73E8] text-[10px] font-semibold uppercase tracking-widest mb-4">
@@ -95,8 +94,7 @@ export default function BeforeAfterSlider() {
                 className="absolute inset-y-0 left-0 w-full h-full bg-white flex items-center justify-center"
                 style={{ width: containerRef.current?.getBoundingClientRect().width || "100%" }}
               >
-                {/* Grid Pattern */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#E8EAED_1px,transparent_1px),linear-gradient(to_bottom,#E8EAED_1px,transparent_1px)] bg-[size:24px_24px] opacity-80" />
+
 
                 {/* CAD SVG */}
                 <svg className="w-11/12 h-5/6 opacity-70 text-[#1A73E8] stroke-current z-10" viewBox="0 0 800 500" fill="none" strokeWidth="1.5">

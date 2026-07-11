@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Cuboid, Move3d, Video } from "lucide-react";
+import Link from "next/link";
 
 const SERVICES_DATA = [
   {
@@ -38,7 +39,6 @@ const SERVICES_DATA = [
 ];
 
 function ServiceCard({ service }: { service: (typeof SERVICES_DATA)[0] }) {
-  const Icon = service.icon;
   const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -53,51 +53,35 @@ function ServiceCard({ service }: { service: (typeof SERVICES_DATA)[0] }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ 
-        borderColor: isHovered ? "rgba(37, 99, 235, 0.4)" : "#DCE3EC",
+        borderColor: isHovered ? "#B4D0FB" : "#DCE3EC",
         boxShadow: isHovered 
-          ? "0 24px 48px rgba(37, 99, 235, 0.12)"
+          ? "0 24px 48px rgba(15, 23, 42, 0.12)"
           : "0 16px 36px rgba(15, 23, 42, 0.05)"
       }}
-      className="group relative rounded-[20px] p-8 flex flex-col h-full cursor-default bg-white border transition-all duration-250"
+      className="group relative rounded-[20px] p-8 flex flex-col h-full cursor-default bg-white hover:bg-[#D2E3FC] border transition-all duration-300"
     >
-      <div className="flex items-start justify-between mb-6">
-        <div
-          className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300"
-          style={{ backgroundColor: service.tagBg, border: `1px solid ${service.tagBorder}` }}
-        >
-          <Icon className="w-6 h-6 text-[#2563EB]" />
-        </div>
-        <div
-          className="px-3 py-1 rounded-full text-sm font-semibold"
-          style={{ backgroundColor: service.tagBg, border: `1px solid ${service.tagBorder}`, color: service.color }}
-        >
-          {service.tag}
-        </div>
-      </div>
-
-      <h3 className="text-2xl font-bold text-[#111827] mb-3 leading-snug">{service.title}</h3>
-      <p className="text-[#6B7280] text-base md:text-lg leading-relaxed flex-grow">
+      <h3 className="text-2xl font-bold text-[#111827] transition-colors duration-300 mb-3 leading-snug">{service.title}</h3>
+      <p className="text-[#6B7280] transition-colors duration-300 text-base md:text-lg leading-relaxed flex-grow">
         {service.description}
       </p>
 
-      <div className="mt-6 flex items-center text-sm font-semibold text-[#6B7280] group-hover:text-[#2563EB] transition-colors duration-250 w-max">
+      <Link href="/services" className="mt-6 flex items-center text-sm font-semibold text-[#6B7280] group-hover:text-[#60A5FA] transition-colors duration-300 w-max">
         <span className="relative text-sm">
           Explore Capability
-          <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-[#2563EB] group-hover:w-full transition-all duration-250" />
+          <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-[#60A5FA] group-hover:w-full transition-all duration-300" />
         </span>
-        <svg className="w-3.5 h-3.5 ml-1.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-250" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-3.5 h-3.5 ml-1.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
         </svg>
-      </div>
+      </Link>
     </motion.div>
   );
 }
 
 export default function Services() {
   return (
-    <section id="services" className="relative w-full py-32 overflow-hidden bg-gradient-to-b from-transparent via-[#F4F7FC]/70 to-transparent border-y border-[#E5E8EB]/30">
+    <section id="services" className="relative w-full py-32 overflow-hidden bg-[#D2E3FC]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 flex flex-col items-center">
           <motion.div

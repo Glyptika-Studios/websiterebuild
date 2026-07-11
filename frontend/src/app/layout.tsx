@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased relative min-h-screen bg-[#F8F9FA] text-[#202124]`}>
+      <body className={`${inter.variable} antialiased relative min-h-screen bg-white text-[#202124]`}>
         <AuthProvider>
           <PublicLayoutWrapper>
             {children}

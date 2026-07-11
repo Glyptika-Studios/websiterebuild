@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate, useInView } from "framer-motion";
 import {
   ArrowRight,
   CheckCircle2,
@@ -242,41 +242,104 @@ const FAQS = [
   }
 ];
 
+function AnimatedCounter({ value, decimals = 0, suffix = "" }: { value: number; decimals?: number; suffix?: string }) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => latest.toFixed(decimals));
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(count, value, { duration: 1.5, ease: "easeOut" });
+      return () => controls.stop();
+    }
+  }, [isInView, count, value]);
+
+  useEffect(() => {
+    return rounded.on("change", (latest) => {
+      if (ref.current) {
+        ref.current.textContent = latest + suffix;
+      }
+    });
+  }, [rounded, suffix]);
+
+  return <span ref={ref}>0{suffix}</span>;
+}
+
 export default function XplorPage() {
   const [activeMedia, setActiveMedia] = useState<MediaItem>(MOCK_GALLERY[0]);
   const [activeModuleTab, setActiveModuleTab] = useState<"neo" | "adorno" | "apice">("neo");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const mainRef = useRef<HTMLDivElement>(null);
+  const [gradientCSS, setGradientCSS] = useState<string>("");
+
+  // 3 alternating colors — subtle, flowing
+  const SECTION_COLORS = [
+    "191,219,254", // Soft blue (A)
+    "199,210,254", // Soft indigo (B)
+    "221,214,254", // Soft violet (C)
+  ];
+  const OPACITY = 0.35;
+
+  useEffect(() => {
+    const measure = () => {
+      const main = mainRef.current;
+      if (!main) return;
+      const sections = main.querySelectorAll<HTMLElement>(":scope > div > section");
+      if (!sections.length) return;
+      const totalH = main.scrollHeight;
+      if (totalH === 0) return;
+
+      // Place one color at each section's midpoint — CSS blends naturally between them
+      const stops: string[] = [];
+      sections.forEach((sec, i) => {
+        const mid = sec.offsetTop + sec.offsetHeight / 2;
+        const pct = (mid / totalH) * 100;
+        const color = SECTION_COLORS[i % SECTION_COLORS.length];
+        stops.push(`rgba(${color},${OPACITY}) ${pct.toFixed(1)}%`);
+      });
+
+      setGradientCSS(`linear-gradient(180deg, ${stops.join(", ")})`);
+    };
+
+    // Measure after layout + images load
+    measure();
+    const timer = setTimeout(measure, 1500);
+    window.addEventListener("resize", measure);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
 
   const activeModule = MODULE_DETAILS[activeModuleTab];
   const ModuleIcon = activeModule.icon;
 
   return (
-    <main className="min-h-screen bg-transparent text-[#111827] font-sans selection:bg-[#2563EB]/30 overflow-x-hidden relative">
-
+    <main ref={mainRef} className="min-h-screen text-[#111827] font-sans selection:bg-[#2563EB]/30 overflow-x-hidden relative bg-white">
       <div className="relative z-10">
-
-        {/* ============================================================
-            1. HERO SECTION WITH LOOPS BACKGROUND VIDEO
-           ============================================================ */}
         <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-[#E5E7EB]">
-          {/* Looping BG Video */}
-          <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-            <video 
-              src="/xplor_bgvid.mp4" 
-              autoPlay 
-              loop 
-              muted 
-              playsInline 
-              className="absolute inset-0 w-full h-full object-cover opacity-45"
-            />
-            {/* Glossy Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#FAFBFC]/10 via-[#FAFBFC]/40 to-[#FAFBFC]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FAFBFC]/30 via-transparent to-[#FAFBFC]/30" />
-          </div>
-
+          {/* Grid Background */}
+          <div
+            className="absolute inset-0 w-full h-full z-0 pointer-events-none"
+            style={{
+              backgroundImage: `url('/bgimage.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+          {/* Dot Matrix Overlay */}
+          <div 
+            className="absolute inset-0 w-full h-full z-0 pointer-events-none" 
+            style={{
+              backgroundImage: "radial-gradient(#CBD5E1 1.5px, transparent 1.5px)",
+              backgroundSize: "32px 32px",
+              opacity: 0.6
+            }}
+          />
           <div className="relative z-10 max-w-7xl mx-auto text-center flex flex-col items-center">
             {/* Tech Badge */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
@@ -284,7 +347,7 @@ export default function XplorPage() {
             >
               <Sparkles className="w-3.5 h-3.5 text-[#2563EB] animate-pulse" />
               Flagship Spatial Engine
-            </motion.div>
+            </motion.div> */}
 
             {/* Main Title */}
             <motion.h1
@@ -321,7 +384,7 @@ export default function XplorPage() {
                 <span>Book a Live Demo</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              
+
               <a
                 href="#modules"
                 className="px-8 py-4 bg-white hover:bg-[#F3F7FF] text-[#2563EB] rounded-xl font-bold border border-[#2563EB] transition-all duration-200 text-base hover:-translate-y-0.5"
@@ -335,7 +398,7 @@ export default function XplorPage() {
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-sm text-[#6B7280] z-10 pointer-events-none select-none">
             <span className="font-bold tracking-widest uppercase text-xs">Scroll to explore</span>
             <div className="w-5 h-8 rounded-full border border-[#E5E7EB] flex justify-center p-1">
-              <motion.div 
+              <motion.div
                 animate={{ y: [0, 8, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
                 className="w-1 h-1.5 bg-[#2563EB] rounded-full"
@@ -343,184 +406,169 @@ export default function XplorPage() {
             </div>
           </div>
         </section>
-
-
         {/* ============================================================
-            2. HIGH-IMPACT METRICS & STATS SECTION
+            STATS, WHY CHOOSE, AND SECTORS WRAPPER WITH LIGHT BLUE BG
            ============================================================ */}
-        <section className="py-12 relative z-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-12">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative z-10 text-center">
+        <section className="bg-[#D2E3FC] py-16 relative z-20 border-y border-[#DCEBFF]">
+          {/* 2. HIGH-IMPACT METRICS, STATS, & WHY CHOOSE COMBINED */}
+          <div className="py-6 relative z-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="rounded-2xl border border-white/50 p-8 md:p-12" style={{ background: "rgba(255,255,255,0.75)", boxShadow: "0 8px 32px rgba(37,99,235,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
                 
-                {/* Stat 1 */}
-                <div className="flex flex-col items-center justify-center space-y-2 group">
-                  <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#2563EB] tracking-tight transition-all duration-300">
-                    99%
+                {/* Heading */}
+                <div className="text-center mb-12 relative z-10">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-[#111827]">
+                    Why Choose XPLOR
+                  </h3>
+                </div>
+
+                {/* Stats row */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative z-10 text-center mb-12 border-b border-gray-200/60 pb-12">
+                  {/* Stat 1 */}
+                  <div className="flex flex-col items-center justify-center space-y-2 group">
+                    <div className="text-2xl sm:text-3xl font-bold text-[#2563EB] tracking-tight transition-all duration-300">
+                      <AnimatedCounter value={99} decimals={0} suffix="%" />
+                    </div>
+                    <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
+                      Faster Synthesis
+                    </div>
                   </div>
-                  <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
-                    Faster Synthesis
+
+                  {/* Stat 2 */}
+                  <div className="flex flex-col items-center justify-center space-y-2 group">
+                    <div className="text-2xl sm:text-3xl font-bold text-[#2563EB] tracking-tight transition-all duration-300">
+                      <AnimatedCounter value={99.98} decimals={2} suffix="%" />
+                    </div>
+                    <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
+                      Cost Reductions
+                    </div>
+                  </div>
+
+                  {/* Stat 3 */}
+                  <div className="flex flex-col items-center justify-center space-y-2 group">
+                    <div className="text-2xl sm:text-3xl font-bold text-[#2563EB] tracking-tight transition-all duration-300">
+                      <AnimatedCounter value={99.9} decimals={1} suffix="%" />
+                    </div>
+                    <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
+                      CAD Precision
+                    </div>
                   </div>
                 </div>
 
-                {/* Stat 2 */}
-                <div className="flex flex-col items-center justify-center space-y-2 group">
-                  <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#0D652D] tracking-tight transition-all duration-300">
-                    99.98%
+                {/* 4 Cards grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+                  {/* Prop 1 */}
+                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col items-start space-y-3 group">
+                    <div className="w-10 h-10 rounded-xl bg-[#FCE8E6] border border-[#F5C6C2] flex items-center justify-center text-[#C5221F] font-bold">
+                      <Zap className="w-5 h-5 animate-pulse" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#111827] group-hover:text-[#C5221F] transition-colors">99% Faster Visualization</h4>
+                      <p className="text-xs text-[#6B7280] mt-1">From weeks to minutes.</p>
+                    </div>
                   </div>
-                  <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
-                    Cost Reductions
-                  </div>
-                </div>
 
-                {/* Stat 3 */}
-                <div className="flex flex-col items-center justify-center space-y-2 group">
-                  <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#A142F4] tracking-tight transition-all duration-300">
-                    99.9%
+                  {/* Prop 2 */}
+                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col items-start space-y-3 group">
+                    <div className="w-10 h-10 rounded-xl bg-[#FCE8E6] border border-[#F5C6C2] flex items-center justify-center text-[#C5221F] font-bold">
+                      <Users className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#111827] group-hover:text-[#C5221F] transition-colors">No Technical Expertise</h4>
+                      <p className="text-xs text-[#6B7280] mt-1">Zero learning curve.</p>
+                    </div>
                   </div>
-                  <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
-                    CAD Precision
+
+                  {/* Prop 3 */}
+                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col items-start space-y-3 group">
+                    <div className="w-10 h-10 rounded-xl bg-[#FCE8E6] border border-[#F5C6C2] flex items-center justify-center text-[#C5221F] font-bold">
+                      <Layers className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#111827] group-hover:text-[#C5221F] transition-colors">One Unified Workflow</h4>
+                      <p className="text-xs text-[#6B7280] mt-1">No switching between tools.</p>
+                    </div>
+                  </div>
+
+                  {/* Prop 4 */}
+                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col items-start space-y-3 group">
+                    <div className="w-10 h-10 rounded-xl bg-[#FCE8E6] border border-[#F5C6C2] flex items-center justify-center text-[#C5221F] font-bold">
+                      <CheckCircle2 className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#111827] group-hover:text-[#C5221F] transition-colors">Accurate Communication</h4>
+                      <p className="text-xs text-[#6B7280] mt-1">True-to-plan & real-time collaboration.</p>
+                    </div>
                   </div>
                 </div>
 
               </div>
             </div>
           </div>
-        </section>
 
-        {/* ============================================================
-            2b. WHY CHOOSE XPLOR SECTION
-           ============================================================ */}
-        <section className="py-12 relative z-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-12">
-              
-              <div className="text-center mb-10 relative z-10">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FCE8E6] border border-[#F5C6C2] text-[#C5221F] text-xs font-bold uppercase tracking-widest mb-3">
-                  Core Value Propositions
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-bold text-[#111827]">
-                  Why Choose XPLOR
-                </h3>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-                
-                {/* Prop 1 */}
-                <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col items-start space-y-3 group">
-                  <div className="w-10 h-10 rounded-xl bg-[#FCE8E6] border border-[#F5C6C2] flex items-center justify-center text-[#C5221F] font-bold">
-                    <Zap className="w-5 h-5 animate-pulse" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-[#111827] group-hover:text-[#C5221F] transition-colors">99% Faster Visualization</h4>
-                    <p className="text-xs text-[#6B7280] mt-1">From weeks to minutes.</p>
-                  </div>
-                </div>
-
-                {/* Prop 2 */}
-                <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col items-start space-y-3 group">
-                  <div className="w-10 h-10 rounded-xl bg-[#FCE8E6] border border-[#F5C6C2] flex items-center justify-center text-[#C5221F] font-bold">
-                    <Users className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-[#111827] group-hover:text-[#C5221F] transition-colors">No Technical Expertise</h4>
-                    <p className="text-xs text-[#6B7280] mt-1">Zero learning curve.</p>
-                  </div>
-                </div>
-
-                {/* Prop 3 */}
-                <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col items-start space-y-3 group">
-                  <div className="w-10 h-10 rounded-xl bg-[#FCE8E6] border border-[#F5C6C2] flex items-center justify-center text-[#C5221F] font-bold">
-                    <Layers className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-[#111827] group-hover:text-[#C5221F] transition-colors">One Unified Workflow</h4>
-                    <p className="text-xs text-[#6B7280] mt-1">No switching between tools.</p>
-                  </div>
-                </div>
-
-                {/* Prop 4 */}
-                <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col items-start space-y-3 group">
-                  <div className="w-10 h-10 rounded-xl bg-[#FCE8E6] border border-[#F5C6C2] flex items-center justify-center text-[#C5221F] font-bold">
-                    <CheckCircle2 className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-[#111827] group-hover:text-[#C5221F] transition-colors">Accurate Communication</h4>
-                    <p className="text-xs text-[#6B7280] mt-1">True-to-plan & real-time collaboration.</p>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* ============================================================
+          {/* ============================================================
             2c. WHO USES XPLOR SECTION
            ============================================================ */}
-        <section className="py-12 relative z-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-12">
-              
-              <div className="text-center mb-10 relative z-10">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#E6F4EA] border border-[#CEEAD6] text-[#0D652D] text-xs font-bold uppercase tracking-widest mb-3">
-                  Target Audience
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-bold text-[#111827]">
-                  Built for Industry Professionals
-                </h3>
+          <div className="py-6 relative z-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="rounded-2xl border border-white/50 p-8 md:p-12" style={{ background: "rgba(255,255,255,0.75)", boxShadow: "0 8px 32px rgba(13,101,45,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+
+                <div className="text-center mb-10 relative z-10">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-[#111827]">
+                    Built for Industry Professionals
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+
+                  {/* Sector 1 */}
+                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
+                    <div className="w-8 h-8 rounded-lg bg-[#E6F4EA] border border-[#CEEAD6] flex items-center justify-center text-[#0D652D] shrink-0 font-bold">
+                      <CheckCircle2 className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-bold text-[#111827] group-hover:text-[#0D652D] transition-colors uppercase tracking-wider">Architects & Interior Designers</span>
+                  </div>
+
+                  {/* Sector 2 */}
+                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
+                    <div className="w-8 h-8 rounded-lg bg-[#E6F4EA] border border-[#CEEAD6] flex items-center justify-center text-[#0D652D] shrink-0 font-bold">
+                      <CheckCircle2 className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-bold text-[#111827] group-hover:text-[#0D652D] transition-colors uppercase tracking-wider">Real Estate Developers & Contractors</span>
+                  </div>
+
+                  {/* Sector 3 */}
+                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
+                    <div className="w-8 h-8 rounded-lg bg-[#E6F4EA] border border-[#CEEAD6] flex items-center justify-center text-[#0D652D] shrink-0 font-bold">
+                      <CheckCircle2 className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-bold text-[#111827] group-hover:text-[#0D652D] transition-colors uppercase tracking-wider">Furniture & Retail Brands</span>
+                  </div>
+
+                </div>
+
+                {/* Second row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 mt-6 max-w-4xl mx-auto">
+
+                  {/* Sector 4 */}
+                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
+                    <div className="w-8 h-8 rounded-lg bg-[#E6F4EA] border border-[#CEEAD6] flex items-center justify-center text-[#0D652D] shrink-0 font-bold">
+                      <CheckCircle2 className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-bold text-[#111827] group-hover:text-[#0D652D] transition-colors uppercase tracking-wider">Event & Experience Designers</span>
+                  </div>
+
+                  {/* Sector 5 */}
+                  <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
+                    <div className="w-8 h-8 rounded-lg bg-[#E6F4EA] border border-[#CEEAD6] flex items-center justify-center text-[#0D652D] shrink-0 font-bold">
+                      <CheckCircle2 className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-bold text-[#111827] group-hover:text-[#0D652D] transition-colors uppercase tracking-wider">Defence & Industrial VR Training Teams</span>
+                  </div>
+
+                </div>
+
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                
-                {/* Sector 1 */}
-                <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#E6F4EA] border border-[#CEEAD6] flex items-center justify-center text-[#0D652D] shrink-0 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-bold text-[#111827] group-hover:text-[#0D652D] transition-colors uppercase tracking-wider">Architects & Interior Designers</span>
-                </div>
-
-                {/* Sector 2 */}
-                <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#E6F4EA] border border-[#CEEAD6] flex items-center justify-center text-[#0D652D] shrink-0 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-bold text-[#111827] group-hover:text-[#0D652D] transition-colors uppercase tracking-wider">Real Estate Developers & Contractors</span>
-                </div>
-
-                {/* Sector 3 */}
-                <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#E6F4EA] border border-[#CEEAD6] flex items-center justify-center text-[#0D652D] shrink-0 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-bold text-[#111827] group-hover:text-[#0D652D] transition-colors uppercase tracking-wider">Furniture & Retail Brands</span>
-                </div>
-
-              </div>
-
-              {/* Second row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 mt-6 max-w-4xl mx-auto">
-                
-                {/* Sector 4 */}
-                <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#E6F4EA] border border-[#CEEAD6] flex items-center justify-center text-[#0D652D] shrink-0 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-bold text-[#111827] group-hover:text-[#0D652D] transition-colors uppercase tracking-wider">Event & Experience Designers</span>
-                </div>
-
-                {/* Sector 5 */}
-                <div className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#E6F4EA] border border-[#CEEAD6] flex items-center justify-center text-[#0D652D] shrink-0 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-bold text-[#111827] group-hover:text-[#0D652D] transition-colors uppercase tracking-wider">Defence & Industrial VR Training Teams</span>
-                </div>
-
-              </div>
-
             </div>
           </div>
         </section>
@@ -537,7 +585,7 @@ export default function XplorPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            
+
             {/* Left Column: Interactive Selector List */}
             <div className="lg:col-span-4 flex flex-col gap-4 justify-center">
               {MOCK_GALLERY.map((item) => {
@@ -546,11 +594,10 @@ export default function XplorPage() {
                   <button
                     key={item.id}
                     onClick={() => setActiveMedia(item)}
-                    className={`p-6 rounded-2xl text-left border transition-all duration-200 relative overflow-hidden flex flex-col ${
-                      isActive 
-                        ? 'bg-[#F3F7FF] border-[#2563EB]/30 shadow-sm' 
-                        : 'bg-white border-[#E5E7EB] hover:border-[#BDC1C6] hover:bg-[#F1F3F4]'
-                    }`}
+                    className={`p-6 rounded-2xl text-left border transition-all duration-200 relative overflow-hidden flex flex-col ${isActive
+                      ? 'bg-[#F3F7FF] border-[#2563EB]/30 shadow-sm'
+                      : 'bg-white border-[#E5E7EB] hover:border-[#BDC1C6] hover:bg-[#F1F3F4]'
+                      }`}
                   >
                     <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-widest mb-1.5">{item.category}</span>
                     <span className="text-lg font-bold text-[#111827] leading-tight mb-2">{item.title}</span>
@@ -573,8 +620,8 @@ export default function XplorPage() {
                 >
                   {/* Canvas Render Frame */}
                   <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-[#E5E7EB] group">
-                    <Image 
-                      src={activeMedia.imageUrl} 
+                    <Image
+                      src={activeMedia.imageUrl}
                       alt={activeMedia.title}
                       fill
                       sizes="(max-width: 1024px) 100vw, 66vw"
@@ -621,11 +668,10 @@ export default function XplorPage() {
                 <button
                   key={tab}
                   onClick={() => setActiveModuleTab(tab)}
-                  className={`px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 whitespace-nowrap ${
-                    activeModuleTab === tab
-                      ? "bg-[#2563EB] text-white shadow-[0_4px_12px_rgba(37,99,235,0.2)]"
-                      : "text-[#2563EB] hover:bg-[#E8F0FE]"
-                  }`}
+                  className={`px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 whitespace-nowrap ${activeModuleTab === tab
+                    ? "bg-[#2563EB] text-white shadow-[0_4px_12px_rgba(37,99,235,0.2)]"
+                    : "text-[#2563EB] hover:bg-[#E8F0FE]"
+                    }`}
                 >
                   {MODULE_DETAILS[tab].name}
                 </button>
@@ -640,9 +686,10 @@ export default function XplorPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -15 }}
                 transition={{ duration: 0.4 }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-6xl mx-auto items-stretch bg-white border border-[#E5E7EB] p-8 md:p-10 rounded-2xl shadow-sm"
+                className="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-6xl mx-auto items-stretch border border-white/50 p-8 md:p-10 rounded-2xl"
+                style={{ background: "rgba(255,255,255,0.80)", boxShadow: "0 12px 48px rgba(37,99,235,0.07), inset 0 1px 0 rgba(255,255,255,0.9)" }}
               >
-                
+
                 {/* Details Column */}
                 <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
                   <div>
@@ -700,7 +747,7 @@ export default function XplorPage() {
                     {activeModule.pricing.map((tier, idx) => {
                       const headerBg = "bg-gradient-to-r from-[#E8F0FE] via-[#D2E3FC] to-[#F3E8FD] border-b border-[#C5D8F9]";
                       return (
-                        <div 
+                        <div
                           key={idx}
                           className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col justify-between overflow-hidden"
                         >
@@ -713,63 +760,63 @@ export default function XplorPage() {
                                 {tier.name}
                               </h5>
                             </div>
-                          
-                          {/* Price */}
-                          <div className="flex items-baseline gap-1 mb-4">
-                            <span className="text-2xl font-bold text-[#111827]">
-                              {tier.price}
-                            </span>
-                            {tier.price !== "Free Trial" && (
-                              <span className="text-[10px] text-[#6B7280] font-medium font-sans">
-                                / month
+
+                            {/* Price */}
+                            <div className="flex items-baseline gap-1 mb-4">
+                              <span className="text-2xl font-bold text-[#111827]">
+                                {tier.price}
                               </span>
-                            )}
+                              {tier.price !== "Free Trial" && (
+                                <span className="text-[10px] text-[#6B7280] font-medium font-sans">
+                                  / month
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Quotas */}
+                            <div className="space-y-1.5 mb-6 text-[11px] text-[#6B7280] border-y border-[#E5E7EB] py-3.5 font-sans">
+                              <div className="flex justify-between">
+                                <span className="text-[#6B7280] font-semibold">Jobs Allowance:</span>
+                                <span className="text-[#111827] font-bold font-mono">{tier.jobs}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-[#6B7280] font-semibold">Extra Job:</span>
+                                <span className="text-[#111827] font-bold font-mono">{tier.extraJob}</span>
+                              </div>
+                              {tier.admins && (
+                                <div className="flex justify-between">
+                                  <span className="text-[#6B7280] font-semibold">Seat Limit:</span>
+                                  <span className="text-[#111827] font-bold font-mono">{tier.admins}</span>
+                                </div>
+                              )}
+                              {tier.screens && (
+                                <div className="flex justify-between">
+                                  <span className="text-[#6B7280] font-semibold">Display Nodes:</span>
+                                  <span className="text-[#111827] font-bold font-mono">{tier.screens}</span>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Features list */}
+                            <ul className="space-y-2 mb-6">
+                              {tier.features.map((feat, fIdx) => (
+                                <li key={fIdx} className="flex items-start gap-2 text-[11px] text-[#6B7280] leading-relaxed">
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] mt-0.5 shrink-0" />
+                                  <span>{feat}</span>
+                                </li>
+                              ))}
+                            </ul>
                           </div>
 
-                          {/* Quotas */}
-                          <div className="space-y-1.5 mb-6 text-[11px] text-[#6B7280] border-y border-[#E5E7EB] py-3.5 font-sans">
-                            <div className="flex justify-between">
-                              <span className="text-[#6B7280] font-semibold">Jobs Allowance:</span>
-                              <span className="text-[#111827] font-bold font-mono">{tier.jobs}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-[#6B7280] font-semibold">Extra Job:</span>
-                              <span className="text-[#111827] font-bold font-mono">{tier.extraJob}</span>
-                            </div>
-                            {tier.admins && (
-                              <div className="flex justify-between">
-                                <span className="text-[#6B7280] font-semibold">Seat Limit:</span>
-                                <span className="text-[#111827] font-bold font-mono">{tier.admins}</span>
-                              </div>
-                            )}
-                            {tier.screens && (
-                              <div className="flex justify-between">
-                                <span className="text-[#6B7280] font-semibold">Display Nodes:</span>
-                                <span className="text-[#111827] font-bold font-mono">{tier.screens}</span>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Features list */}
-                          <ul className="space-y-2 mb-6">
-                            {tier.features.map((feat, fIdx) => (
-                              <li key={fIdx} className="flex items-start gap-2 text-[11px] text-[#6B7280] leading-relaxed">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] mt-0.5 shrink-0" />
-                                <span>{feat}</span>
-                              </li>
-                            ))}
-                          </ul>
+                          <Link
+                            href="/request-proposal"
+                            className="w-full py-3 rounded-xl text-center text-xs font-bold uppercase tracking-wider text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_6px_20px_rgba(37,99,235,0.15)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.25)] hover:-translate-y-0.5 transition-all duration-250 block"
+                          >
+                            Choose Plan
+                          </Link>
                         </div>
-
-                        <Link 
-                          href="/request-proposal"
-                          className="w-full py-3 rounded-xl text-center text-xs font-bold uppercase tracking-wider text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_6px_20px_rgba(37,99,235,0.15)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.25)] hover:-translate-y-0.5 transition-all duration-250 block"
-                        >
-                          Choose Plan
-                        </Link>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -788,14 +835,14 @@ export default function XplorPage() {
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold text-[#111827]">FAQ</h2>
             </div>
-            
+
             <div className="space-y-4">
               {FAQS.map((faq, idx) => (
-                <div 
+                <div
                   key={idx}
                   className={`border ${openFaq === idx ? 'border-[#2563EB]/30 bg-[#F3F7FF]/20' : 'border-[#E5E7EB] bg-white'} rounded-2xl overflow-hidden transition-all duration-300`}
                 >
-                  <button 
+                  <button
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                     className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
                   >
@@ -806,7 +853,7 @@ export default function XplorPage() {
                       <Plus className="w-4 h-4 text-[#6B7280] shrink-0" />
                     )}
                   </button>
-                  <div 
+                  <div
                     className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${openFaq === idx ? 'max-h-96 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
                   >
                     <p className="text-sm text-[#6B7280] leading-relaxed">
@@ -824,20 +871,20 @@ export default function XplorPage() {
             8. FINAL CALL TO ACTION
            ============================================================ */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mb-20 relative">
-          <div className="relative p-12 md:p-16 rounded-[2rem] bg-[#2563EB] text-center space-y-6 overflow-hidden shadow-sm">
-            
-            <span className="text-xs font-bold uppercase tracking-widest text-white/80">Next-Gen AEC Synthesis</span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight max-w-2xl mx-auto">
+          <div className="relative p-12 md:p-16 rounded-[2rem] bg-[#D2E3FC] border border-[#B4D0FB] text-center space-y-6 overflow-hidden shadow-sm">
+
+            <span className="text-xs font-bold uppercase tracking-widest text-[#2563EB] bg-[#2563EB]/10 border border-[#2563EB]/20 px-3 py-1 rounded-full inline-flex">Next-Gen AEC Synthesis</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#111827] leading-tight max-w-2xl mx-auto">
               Ready to transform your blueprint workflows?
             </h2>
-            <p className="text-sm text-white/70 max-w-md mx-auto font-light leading-relaxed">
+            <p className="text-sm text-[#374151] max-w-md mx-auto font-light leading-relaxed">
               Create a proposal layout configuration to integrate XPLOR with your company tools.
             </p>
-            
+
             <div className="pt-4">
-              <Link 
+              <Link
                 href="/request-proposal"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-[#F1F3F4] text-[#2563EB] rounded-full font-bold uppercase tracking-wider transition-all duration-300 shadow-sm"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-full font-bold uppercase tracking-wider transition-all duration-300 shadow-sm text-sm"
               >
                 <span>Request Custom Proposal</span>
                 <ArrowRight className="w-4 h-4" />
@@ -845,7 +892,6 @@ export default function XplorPage() {
             </div>
           </div>
         </section>
-
       </div>
     </main>
   );
