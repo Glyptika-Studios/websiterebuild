@@ -694,184 +694,165 @@ export default function XplorPage() {
             <div className="text-center mb-16">
               <span className="text-xs font-bold uppercase tracking-widest text-[#2563EB]">Plans & Pricing</span>
               <h2 className="text-3xl sm:text-4xl font-bold text-[#111827] mt-2 mb-4">Choose Your XPLOR Module</h2>
-              <p className="text-[#6B7280] max-w-2xl mx-auto">Three specialized modules, each with flexible tiers. Click any module to explore pricing details.</p>
+              <p className="text-[#6B7280] max-w-2xl mx-auto">Three specialized modules, each with flexible tiers. Select a module below to view detailed pricing.</p>
             </div>
 
-            {/* Module Cards — collapsed / expanded accordion */}
-            <div className="space-y-4">
+            {/* Horizontal Module Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               {(["neo", "adorno", "apice"] as const).map((moduleKey) => {
                 const mod = MODULE_DETAILS[moduleKey];
                 const ModIcon = mod.icon;
-                const isOpen = activeModuleTab === moduleKey;
+                const isActive = activeModuleTab === moduleKey;
                 const startingPrice = mod.pricing[0]?.price ?? "";
 
                 return (
-                  <div key={moduleKey} className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-                    isOpen
-                      ? "border-[#2563EB]/30 shadow-[0_12px_48px_rgba(37,99,235,0.08)]"
-                      : "border-[#E5E7EB] hover:border-[#BDC1C6] hover:shadow-sm"
-                  }`} style={{ background: isOpen ? "rgba(243,247,255,0.5)" : "#fff" }}>
-                    {/* Collapsed header — always visible */}
-                    <button
-                      onClick={() => setActiveModuleTab(isOpen ? ("" as typeof activeModuleTab) : moduleKey)}
-                      className="w-full px-6 sm:px-8 py-6 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 text-left group"
-                    >
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-300 ${
-                        isOpen ? "bg-[#2563EB] text-white" : "bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF]"
-                      }`}>
-                        <ModIcon className="w-6 h-6" />
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <h3 className="text-lg font-bold text-[#111827]">{mod.name}</h3>
-                          <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest hidden sm:inline">— {mod.tagline}</span>
-                        </div>
-                        <p className="text-xs text-[#6B7280] line-clamp-1">
-                          <Sparkles className="w-3 h-3 inline mr-1 text-[#2563EB]" />
-                          Best for: {mod.bestFor}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center gap-4 shrink-0">
-                        <div className="text-right">
-                          <span className="text-[10px] uppercase tracking-wider text-[#6B7280] font-semibold block">Starting at</span>
-                          <span className="text-lg font-bold text-[#2563EB]">{startingPrice}<span className="text-xs text-[#6B7280] font-normal">/mo</span></span>
-                        </div>
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${
-                          isOpen ? "bg-[#2563EB] text-white rotate-180" : "bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF]"
+                  <button
+                    key={moduleKey}
+                    onClick={() => setActiveModuleTab(isActive ? "" : moduleKey)}
+                    className={`p-6 rounded-2xl text-left border transition-all duration-300 relative overflow-hidden flex flex-col justify-between group h-full ${
+                      isActive
+                        ? "bg-[#F3F7FF] border-[#2563EB]/40 shadow-sm"
+                        : "bg-white border-[#E5E7EB] hover:border-[#BDC1C6] hover:bg-[#F1F3F4]/20 hover:shadow-sm"
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${
+                          isActive ? "bg-[#2563EB] text-white" : "bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF]"
                         }`}>
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                          <ModIcon className="w-5 h-5" />
                         </div>
+                        <h3 className="text-lg font-bold text-[#111827]">{mod.name}</h3>
                       </div>
-                    </button>
-
-                    {/* Expanded content */}
-                    <div className={`transition-all duration-400 ease-in-out overflow-hidden ${
-                      isOpen ? "max-h-[3000px] opacity-100" : "max-h-0 opacity-0"
-                    }`}>
-                      <div className="px-6 sm:px-8 pb-8 pt-2">
-                        {/* Module description */}
-                        <p className="text-sm text-[#6B7280] leading-relaxed max-w-3xl mb-8">{mod.desc}</p>
-
-                        {/* Pricing tier cards */}
-                        <div className={`grid grid-cols-1 md:grid-cols-${mod.pricing.length > 3 ? '4' : '3'} gap-5`}>
-                          {mod.pricing.map((tier, idx) => (
-                            <div
-                              key={idx}
-                              className="rounded-2xl bg-white border border-[#E5E7EB] overflow-hidden hover:-translate-y-1 hover:border-[#2563EB]/40 hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col"
-                            >
-                              {/* Tier header */}
-                              <div className="px-5 pt-5 pb-4 border-b border-[#E5E7EB]">
-                                <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-widest block mb-1">{mod.name}</span>
-                                <h5 className="text-base font-bold text-[#111827] mb-3">{tier.name}</h5>
-                                <div className="flex items-baseline gap-1">
-                                  <span className="text-2xl font-bold text-[#111827]">{tier.price}</span>
-                                  {tier.price !== "Free Trial" && (
-                                    <span className="text-xs text-[#6B7280]">/month</span>
-                                  )}
-                                </div>
-                              </div>
-
-                              {/* Spec rows */}
-                              <div className="px-5 py-4 flex-1">
-                                <div className="space-y-2 text-[11px]">
-                                  {[
-                                    ["Jobs/month", tier.jobsPerMonth.toLocaleString()],
-                                    ["Extra Job", tier.extraJob],
-                                    ["Admins", tier.admins.toString()],
-                                    ["Screens", tier.screens.toString()],
-                                    ["Max Admins", tier.maxAdmins.toString()],
-                                    ["Max Screens", tier.maxScreens.toString()],
-                                    ["Extra Admin Cost", tier.extraAdminCost],
-                                    ["Extra Screen Cost", tier.extraScreenCost],
-                                    ["Furniture Uploads", tier.furnitureUploads.toString()],
-                                    ["Extra Furniture Cost", tier.extraFurnitureCost],
-                                  ].map(([label, val], rIdx) => (
-                                    <div key={rIdx} className="flex justify-between items-center py-1 border-b border-[#F3F4F6] last:border-b-0">
-                                      <span className="text-[#6B7280] font-medium">{label}</span>
-                                      <span className="text-[#111827] font-bold font-mono">{val}</span>
-                                    </div>
-                                  ))}
-                                </div>
-
-                                {/* Features */}
-                                <div className="mt-4 pt-4 border-t border-[#E5E7EB]">
-                                  <span className="text-[9px] font-bold text-[#6B7280] uppercase tracking-widest block mb-2">Highlights</span>
-                                  <ul className="space-y-1.5">
-                                    {tier.features.map((feat, fIdx) => (
-                                      <li key={fIdx} className="flex items-start gap-1.5 text-[11px] text-[#6B7280]">
-                                        <CheckCircle2 className="w-3 h-3 text-[#2563EB] mt-0.5 shrink-0" />
-                                        <span>{feat}</span>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              </div>
-
-                              {/* CTA */}
-                              <div className="px-5 pb-5">
-                                <Link
-                                  href="/request-proposal"
-                                  className="w-full py-3 rounded-xl text-center text-xs font-bold uppercase tracking-wider text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_6px_20px_rgba(37,99,235,0.15)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.25)] hover:-translate-y-0.5 transition-all duration-250 block"
-                                >
-                                  Get Started →
-                                </Link>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Technical specs + capabilities */}
-                        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                          {/* Capabilities */}
-                          <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB]">
-                            <h4 className="text-xs font-bold uppercase tracking-widest text-[#111827] mb-4">Core Capabilities</h4>
-                            <ul className="space-y-2.5">
-                              {mod.capabilities.map((cap, i) => (
-                                <li key={i} className="flex items-center gap-2.5 text-sm text-[#6B7280]">
-                                  <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
-                                  {cap}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          {/* Technical specs */}
-                          <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB]">
-                            <h4 className="text-xs font-bold uppercase tracking-widest text-[#111827] mb-4">Technical Specifications</h4>
-                            <div className="space-y-4">
-                              <div>
-                                <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest block">Mesh Complexity</span>
-                                <span className="text-base font-bold text-[#111827] font-mono">{mod.specs.complexity}</span>
-                              </div>
-                              <div>
-                                <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest block">Rendering Engine</span>
-                                <span className="text-base font-bold text-[#111827] font-mono">{mod.specs.engine}</span>
-                              </div>
-                              <div>
-                                <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest block">Average Throughput</span>
-                                <span className="text-base font-bold text-[#111827] font-mono">{mod.specs.throughput}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Demo link */}
-                        <div className="mt-6 pt-6 border-t border-[#E5E7EB] flex justify-center">
-                          <Link
-                            href="/request-proposal"
-                            className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#2563EB] hover:text-[#1765CC] transition-colors group"
-                          >
-                            Request a {mod.name} demo
-                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                          </Link>
-                        </div>
+                      
+                      <div className="mb-6">
+                        <p className="text-xs font-semibold text-[#6B7280] uppercase tracking-wider mb-2">{mod.shortTagline}</p>
+                        <p className="text-xs text-[#6B7280] leading-relaxed line-clamp-2">Best for: {mod.bestFor}</p>
                       </div>
                     </div>
-                  </div>
+
+                    <div className="pt-4 border-t border-[#E5E7EB] w-full flex justify-between items-end">
+                      <div>
+                        <span className="text-[9px] uppercase tracking-wider text-[#6B7280] font-semibold block">Starting at</span>
+                        <span className="text-base font-bold text-[#2563EB]">{startingPrice}<span className="text-xs text-[#6B7280] font-normal">/mo</span></span>
+                      </div>
+                      <div className={`text-xs font-bold uppercase tracking-wider transition-colors duration-205 flex items-center gap-1 ${
+                        isActive ? "text-[#2563EB]" : "text-[#6B7280] group-hover:text-[#2563EB]"
+                      }`}>
+                        {isActive ? "Viewing details" : "Explore plans"}
+                        <svg className={`w-3.5 h-3.5 transition-transform duration-300 ${isActive ? "rotate-90 text-[#2563EB]" : "group-hover:translate-x-0.5"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </div>
+                  </button>
                 );
               })}
             </div>
+
+            {/* Expanded Pricing details for the active module */}
+            <AnimatePresence mode="wait">
+              {activeModuleTab && (() => {
+                const activeMod = MODULE_DETAILS[activeModuleTab];
+                return (
+                  <motion.div
+                    key={activeModuleTab}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.35 }}
+                    className="mt-12 p-8 sm:p-10 rounded-[2rem] border border-[#E5E7EB] bg-white shadow-[0_12px_48px_rgba(37,99,235,0.04)]"
+                  >
+                    <div className="mb-8 border-b border-[#E5E7EB] pb-6">
+                      <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 mb-2">
+                        <h3 className="text-2xl font-bold text-[#111827]">{activeMod.name} Pricing Details</h3>
+                        <span className="text-xs font-semibold text-[#6B7280] uppercase tracking-widest">— {activeMod.tagline}</span>
+                      </div>
+                      <p className="text-sm text-[#6B7280] leading-relaxed max-w-4xl">{activeMod.desc}</p>
+                    </div>
+
+                    {/* Pricing Tiers Grid */}
+                    <div className={`grid grid-cols-1 md:grid-cols-${activeMod.pricing.length > 3 ? '4' : '3'} gap-6`}>
+                      {activeMod.pricing.map((tier, idx) => (
+                        <div
+                          key={idx}
+                          className="rounded-2xl bg-[#F9FAFB]/50 border border-[#E5E7EB] overflow-hidden hover:-translate-y-1 hover:border-[#2563EB]/40 hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col justify-between bg-white"
+                        >
+                          {/* Tier Header */}
+                          <div className="px-6 pt-6 pb-4 border-b border-[#E5E7EB]">
+                            <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-widest block mb-1">{activeMod.name}</span>
+                            <h5 className="text-base font-bold text-[#111827] mb-3">{tier.name}</h5>
+                            <div className="flex items-baseline gap-1">
+                              <span className="text-2xl font-bold text-[#111827]">{tier.price}</span>
+                              {tier.price !== "Free Trial" && (
+                                <span className="text-xs text-[#6B7280]">/month</span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Specs Table */}
+                          <div className="px-6 py-5 flex-1">
+                            <div className="space-y-2 text-[11px] mb-6">
+                              {[
+                                ["Jobs/month", tier.jobsPerMonth.toLocaleString()],
+                                ["Extra Job", tier.extraJob],
+                                ["Admins", tier.admins.toString()],
+                                ["Screens", tier.screens.toString()],
+                                ["Max Admins", tier.maxAdmins.toString()],
+                                ["Max Screens", tier.maxScreens.toString()],
+                                ["Extra Admin Cost", tier.extraAdminCost],
+                                ["Extra Screen Cost", tier.extraScreenCost],
+                                ["Furniture Uploads", tier.furnitureUploads.toString()],
+                                ["Extra Furniture Cost", tier.extraFurnitureCost],
+                              ].map(([label, val], rIdx) => (
+                                <div key={rIdx} className="flex justify-between items-center py-1 border-b border-[#F3F4F6] last:border-b-0">
+                                  <span className="text-[#6B7280] font-medium">{label}</span>
+                                  <span className="text-[#111827] font-bold font-mono">{val}</span>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Features list */}
+                            <div className="pt-4 border-t border-[#E5E7EB]">
+                              <span className="text-[9px] font-bold text-[#6B7280] uppercase tracking-widest block mb-2.5">Highlights</span>
+                              <ul className="space-y-2">
+                                {tier.features.map((feat, fIdx) => (
+                                  <li key={fIdx} className="flex items-start gap-2 text-[11px] text-[#6B7280]">
+                                    <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] mt-0.5 shrink-0" />
+                                    <span>{feat}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+
+                          {/* CTA button */}
+                          <div className="px-6 pb-6">
+                            <Link
+                              href="/request-proposal"
+                              className="w-full py-3 rounded-xl text-center text-xs font-bold uppercase tracking-wider text-white bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[0_6px_20px_rgba(37,99,235,0.12)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.22)] hover:-translate-y-0.5 transition-all duration-250 block"
+                            >
+                              Choose Plan
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Request Demo at bottom */}
+                    <div className="mt-10 pt-6 border-t border-[#E5E7EB] flex justify-center">
+                      <Link
+                        href="/request-proposal"
+                        className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#2563EB] hover:text-[#1765CC] transition-colors group"
+                      >
+                        Request a {activeMod.name} demo
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                );
+              })()}
+            </AnimatePresence>
           </div>
         </section>
 
