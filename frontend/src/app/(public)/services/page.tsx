@@ -113,7 +113,7 @@ export default function ServicesPage() {
               >
                 <Link
                   href={service.url}
-                  className="group relative flex flex-col h-full p-8 rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250"
+                  className="group relative flex flex-col h-full p-8 rounded-[20px] border border-[#E5E7EB] hover:border-[#B4D0FB] bg-white hover:bg-[#D2E3FC] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(15,23,42,0.12)] transition-all duration-300"
                 >
                   {/* Content */}
                   <div className="flex-grow z-10">
@@ -130,7 +130,7 @@ export default function ServicesPage() {
                     {service.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-xs font-mono px-2.5 py-1 rounded-md text-[#64748B] bg-slate-900/5 border border-slate-900/10 group-hover:text-slate-300 group-hover:bg-white/10 group-hover:border-white/10 transition-colors duration-300"
+                        className="text-xs font-mono px-2.5 py-1 rounded-md text-[#64748B] bg-slate-900/5 border border-slate-900/10 group-hover:text-[#2563EB] group-hover:bg-white group-hover:border-[#B4D0FB] transition-colors duration-300"
                       >
                         {tag}
                       </span>
