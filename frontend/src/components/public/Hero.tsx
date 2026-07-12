@@ -58,7 +58,7 @@ export default function Hero() {
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-[#111827] tracking-tight mb-8 leading-[1.05] uppercase">
               Building <br />
               the Technology <br />
-              <span className="pb-1 block">
+              <span className="text-[#2563EB] pb-1 block">
                 of Tomorrow
               </span>
             </h1>
