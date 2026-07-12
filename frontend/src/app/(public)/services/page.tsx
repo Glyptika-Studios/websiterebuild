@@ -89,11 +89,7 @@ export default function ServicesPage() {
             Digital
             <br />
             <span
-              className="bg-clip-text text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(90deg, #2563EB, #7C3AED, #059669)",
-              }}
+              className="bg-clip-text text-transparent bg-gradient-to-r from-[#1A73E8] via-[#4285F4] to-[#0F172A] pb-1 block"
             >
               Ecosystems.
             </span>
@@ -117,43 +113,8 @@ export default function ServicesPage() {
               >
                 <Link
                   href={service.url}
-                  className="group relative flex flex-col h-full p-8 rounded-2xl border bg-white/75 hover:bg-[#D2E3FC] overflow-hidden transition-all duration-300 hover:-translate-y-1"
-                  style={{
-                    backdropFilter: "blur(12px)",
-                    borderColor: "rgba(226, 232, 240, 0.8)",
-                    boxShadow:
-                      "0 10px 30px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.borderColor = service.accent + "55";
-                    el.style.boxShadow = `0 20px 40px ${service.accent}12, inset 0 1px 0 rgba(255, 255, 255, 0.1)`;
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.borderColor = "rgba(226, 232, 240, 0.8)";
-                    el.style.boxShadow =
-                      "0 10px 30px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8)";
-                  }}
+                  className="group relative flex flex-col h-full p-8 rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250"
                 >
-                  {/* Subtle top border accent */}
-                  <div
-                    className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{
-                      background: `linear-gradient(90deg, transparent, ${service.accent}, transparent)`,
-                    }}
-                  />
-
-                  {/* Number watermark */}
-                  <div
-                    className="absolute top-6 right-8 text-7xl font-black opacity-[0.05] group-hover:opacity-10 transition-opacity duration-300 select-none leading-none font-mono"
-                    style={{ color: service.accent }}
-                  >
-                    {service.number}
-                  </div>
-
-                  {/* Icon + Category row removed as requested */}
-
                   {/* Content */}
                   <div className="flex-grow z-10">
                     <h3 className="text-2xl font-bold text-[#1E293B] mb-4 leading-tight transition-colors duration-300">

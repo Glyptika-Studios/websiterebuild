@@ -318,11 +318,19 @@ export default function ImsPage() {
             STATS, WHY CHOOSE, AND SECTORS WRAPPER WITH LIGHT BLUE BG
            ============================================================ */}
         <section className="bg-[#D2E3FC] py-16 relative z-20 border-y border-[#E5E7EB]">
-          {/* 2. STATS SECTION */}
-          <div className="py-6 relative z-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-10">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            {/* Merged Stats & Why Choose Container */}
+            <div className="rounded-2xl border border-white/50 p-8 md:p-12" style={{ background: "rgba(255,255,255,0.75)", boxShadow: "0 8px 32px rgba(37,99,235,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+              {/* Heading */}
+              <div className="text-center mb-12 relative z-10">
+                <h3 className="text-2xl sm:text-3xl font-bold text-[#111827]">
+                  Why Choose IMS
+                </h3>
+              </div>
+
+              {/* Stats Row */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative z-10 text-center mb-12 border-b border-gray-200/60 pb-12">
                 {[
                   { value: "99.99%", label: "System Uptime", color: "#2563EB" },
                   { value: "85%", label: "Time Reduction", color: "#A142F4" },
@@ -341,87 +349,61 @@ export default function ImsPage() {
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
-          </div>
 
-        {/* ============================================================
-            2b. WHY CHOOSE IMS SECTION
-           ============================================================ */}
-        <div className="py-6 relative z-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-10">
-              <div className="text-center mb-8">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3E8FD] border border-[#E4CCFA] text-[#A142F4] text-xs font-medium uppercase tracking-widest mb-3">
-                  Core Value Propositions
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-bold text-[#111827]">
-                  Why Choose IMS
-                </h3>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {/* 4 Cards Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
                 {[
                   { icon: Lock, title: "Air-Gapped Setup", desc: "Run completely offline within local defense containers." },
                   { icon: Database, title: "Isolated DB Nodes", desc: "Isolated database cores featuring Row Level Security." },
                   { icon: Zap, title: "Automatic Decrements", desc: "Logistics flows auto sync to asset databases instantly." },
                   { icon: Activity, title: "Immutable History", desc: "Chronological activity sync audit registers." }
                 ].map((prop, i) => (
-                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#E5E7EB] hover:border-[#BDC1C6] hover:shadow-sm transition-all duration-200 flex flex-col items-start space-y-2.5 group">
-                    <div className="w-9 h-9 rounded-lg bg-[#F3E8FD] border border-[#E4CCFA] flex items-center justify-center text-[#A142F4]">
-                      <prop.icon className="w-4 h-4" />
+                  <div key={i} className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col items-start space-y-3 group">
+                    <div className="w-10 h-10 rounded-xl bg-[#F3E8FD] border border-[#E4CCFA] flex items-center justify-center text-[#A142F4] font-bold">
+                      <prop.icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-[#111827] group-hover:text-[#A142F4] transition-colors">{prop.title}</h4>
-                      <p className="text-xs text-[#6B7280] mt-0.5">{prop.desc}</p>
+                      <h4 className="text-sm font-bold text-[#111827] group-hover:text-[#A142F4] transition-colors">{prop.title}</h4>
+                      <p className="text-xs text-[#6B7280] mt-1">{prop.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
-          </div>
 
-        {/* ============================================================
-            2c. WHO USES IMS SECTION
-           ============================================================ */}
-        <div className="py-6 relative z-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8 md:p-10">
-              <div className="text-center mb-8">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3F7FF] border border-[#DCEBFF] text-[#2563EB] text-xs font-medium uppercase tracking-widest mb-3">
-                  Target Sectors
-                </span>
+            {/* Target Sectors Container */}
+            <div className="rounded-2xl border border-white/50 p-8 md:p-12" style={{ background: "rgba(255,255,255,0.75)", boxShadow: "0 8px 32px rgba(37,99,235,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+              <div className="text-center mb-10 relative z-10">
                 <h3 className="text-2xl sm:text-3xl font-bold text-[#111827]">
                   Built for Secure Enterprise & Defense
                 </h3>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                 {["Indian Defense Institutions", "Security Infrastructure Teams", "Heavy Material Warehouses"].map((sector, i) => (
-                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#E5E7EB] hover:border-[#2563EB]/30 transition-all duration-200 flex items-center space-x-3 group">
-                    <div className="w-7 h-7 rounded-md bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center text-[#2563EB] shrink-0">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
+                  <div key={i} className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
+                    <div className="w-8 h-8 rounded-lg bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center text-[#2563EB] shrink-0">
+                      <CheckCircle2 className="w-4 h-4" />
                     </div>
-                    <span className="text-xs font-semibold text-[#111827] group-hover:text-[#2563EB] transition-colors uppercase tracking-wider">{sector}</span>
+                    <span className="text-xs font-bold text-[#111827] group-hover:text-[#2563EB] transition-colors uppercase tracking-wider">{sector}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 mt-6 max-w-4xl mx-auto">
                 {["Military Logistics Centers", "On-Premise Enterprise Facilities"].map((sector, i) => (
-                  <div key={i} className="p-5 rounded-xl bg-[#FAFAF9] border border-[#E5E7EB] hover:border-[#2563EB]/30 transition-all duration-200 flex items-center space-x-3 group">
-                    <div className="w-7 h-7 rounded-md bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center text-[#2563EB] shrink-0">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
+                  <div key={i} className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex items-center space-x-4 group">
+                    <div className="w-8 h-8 rounded-lg bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center text-[#2563EB] shrink-0">
+                      <CheckCircle2 className="w-4 h-4" />
                     </div>
-                    <span className="text-xs font-semibold text-[#111827] group-hover:text-[#2563EB] transition-colors uppercase tracking-wider">{sector}</span>
+                    <span className="text-xs font-bold text-[#111827] group-hover:text-[#2563EB] transition-colors uppercase tracking-wider">{sector}</span>
                   </div>
                 ))}
               </div>
             </div>
+
           </div>
-        </div>
-      </section>
+        </section>
 
         {/* ============================================================
             3. AUDIT ESTIMATOR CALCULATOR
