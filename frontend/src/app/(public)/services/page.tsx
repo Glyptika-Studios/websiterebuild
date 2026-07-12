@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Layers, Move3d, Code2, Database, ArrowUpRight } from "lucide-react";
+import { Layers, Move3d, Code2, Database, ChevronRight, ArrowRight } from "lucide-react";
 
 const MOCK_SERVICES = [
   {
@@ -138,12 +138,13 @@ export default function ServicesPage() {
                   </div>
 
                   {/* CTA */}
-                  <div
-                    className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider transition-all duration-200"
-                    style={{ color: service.accent }}
-                  >
-                    <span>View Details</span>
-                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                  <div className="relative z-10 mt-auto pt-4 border-t border-[#E5E7EB] transition-colors duration-300 flex">
+                    <span
+                      className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl text-sm font-bold bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] group-hover:bg-[#2563EB] group-hover:border-[#2563EB] group-hover:text-white transition-all duration-300 shadow-sm"
+                    >
+                      View Details
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </span>
                   </div>
                 </Link>
               </motion.div>
@@ -151,40 +152,28 @@ export default function ServicesPage() {
           })}
         </div>
 
-        {/* Bottom CTA strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-2xl border"
-          style={{
-            background: "rgba(255, 255, 255, 0.6)",
-            borderColor: "rgba(226, 232, 240, 0.8)",
-            boxShadow: "0 10px 30px rgba(15, 23, 42, 0.03)",
-          }}
-        >
-          <div>
-            <p className="text-[#1E293B] font-bold text-lg mb-1">
+        {/* Request Proposal Section (styled like IMS/XPLOR call-to-action) */}
+        <section className="mt-20 max-w-5xl mx-auto relative">
+          <div className="relative p-12 md:p-16 rounded-[2rem] bg-[#D2E3FC] border border-[#B4D0FB] text-center space-y-6 overflow-hidden shadow-sm">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#2563EB] bg-[#2563EB]/10 border border-[#2563EB]/20 px-3 py-1 rounded-full inline-flex">Custom Solutions</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#111827] leading-tight max-w-2xl mx-auto">
               Need a custom solution?
+            </h2>
+            <p className="text-sm text-[#374151] max-w-md mx-auto font-light leading-relaxed">
+              Every project is unique. Let&apos;s talk about what you need to build your digital ecosystem.
             </p>
-            <p className="text-[#64748B] text-sm">
-              Every project is unique. Let&apos;s talk about what you need.
-            </p>
+
+            <div className="pt-4">
+              <Link
+                href="/request-proposal"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-full font-bold uppercase tracking-wider transition-all duration-300 shadow-sm text-sm"
+              >
+                <span>Request Proposal</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
-          <Link
-            href="/request-proposal"
-            className="flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-200 hover:-translate-y-0.5 whitespace-nowrap"
-            style={{
-              background: "linear-gradient(135deg, #2563EB, #7C3AED)",
-              color: "white",
-              boxShadow: "0 8px 24px rgba(37,99,235,0.2)",
-            }}
-          >
-            Request Proposal
-            <ArrowUpRight className="w-4 h-4" />
-          </Link>
-        </motion.div>
+        </section>
       </div>
     </main>
   );

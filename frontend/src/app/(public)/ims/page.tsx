@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform, useInView, animate } from "framer-motion";
 import { 
   ShieldCheck, 
   Database, 
@@ -186,6 +186,30 @@ const FAQS = [
   }
 ];
 
+function AnimatedCounter({ value, decimals = 0, suffix = "" }: { value: number; decimals?: number; suffix?: string }) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => latest.toFixed(decimals));
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(count, value, { duration: 1.5, ease: "easeOut" });
+      return () => controls.stop();
+    }
+  }, [isInView, count, value]);
+
+  useEffect(() => {
+    return rounded.on("change", (latest) => {
+      if (ref.current) {
+        ref.current.textContent = latest + suffix;
+      }
+    });
+  }, [rounded, suffix]);
+
+  return <span ref={ref}>0{suffix}</span>;
+}
+
 export default function ImsPage() {
   const [activeModuleTab, setActiveModuleTab] = useState<"core" | "flow" | "dispatch">("core");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -331,23 +355,35 @@ export default function ImsPage() {
 
               {/* Stats Row */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative z-10 text-center mb-12 border-b border-gray-200/60 pb-12">
-                {[
-                  { value: "99.99%", label: "System Uptime", color: "#2563EB" },
-                  { value: "85%", label: "Time Reduction", color: "#A142F4" },
-                  { value: "0", label: "Security Breaches", color: "#0D652D" }
-                ].map((stat, i) => (
-                  <div key={i} className="flex flex-col items-center justify-center space-y-1.5 group">
-                    <div 
-                      className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight group-hover:opacity-85 transition-all duration-200 font-sans"
-                      style={{ color: stat.color }}
-                    >
-                      {stat.value}
-                    </div>
-                    <div className="text-xs md:text-sm text-[#6B7280] font-medium uppercase tracking-widest">
-                      {stat.label}
-                    </div>
+                {/* Stat 1 */}
+                <div className="flex flex-col items-center justify-center space-y-2 group">
+                  <div className="text-2xl sm:text-3xl font-bold text-[#2563EB] tracking-tight transition-all duration-300">
+                    <AnimatedCounter value={99.99} decimals={2} suffix="%" />
                   </div>
-                ))}
+                  <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
+                    System Uptime
+                  </div>
+                </div>
+
+                {/* Stat 2 */}
+                <div className="flex flex-col items-center justify-center space-y-2 group">
+                  <div className="text-2xl sm:text-3xl font-bold text-[#2563EB] tracking-tight transition-all duration-300">
+                    <AnimatedCounter value={85} decimals={0} suffix="%" />
+                  </div>
+                  <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
+                    Time Reduction
+                  </div>
+                </div>
+
+                {/* Stat 3 */}
+                <div className="flex flex-col items-center justify-center space-y-2 group">
+                  <div className="text-2xl sm:text-3xl font-bold text-[#2563EB] tracking-tight transition-all duration-300">
+                    <AnimatedCounter value={0} decimals={0} suffix="" />
+                  </div>
+                  <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
+                    Security Breaches
+                  </div>
+                </div>
               </div>
 
               {/* 4 Cards Grid */}

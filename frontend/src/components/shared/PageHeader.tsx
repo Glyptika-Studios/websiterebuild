@@ -32,7 +32,7 @@ export default function PageHeader({ badgeText, badgeIcon: BadgeIcon = Sparkles,
         transition={{ duration: 0.6, delay: 0.05 }}
         className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#111827] mb-5 tracking-tight leading-tight"
       >
-        {title} {gradientTitle && <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#EC4899] pb-0.5 inline-block">{gradientTitle}</span>}
+        {title} {gradientTitle && <span className="text-[#2563EB] pb-0.5 inline-block">{gradientTitle}</span>}
       </motion.h1>
 
       <motion.p
