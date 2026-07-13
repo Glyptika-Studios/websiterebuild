@@ -211,7 +211,6 @@ function AnimatedCounter({ value, decimals = 0, suffix = "" }: { value: number; 
 }
 
 export default function ImsPage() {
-  const [activeModuleTab, setActiveModuleTab] = useState<"core" | "flow" | "dispatch">("core");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -240,9 +239,6 @@ export default function ImsPage() {
   // Calculator logic
   const estTimeSaved = Math.round((calcAssets * 0.5) + (calcAdmins * 24));
   const estCostSaved = Math.round((calcAssets * 150) + (calcAdmins * 12500));
-
-  const activeModule = MODULE_DETAILS[activeModuleTab];
-  const ModuleIcon = activeModule.icon;
 
   return (
     <main className="min-h-screen bg-transparent overflow-x-hidden relative">
@@ -541,97 +537,7 @@ export default function ImsPage() {
           </div>
         </section>
 
-        {/* ============================================================
-            4. SYSTEM ARCHITECTURE MODULES
-           ============================================================ */}
-        <section id="modules" className="py-32 border-t border-[#E5E7EB]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <span className="text-sm font-semibold uppercase tracking-widest text-[#2563EB]">System Architecture</span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] mt-2 mb-3">Custom Modular Capabilities</h2>
-              <p className="text-[#6B7280] max-w-2xl mx-auto text-base">Toggle the tabs below to view detailed specifications and licensing tiers for each module.</p>
-            </div>
 
-            {/* Selector tabs */}
-            <div className="flex justify-center mb-10 max-w-lg mx-auto overflow-x-auto gap-2 bg-[#F3F7FF] p-1.5 rounded-2xl border border-[#DCEBFF]">
-              {(["core", "flow", "dispatch"] as const).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveModuleTab(tab)}
-                  className={`px-5 py-2.5 text-sm font-bold uppercase tracking-wider rounded-xl transition-all duration-300 whitespace-nowrap ${
-                    activeModuleTab === tab
-                      ? "bg-[#2563EB] text-white shadow-[0_4px_12px_rgba(37,99,235,0.2)]"
-                      : "text-[#2563EB] hover:bg-[#E8F0FE]"
-                  }`}
-                >
-                  {MODULE_DETAILS[tab].name}
-                </button>
-              ))}
-            </div>
-
-            {/* Display module card */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeModuleTab}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-stretch bg-white border border-[#E5E7EB] p-8 md:p-10 rounded-2xl shadow-sm"
-              >
-                
-                {/* Details Column */}
-                <div className="lg:col-span-7 flex flex-col justify-between space-y-5">
-                  <div>
-                    <div className="w-12 h-12 rounded-xl bg-[#F3F7FF] border border-[#DCEBFF] flex items-center justify-center mb-5">
-                      <ModuleIcon className="w-6 h-6 text-[#2563EB]" />
-                    </div>
-                    <span className="text-xs font-medium uppercase tracking-widest text-[#6B7280]">{activeModule.tagline}</span>
-                    <h3 className="text-2xl font-bold text-[#111827] mt-1 mb-3">{activeModule.name}</h3>
-                    <p className="text-[#6B7280] leading-relaxed text-sm mb-6">{activeModule.desc}</p>
-
-                    <h4 className="text-xs font-semibold uppercase tracking-widest text-[#111827] mb-3">Core capabilities</h4>
-                    <ul className="space-y-2.5">
-                      {activeModule.capabilities.map((cap, i) => (
-                        <li key={i} className="flex items-center gap-2.5 text-sm">
-                          <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
-                          <span className="text-[#6B7280]">{cap}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="pt-5 border-t border-[#E5E7EB]">
-                    <Link
-                      href="/request-proposal"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-[#2563EB] hover:text-[#1765CC] transition-colors group"
-                    >
-                      Request module deployment
-                      <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                    </Link>
-                  </div>
-                </div>
-
-                {/* Technical Specs Panels */}
-                <div className="lg:col-span-5 flex flex-col justify-center gap-3">
-                  {[
-                    { label: "System Complexity", value: activeModule.specs.complexity },
-                    { label: "Core Database Engine", value: activeModule.specs.engine },
-                    { label: "Average Throughput", value: activeModule.specs.throughput },
-                  ].map((spec, i) => (
-                    <div key={i} className="p-5 rounded-xl bg-[#F8F9FA] border border-[#E5E7EB]">
-                      <span className="text-[9px] font-medium text-[#6B7280] uppercase tracking-widest block">{spec.label}</span>
-                      <span className="text-base font-semibold text-[#111827] mt-1 block font-mono">{spec.value}</span>
-                    </div>
-                  ))}
-                </div>
-
-
-              </motion.div>
-            </AnimatePresence>
-
-          </div>
-        </section>
 
         {/* ============================================================
             5. FAQ SECTION

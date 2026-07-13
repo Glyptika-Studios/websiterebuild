@@ -65,18 +65,6 @@ function ProjectRow({ project, index }: { project: (typeof FEATURED_PROJECTS)[0]
         transition={{ duration: 0.7, ease: "easeOut" }}
         className="w-full lg:w-1/2 space-y-8"
       >
-        {/* Tag */}
-        <div
-          className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border"
-          style={{
-            color: project.accent,
-            backgroundColor: project.accentDim,
-            borderColor: project.accentBorder,
-          }}
-        >
-          {project.tag}
-        </div>
-
         <div>
           <p className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: project.accent }}>
             {project.subtitle}
@@ -97,22 +85,15 @@ function ProjectRow({ project, index }: { project: (typeof FEATURED_PROJECTS)[0]
         {/* Metric cards */}
         <div className="grid grid-cols-2 gap-4 pt-2">
           {project.metrics.map((metric, mIdx) => {
-            const MetricIcon = metric.icon;
             return (
               <div
                 key={mIdx}
-                className="group p-5 rounded-xl flex items-center gap-4 border transition-all duration-200 hover:-translate-y-0.5"
+                className="group p-5 rounded-xl border transition-all duration-200 hover:-translate-y-0.5"
                 style={{
                   backgroundColor: project.accentDim,
                   borderColor: project.accentBorder,
                 }}
               >
-                <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: "rgba(255,255,255,0.6)", border: `1px solid ${project.accentBorder}` }}
-                >
-                  <MetricIcon className="w-5 h-5" style={{ color: project.accent }} />
-                </div>
                 <div>
                   <div className="text-xl md:text-2xl font-black text-[#0F172A] tracking-tight">{metric.value}</div>
                   <div className="text-xs text-[#334155] uppercase tracking-wider font-semibold">{metric.label}</div>

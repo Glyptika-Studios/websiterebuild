@@ -50,7 +50,7 @@ export default function TeamPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative bg-white hover:bg-[#D2E3FC] border border-[#E5E7EB] hover:border-[#B4D0FB] rounded-2xl p-8 transition-all duration-300 text-center flex flex-col items-center hover:shadow-[0_18px_48px_rgba(15,23,42,0.12)] cursor-default hover:-translate-y-1"
+              className="group relative bg-white hover:bg-[#D2E3FC] border border-[#E5E7EB] hover:border-[#B4D0FB] rounded-2xl p-8 transition-all duration-300 text-center flex flex-col items-center hover:shadow-[0_24px_48px_rgba(15,23,42,0.3)] cursor-default hover:-translate-y-1"
             >
               {/* Profile Image */}
               <div className="w-32 h-32 rounded-full overflow-hidden border border-[#E5E7EB] group-hover:border-[#38BDF8] transition-colors duration-300 mb-6 relative">

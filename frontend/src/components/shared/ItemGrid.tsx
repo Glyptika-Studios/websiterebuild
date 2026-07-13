@@ -44,7 +44,7 @@ export default function ItemGrid({ items, type = "services" }: ItemGridProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.08 }}
             onClick={(e) => handleCardClick(e, item)}
-            className={`w-full md:w-[calc(50%-12px)] ${lgWidth} group relative bg-white hover:bg-[#D2E3FC] border border-[#E5E7EB] hover:border-[#B4D0FB] rounded-[20px] p-7 transition-all duration-300 flex flex-col shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(15,23,42,0.12)] ${
+            className={`w-full md:w-[calc(50%-12px)] ${lgWidth} group relative bg-white hover:bg-[#D2E3FC] border border-[#E5E7EB] hover:border-[#B4D0FB] rounded-[20px] p-7 transition-all duration-300 flex flex-col shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(15,23,42,0.3)] ${
               type !== "posts" ? "cursor-pointer" : ""
             }`}
           >

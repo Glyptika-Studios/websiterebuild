@@ -113,7 +113,7 @@ export default function ServicesPage() {
               >
                 <Link
                   href={service.url}
-                  className="group relative flex flex-col h-full p-8 rounded-[20px] border border-[#E5E7EB] hover:border-[#B4D0FB] bg-white hover:bg-[#D2E3FC] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(15,23,42,0.12)] transition-all duration-300"
+                  className="group relative flex flex-col h-full p-8 rounded-[20px] border border-[#E5E7EB] hover:border-[#B4D0FB] bg-white hover:bg-[#D2E3FC] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(15,23,42,0.3)] transition-all duration-300"
                 >
                   {/* Content */}
                   <div className="flex-grow z-10">

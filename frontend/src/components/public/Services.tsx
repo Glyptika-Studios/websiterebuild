@@ -55,7 +55,7 @@ function ServiceCard({ service }: { service: (typeof SERVICES_DATA)[0] }) {
       style={{ 
         borderColor: isHovered ? "#B4D0FB" : "#DCE3EC",
         boxShadow: isHovered 
-          ? "0 24px 48px rgba(15, 23, 42, 0.12)"
+          ? "0 24px 48px rgba(15, 23, 42, 0.3)"
           : "0 16px 36px rgba(15, 23, 42, 0.05)"
       }}
       className="group relative rounded-[20px] p-8 flex flex-col h-full cursor-default bg-white hover:bg-[#D2E3FC] border transition-all duration-300"
