@@ -61,6 +61,7 @@ export default function UsersPermissionsManager() {
   const [resetTarget, setResetTarget] = useState<DbUser | null>(null);
   const [resetting, setResetting] = useState(false);
   const [resetMsg, setResetMsg] = useState<string | null>(null);
+  const [actionLink, setActionLink] = useState<string | null>(null);
 
   // Load users from DB
   const fetchUsers = useCallback(async () => {
@@ -91,6 +92,7 @@ export default function UsersPermissionsManager() {
     setFormType("Full-time");
     setDrawerError(null);
     setDrawerSuccess(null);
+    setActionLink(null);
     setIsFormOpen(true);
   };
 
@@ -104,6 +106,7 @@ export default function UsersPermissionsManager() {
     setFormType(dbUser.employment_type);
     setDrawerError(null);
     setDrawerSuccess(null);
+    setActionLink(null);
     setIsFormOpen(true);
   };
 
@@ -126,6 +129,7 @@ export default function UsersPermissionsManager() {
     e.preventDefault();
     setDrawerError(null);
     setDrawerSuccess(null);
+    setActionLink(null);
 
     if (!formName.trim() || !formEmail.trim() || !formRollNo.trim()) {
       setDrawerError("All fields are required.");
@@ -147,7 +151,7 @@ export default function UsersPermissionsManager() {
         await fetchUsers();
       } else {
         // INVITE new user (Logic maps role cleanly)
-        await api.post("/api/v1/admin/users/invite", {
+        const res = await api.post<any>("/api/v1/admin/users/invite", {
           email: formEmail,
           name: formName,
           roll_no: formRollNo,
@@ -155,7 +159,12 @@ export default function UsersPermissionsManager() {
           employment_type: formType,
         });
 
-        setDrawerSuccess(`Invite email sent to ${formEmail}. They will set their own password.`);
+        if (res.success && res.data?.action_link) {
+          setActionLink(res.data.action_link);
+          setDrawerSuccess("User invited successfully. Copy the link below to set their password.");
+        } else {
+          setDrawerSuccess("User invited successfully.");
+        }
         await fetchUsers();
       }
     } catch (err: any) {
@@ -170,9 +179,15 @@ export default function UsersPermissionsManager() {
     setResetTarget(target);
     setResetting(true);
     setResetMsg(null);
+    setActionLink(null);
     try {
       const res = await api.post<any>(`/api/v1/admin/users/${target.id}/reset-password`, null);
-      setResetMsg(res.message || `Password reset email sent to ${target.email}.`);
+      if (res.success && res.data?.action_link) {
+        setActionLink(res.data.action_link);
+        setResetMsg(`Password reset link generated for ${target.email}.`);
+      } else {
+        setResetMsg(res.message || `Password reset email sent to ${target.email}.`);
+      }
     } catch (err: any) {
       setResetMsg("Error: " + err.message);
     } finally {
@@ -203,8 +218,54 @@ export default function UsersPermissionsManager() {
         </button>
       </div>
 
+      {/* Copyable Action Link Widget */}
+      {actionLink && (
+        <div className="p-6 rounded-3xl bg-blue-500/10 border border-blue-500/30 text-white space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-black uppercase tracking-wider text-blue-400">
+              Generated Access / Recovery Link
+            </span>
+            <button
+              onClick={() => setActionLink(null)}
+              className="text-slate-400 hover:text-white transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <p className="text-xs text-slate-300">
+            Use this link directly to set/update the user&apos;s password. This bypasses email link expirations.
+          </p>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              readOnly
+              value={actionLink}
+              onClick={(e) => (e.target as HTMLInputElement).select()}
+              className="flex-1 px-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-2xl text-xs font-mono text-slate-300 focus:outline-none"
+            />
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(actionLink);
+                alert("Link copied to clipboard!");
+              }}
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-2xl text-xs font-bold transition-colors"
+            >
+              Copy Link
+            </button>
+            <a
+              href={actionLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-white/10 rounded-2xl text-xs font-bold transition-colors flex items-center"
+            >
+              Open Link
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Password reset toast */}
-      {resetMsg && (
+      {resetMsg && !actionLink && (
         <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/25 text-blue-300 text-xs font-bold flex gap-3 items-center">
           <Mail className="w-4 h-4 shrink-0" />
           <span>{resetMsg}</span>

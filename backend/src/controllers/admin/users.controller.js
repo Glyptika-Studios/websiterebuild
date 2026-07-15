@@ -183,22 +183,28 @@ export const inviteAdminUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "An admin with this email already exists");
   }
 
-  // Step 1 — Send Supabase Auth invite
-  // This requires supabaseAdmin (service_role key)
-  const { data: authData, error: inviteError } =
-    await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-      data: { name }, // stored in user_metadata
+  // Step 1 — Generate Supabase Auth invite link
+  // Using generateLink avoids the email pre-fetching consumption issue,
+  // letting the superadmin display and open the link directly.
+  const { data: linkData, error: inviteError } =
+    await supabaseAdmin.auth.admin.generateLink({
+      type: "invite",
+      email,
+      options: {
+        data: { name },
+        redirectTo: `${req.headers.origin || "http://localhost:3000"}/admin/login`,
+      },
     });
 
   if (inviteError) {
-    // Handle already registered in auth
     if (inviteError.message?.includes("already been registered")) {
       throw new ApiError(409, "This email is already registered in the system");
     }
-    throw new ApiError(500, "Failed to send invite: " + inviteError.message);
+    throw new ApiError(500, "Failed to generate invite: " + inviteError.message);
   }
 
-  const userId = authData.user.id;
+  const userId = linkData.user.id;
+  const actionLink = linkData.properties.action_link;
 
   // Step 2 — Insert into admin_users
   const { data: adminUser, error: insertError } = await supabaseAdmin
@@ -242,7 +248,6 @@ export const inviteAdminUser = asyncHandler(async (req, res) => {
 
     if (permError) {
       console.error("Permissions insert failed:", permError.message);
-      // Don't throw — user was created, permissions can be fixed later
     } else {
       insertedPermissions = perms;
     }
@@ -257,8 +262,8 @@ export const inviteAdminUser = asyncHandler(async (req, res) => {
   return res.status(201).json(
     new ApiResponse(
       201,
-      { ...adminUser, permissions: insertedPermissions },
-      "Admin user invited successfully. They will receive an email to set their password."
+      { ...adminUser, permissions: insertedPermissions, action_link: actionLink },
+      "Admin user invited successfully."
     )
   );
 });
@@ -597,7 +602,7 @@ export const deleteUserPermission = asyncHandler(async (req, res) => {
 });
 
 // ── POST /api/v1/admin/users/:id/reset-password ──────────────
-// Sends a Supabase password reset email to the user.
+// Generates a password reset link for the user.
 export const resetAdminUserPassword = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -611,17 +616,20 @@ export const resetAdminUserPassword = asyncHandler(async (req, res) => {
   if (fetchError || !adminUser)
     throw new ApiError(404, "Admin user not found");
 
-  // Send a real password reset email via Supabase Auth
-  const { error: resetError } = await supabaseAdmin.auth.resetPasswordForEmail(
-    adminUser.email,
-    {
+  // Generate a password reset link via Supabase Auth Admin
+  const { data: linkData, error: resetError } = await supabaseAdmin.auth.admin.generateLink({
+    type: "recovery",
+    email: adminUser.email,
+    options: {
       redirectTo: `${req.headers.origin || "http://localhost:3000"}/admin/login`,
-    }
-  );
+    },
+  });
 
   if (resetError) {
-    throw new ApiError(500, "Failed to send password reset email: " + resetError.message);
+    throw new ApiError(500, "Failed to generate password reset link: " + resetError.message);
   }
+
+  const actionLink = linkData.properties.action_link;
 
   await logAudit(req.user, "UPDATE", "admin_auth", id, {
     action: "password_reset_triggered",
@@ -632,8 +640,8 @@ export const resetAdminUserPassword = asyncHandler(async (req, res) => {
   return res.status(200).json(
     new ApiResponse(
       200,
-      { email: adminUser.email },
-      `Password reset email sent successfully to ${adminUser.email}`
+      { email: adminUser.email, action_link: actionLink },
+      "Password reset link generated successfully."
     )
   );
 });
