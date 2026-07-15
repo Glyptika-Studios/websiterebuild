@@ -186,13 +186,15 @@ export const inviteAdminUser = asyncHandler(async (req, res) => {
   // Step 1 — Generate Supabase Auth invite link
   // Using generateLink avoids the email pre-fetching consumption issue,
   // letting the superadmin display and open the link directly.
+  const frontendOrigin = req.headers.origin || process.env.CORS_ORIGIN || "http://localhost:3000";
+
   const { data: linkData, error: inviteError } =
     await supabaseAdmin.auth.admin.generateLink({
       type: "invite",
       email,
       options: {
         data: { name },
-        redirectTo: `${req.headers.origin || "http://localhost:3000"}/admin/login`,
+        redirectTo: `${frontendOrigin}/admin/login`,
       },
     });
 
@@ -616,12 +618,14 @@ export const resetAdminUserPassword = asyncHandler(async (req, res) => {
   if (fetchError || !adminUser)
     throw new ApiError(404, "Admin user not found");
 
+  const frontendOrigin = req.headers.origin || process.env.CORS_ORIGIN || "http://localhost:3000";
+
   // Generate a password reset link via Supabase Auth Admin
   const { data: linkData, error: resetError } = await supabaseAdmin.auth.admin.generateLink({
     type: "recovery",
     email: adminUser.email,
     options: {
-      redirectTo: `${req.headers.origin || "http://localhost:3000"}/admin/login`,
+      redirectTo: `${frontendOrigin}/admin/login`,
     },
   });
 

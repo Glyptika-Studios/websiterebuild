@@ -164,6 +164,15 @@ export default function PublicLayoutWrapper({ children }: PublicLayoutWrapperPro
   const pathname = usePathname();
   const isAdminRoute = pathname?.startsWith("/admin");
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash;
+      if (hash && (hash.includes("access_token=") || hash.includes("error="))) {
+        window.location.href = `/admin/login${hash}`;
+      }
+    }
+  }, []);
+
   if (isAdminRoute) {
     return <>{children}</>;
   }

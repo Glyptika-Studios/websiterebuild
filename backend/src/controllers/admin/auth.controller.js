@@ -1,4 +1,4 @@
-import { createAuthClient, supabaseAdmin } from "../../config/supabase.js";
+import { createAuthClient, createUserClient, supabaseAdmin } from "../../config/supabase.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
@@ -130,18 +130,18 @@ export const updateAdminPassword = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Token and password are required");
   }
 
-  const authClient = createAuthClient();
+  // Create temporary client using the user's access token
+  const authClient = createUserClient(token);
+  const { data, error: getUserError } = await authClient.auth.getUser();
 
-  const { error: setSessionError } = await authClient.auth.setSession({
-    access_token: token,
-    refresh_token: "",
-  });
-
-  if (setSessionError) {
-    throw new ApiError(400, "Invalid or expired confirmation link: " + setSessionError.message);
+  if (getUserError || !data?.user) {
+    throw new ApiError(400, "Invalid or expired confirmation link: " + (getUserError?.message || "Auth session missing"));
   }
 
-  const { data: updateData, error: updateError } = await authClient.auth.updateUser({
+  const userId = data.user.id;
+
+  // Use the admin service role client to directly update the user's password
+  const { data: updateData, error: updateError } = await supabaseAdmin.auth.admin.updateUserById(userId, {
     password,
   });
 
