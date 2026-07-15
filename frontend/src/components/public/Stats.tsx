@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, react-hooks/exhaustive-deps */
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { useEffect, useRef } from "react";
 
 interface StatItem {
   id: number;
@@ -40,12 +40,50 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export default function Stats() {
+  const [mounted, setMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<StatItem[]>(MOCK_STATS);
+
+  useEffect(() => {
+    setMounted(true);
+    fetch("/api/v1/pages/home")
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && json.data && json.data.content && Array.isArray(json.data.content.stats)) {
+          const dbStats = json.data.content.stats;
+          const mapped = dbStats.map((s: any, idx: number) => ({
+            id: idx + 1,
+            value: Number(s.value) || 0,
+            suffix: s.suffix || "",
+            label: s.label || ""
+          }));
+          if (mapped.length > 0) {
+            setStats(mapped);
+          }
+        }
+      })
+      .catch(err => console.error("Error loading stats content:", err))
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (!mounted || loading) {
+    return (
+      <section className="relative w-full py-16 bg-transparent">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="bg-white rounded-2xl border border-[#DCE3EC] h-[100px] animate-pulse" />
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="relative w-full py-16 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="bg-white rounded-2xl border border-[#DCE3EC] shadow-[0_12px_32px_rgba(15,23,42,0.05)] overflow-hidden">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 p-8 md:p-10">
-            {MOCK_STATS.map((stat, index) => (
+            {stats.map((stat, index) => (
               <motion.div
                 key={stat.id}
                 initial={{ opacity: 0, y: 16 }}

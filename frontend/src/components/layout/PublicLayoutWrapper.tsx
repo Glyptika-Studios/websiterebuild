@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, @next/next/no-img-element, react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { api } from "@/lib/api";
 import Header from "./Header";
 import Footer from "./Footer";
 import { Volume2, VolumeX } from "lucide-react";
@@ -10,96 +12,42 @@ import ScrollToTop from "@/components/shared/ScrollToTop";
 import ScrollProgressLine from "@/components/shared/ScrollProgressLine";
 
 // ============================================================
-// PROCEDURAL AUDIO SYNTHESIZER (WEB AUDIO API)
+// BACKGROUND MUSIC PLAYER (Configured in Admin Console)
 // ============================================================
-let audioCtx: AudioContext | null = null;
-let gainNode: GainNode | null = null;
-let osc1: OscillatorNode | null = null;
-let osc2: OscillatorNode | null = null;
-let lfo: OscillatorNode | null = null;
+let audioInstance: HTMLAudioElement | null = null;
 
-const startAmbientSynth = () => {
-  if (audioCtx) return;
+const startAmbientSynth = (musicSettings?: { track_url: string; volume: number }) => {
+  if (audioInstance) return;
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-    audioCtx = new AudioContextClass();
+    let trackUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+    let volume = 35;
 
-    gainNode = audioCtx.createGain();
-    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 1.5); // Subtle low-volume pad
+    if (musicSettings) {
+      if (musicSettings.track_url) trackUrl = musicSettings.track_url;
+      if (musicSettings.volume !== undefined) volume = musicSettings.volume;
+    }
 
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(130, audioCtx.currentTime);
-
-    // Osc 1 (triangle wave at A1 = 55Hz)
-    osc1 = audioCtx.createOscillator();
-    osc1.type = "triangle";
-    osc1.frequency.setValueAtTime(55, audioCtx.currentTime);
-
-    // Osc 2 (sine wave at E2 = 165Hz)
-    osc2 = audioCtx.createOscillator();
-    osc2.type = "sine";
-    osc2.frequency.setValueAtTime(165, audioCtx.currentTime);
-
-    // Modulation LFO
-    lfo = audioCtx.createOscillator();
-    lfo.frequency.value = 0.08;
-    const lfoGain = audioCtx.createGain();
-    lfoGain.gain.value = 35;
-
-    lfo.connect(lfoGain);
-    lfoGain.connect(filter.frequency);
-
-    osc1.connect(filter);
-    osc2.connect(filter);
-    filter.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-
-    osc1.start();
-    osc2.start();
-    lfo.start();
-  } catch {
-    // browser unsupported
+    audioInstance = new Audio(trackUrl);
+    audioInstance.volume = volume / 100;
+    audioInstance.loop = true;
+    audioInstance.play().catch((err) => {
+      console.warn("Autoplay was blocked by browser. Interaction required.", err);
+    });
+  } catch (err) {
+    console.error("Audio playback error:", err);
   }
 };
 
 const stopAmbientSynth = () => {
-  if (!audioCtx) return;
-
-  const localGain = gainNode;
-  const localCtx = audioCtx;
-  const localOsc1 = osc1;
-  const localOsc2 = osc2;
-  const localLfo = lfo;
-
-  if (localGain && localCtx) {
+  if (audioInstance) {
     try {
-      localGain.gain.setValueAtTime(localGain.gain.value, localCtx.currentTime);
-      localGain.gain.linearRampToValueAtTime(0, localCtx.currentTime + 0.4);
+      audioInstance.pause();
     } catch {
       // ignore
     }
+    audioInstance = null;
   }
-
-  setTimeout(() => {
-    try {
-      localOsc1?.stop();
-      localOsc2?.stop();
-      localLfo?.stop();
-      localCtx?.close();
-    } catch {
-      // ignore
-    }
-  }, 500);
-
-  audioCtx = null;
-  gainNode = null;
-  osc1 = null;
-  osc2 = null;
-  lfo = null;
 };
 
 
@@ -109,18 +57,31 @@ const stopAmbientSynth = () => {
 // ============================================================
 function AmbientAudioPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [musicSettings, setMusicSettings] = useState<{ track_url: string; volume: number } | null>(null);
 
   const togglePlayback = () => {
     if (isPlaying) {
       stopAmbientSynth();
       setIsPlaying(false);
     } else {
-      startAmbientSynth();
+      startAmbientSynth(musicSettings || undefined);
       setIsPlaying(true);
     }
   };
 
   useEffect(() => {
+    const fetchMusicSettings = async () => {
+      try {
+        const res = await api.get<any>("/api/v1/pages/home");
+        if (res.success && res.data?.content?.ambient_music) {
+          setMusicSettings(res.data.content.ambient_music);
+        }
+      } catch (err) {
+        console.error("Failed to fetch ambient music settings:", err);
+      }
+    };
+    fetchMusicSettings();
+
     return () => {
       stopAmbientSynth();
     };

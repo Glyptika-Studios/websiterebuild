@@ -26,10 +26,8 @@ import {
 interface HomeContent {
   hero_title: string;
   hero_subtitle: string;
-  stats_projects: string;
-  stats_uptime: string;
-  stats_channels: string;
-  custom_sections: { id: string; title: string; body: string; image_url?: string }[];
+  stats: { value: number; suffix: string; label: string }[];
+  carousel_items: { media_id: string; title: string; description: string }[];
 }
 
 interface XplorContent {
@@ -37,6 +35,9 @@ interface XplorContent {
   core_heading: string;
   core_desc: string;
   modules: { name: string; desc: string; features: string[] }[];
+  showcase_heading: string;
+  showcase_description: string;
+  showcase_items: { media_id: string; title: string; description: string }[];
 }
 
 interface ImsContent {
@@ -44,6 +45,9 @@ interface ImsContent {
   hero_desc: string;
   pricing: { tier: string; price: string; cycle: string; features: string[] }[];
   faqs: { question: string; answer: string }[];
+  showcase_heading: string;
+  showcase_description: string;
+  showcase_items: { media_id: string; title: string; description: string }[];
 }
 
 interface ContactSettings {
@@ -120,13 +124,23 @@ export default function CMSPageEditor() {
 
   // Home State
   const [homeData, setHomeData] = useState<HomeContent>({
-    hero_title: "Bleeding-Edge Telemetry Infrastructure",
-    hero_subtitle: "Constructing digital SaaS portals, enterprise networks, and automated telemetry systems.",
-    stats_projects: "150+",
-    stats_uptime: "99.99%",
-    stats_channels: "10M+",
-    custom_sections: [
-      { id: "1", title: "Robust Security Standards", body: "Every telemetry link utilizes end-to-end pgp keys and strict relational schema isolation rules to safeguard client feeds." }
+    hero_title: "Building the Technology of Tomorrow",
+    hero_subtitle: "One unified platform for 3D, virtual reality, AI, and automation — built for teams that refuse to settle for ordinary.",
+    stats: [
+      { value: 10, suffix: "+", label: "Projects Delivered" },
+      { value: 4, suffix: "+", label: "Defense Projects" },
+      { value: 25, suffix: "+", label: "VR Environments" },
+      { value: 3, suffix: "", label: "Proprietary Softwares" }
+    ],
+    carousel_items: [
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" }
     ]
   });
 
@@ -138,6 +152,13 @@ export default function CMSPageEditor() {
     modules: [
       { name: "NEO", desc: "Edge buffer pipeline", features: ["1M ops/sec buffering", "Encrypted cache", "Multi-region sync"] },
       { name: "ADORNO", desc: "Statistical filter network", features: ["Real-time aggregators", "Custom alert thresholds", "Influx integrations"] }
+    ],
+    showcase_heading: "",
+    showcase_description: "",
+    showcase_items: [
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" }
     ]
   });
 
@@ -151,6 +172,13 @@ export default function CMSPageEditor() {
     ],
     faqs: [
       { question: "Is IMS self-hostable?", answer: "Yes, IMS can be deployed as an isolated Docker package on private clusters." }
+    ],
+    showcase_heading: "",
+    showcase_description: "",
+    showcase_items: [
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" },
+      { media_id: "", title: "", description: "" }
     ]
   });
 
@@ -167,21 +195,66 @@ export default function CMSPageEditor() {
     social_discord: "https://discord.com"
   });
 
-  const fetchHomeAndContactData = async () => {
+  const [videoOptions, setVideoOptions] = useState<any[]>([]);
+  const [loadingVideos, setLoadingVideos] = useState(false);
+  const [imageOptions, setImageOptions] = useState<any[]>([]);
+  const [loadingImages, setLoadingImages] = useState(false);
+
+  const fetchVideoOptions = async () => {
+    setLoadingVideos(true);
+    try {
+      const res = await api.get<any>("/api/v1/admin/media?media_type=video&limit=100");
+      if (res.success && res.data) {
+        setVideoOptions(res.data.items || res.data || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch videos:", err);
+    } finally {
+      setLoadingVideos(false);
+    }
+  };
+
+  const fetchImageOptions = async () => {
+    setLoadingImages(true);
+    try {
+      const res = await api.get<any>("/api/v1/admin/media?media_type=image&limit=100");
+      if (res.success && res.data) {
+        setImageOptions(res.data.items || res.data || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch images:", err);
+    } finally {
+      setLoadingImages(false);
+    }
+  };
+
+  const fetchPageData = async () => {
     try {
       // 1. Fetch home content
       const homeRes = await api.get<any>("/api/v1/pages/home");
       if (homeRes.success && homeRes.data) {
         const dbContent = homeRes.data.content || {};
-        setHomeData(prev => ({
-          ...prev,
-          hero_title: dbContent.hero_title || prev.hero_title,
-          hero_subtitle: dbContent.hero_subtitle || prev.hero_subtitle,
-          stats_projects: dbContent.stats_projects || prev.stats_projects,
-          stats_uptime: dbContent.stats_uptime || prev.stats_uptime,
-          stats_channels: dbContent.stats_channels || prev.stats_channels,
-          custom_sections: dbContent.custom_sections || prev.custom_sections
-        }));
+        
+        // Handle 4 stats
+        const dbStats = dbContent.stats || [];
+        const stats = [...dbStats];
+        while (stats.length < 4) {
+          stats.push({ value: 0, suffix: "", label: "" });
+        }
+
+        // Handle carousel items
+        const dbCarousel = dbContent.carousel_items || [];
+        const carousel_items = [...dbCarousel];
+        while (carousel_items.length < 8) {
+          carousel_items.push({ media_id: "", title: "", description: "" });
+        }
+
+        setHomeData({
+          hero_title: dbContent.hero_title || "Building the Technology of Tomorrow",
+          hero_subtitle: dbContent.hero_subtitle || "One unified platform for 3D, virtual reality, AI, and automation — built for teams that refuse to settle for ordinary.",
+          stats: stats,
+          carousel_items: carousel_items
+        });
 
         if (dbContent.contact) {
           setContactData(prev => ({
@@ -210,20 +283,57 @@ export default function CMSPageEditor() {
           social_discord: discord
         }));
       }
+
+      // 3. Fetch Xplor page content
+      const xplorRes = await api.get<any>("/api/v1/pages/xplor");
+      if (xplorRes.success && xplorRes.data) {
+        const dbContent = xplorRes.data.content || {};
+        const rawItems = dbContent.showcase_items || [];
+        const items = [...rawItems];
+        while (items.length < 3) {
+          items.push({ media_id: "", title: "", description: "" });
+        }
+        setXplorData(prev => ({
+          ...prev,
+          hero_video_url: dbContent.hero_video_url || prev.hero_video_url,
+          core_heading: dbContent.core_heading || prev.core_heading,
+          core_desc: dbContent.core_desc || prev.core_desc,
+          modules: dbContent.modules || prev.modules,
+          showcase_heading: dbContent.showcase_heading || "See XPLOR in Action",
+          showcase_description: dbContent.showcase_description || "Explore high-fidelity interactive spaces built automatically using the XPLOR synthesis pipeline.",
+          showcase_items: items
+        }));
+      }
+
+      // 4. Fetch IMS page content
+      const imsRes = await api.get<any>("/api/v1/pages/ims");
+      if (imsRes.success && imsRes.data) {
+        const dbContent = imsRes.data.content || {};
+        const rawItems = dbContent.showcase_items || [];
+        const items = [...rawItems];
+        while (items.length < 3) {
+          items.push({ media_id: "", title: "", description: "" });
+        }
+        setImsData(prev => ({
+          ...prev,
+          hero_title: dbContent.hero_title || prev.hero_title,
+          hero_desc: dbContent.hero_desc || prev.hero_desc,
+          pricing: dbContent.pricing || prev.pricing,
+          faqs: dbContent.faqs || prev.faqs,
+          showcase_heading: dbContent.showcase_heading || "See IMS in Action",
+          showcase_description: dbContent.showcase_description || "Explore high-fidelity interactive screens and modules built automatically using the IMS management pipeline.",
+          showcase_items: items
+        }));
+      }
     } catch (err) {
-      console.error("Failed to load page config:", err);
+      console.error("Failed to load page configs:", err);
     }
   };
 
-  // Load from Storage and DB on mount
   useEffect(() => {
-    const xplor = localStorage.getItem("glyptika_cms_xplor");
-    const ims = localStorage.getItem("glyptika_cms_ims");
-
-    if (xplor) setXplorData(JSON.parse(xplor));
-    if (ims) setImsData(JSON.parse(ims));
-
-    fetchHomeAndContactData();
+    fetchVideoOptions();
+    fetchImageOptions();
+    fetchPageData();
   }, []);
 
   const triggerSaveSuccess = () => {
@@ -244,10 +354,8 @@ export default function CMSPageEditor() {
         ...currentContent,
         hero_title: homeData.hero_title,
         hero_subtitle: homeData.hero_subtitle,
-        stats_projects: homeData.stats_projects,
-        stats_uptime: homeData.stats_uptime,
-        stats_channels: homeData.stats_channels,
-        custom_sections: homeData.custom_sections
+        stats: homeData.stats,
+        carousel_items: homeData.carousel_items
       };
 
       await api.put("/api/v1/admin/pages/home", {
@@ -269,6 +377,15 @@ export default function CMSPageEditor() {
     setSaving(true);
     setFormError(null);
     try {
+      // Save Xplor page content in DB
+      await api.put("/api/v1/admin/pages/xplor", {
+        content: {
+          showcase_heading: xplorData.showcase_heading,
+          showcase_description: xplorData.showcase_description,
+          showcase_items: xplorData.showcase_items
+        }
+      });
+
       localStorage.setItem("glyptika_cms_xplor", JSON.stringify(xplorData));
 
       // Update modules and their pricing tiers
@@ -306,6 +423,15 @@ export default function CMSPageEditor() {
     setSaving(true);
     setFormError(null);
     try {
+      // Save IMS page content in DB
+      await api.put("/api/v1/admin/pages/ims", {
+        content: {
+          showcase_heading: imsData.showcase_heading,
+          showcase_description: imsData.showcase_description,
+          showcase_items: imsData.showcase_items
+        }
+      });
+
       localStorage.setItem("glyptika_cms_ims", JSON.stringify(imsData));
 
       // Update IMS project record in database
@@ -377,14 +503,6 @@ export default function CMSPageEditor() {
   };
 
   // Helper additions/removals
-  const addHomeCustomSection = () => {
-    const item = { id: `sec-${Date.now()}`, title: "New Section Title", body: "Section details body description..." };
-    setHomeData({ ...homeData, custom_sections: [...homeData.custom_sections, item] });
-  };
-
-  const removeHomeCustomSection = (id: string) => {
-    setHomeData({ ...homeData, custom_sections: homeData.custom_sections.filter((s) => s.id !== id) });
-  };
 
   const addImsFaq = () => {
     const item = { question: "New Question?", answer: "Answer description." };
@@ -492,98 +610,152 @@ export default function CMSPageEditor() {
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-black uppercase tracking-wider text-slate-400">Stats: Projects</label>
-                  <input
-                    type="text"
-                    value={homeData.stats_projects}
-                    onChange={(e) => setHomeData({ ...homeData, stats_projects: e.target.value })}
-                    disabled={!canWrite}
-                    className="w-full px-4 py-3 bg-slate-950/40 border border-white/5 rounded-2xl text-xs text-white focus:outline-none"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-black uppercase tracking-wider text-slate-400">Stats: System Uptime</label>
-                  <input
-                    type="text"
-                    value={homeData.stats_uptime}
-                    onChange={(e) => setHomeData({ ...homeData, stats_uptime: e.target.value })}
-                    disabled={!canWrite}
-                    className="w-full px-4 py-3 bg-slate-950/40 border border-white/5 rounded-2xl text-xs text-white focus:outline-none"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-black uppercase tracking-wider text-slate-400">Stats: Telemetry Streams</label>
-                  <input
-                    type="text"
-                    value={homeData.stats_channels}
-                    onChange={(e) => setHomeData({ ...homeData, stats_channels: e.target.value })}
-                    disabled={!canWrite}
-                    className="w-full px-4 py-3 bg-slate-950/40 border border-white/5 rounded-2xl text-xs text-white focus:outline-none"
-                  />
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[0, 1, 2, 3].map((idx) => {
+                  const stat = homeData.stats?.[idx] || { value: 0, suffix: "", label: "" };
+                  return (
+                    <div key={idx} className="p-4 bg-slate-950/40 border border-white/5 rounded-2xl space-y-3">
+                      <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest block border-b border-white/5 pb-1">Stat #{idx + 1}</span>
+                      
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Value (Number)</label>
+                        <input
+                          type="number"
+                          value={stat.value}
+                          onChange={(e) => {
+                            const updated = [...(homeData.stats || [])];
+                            while (updated.length <= idx) {
+                              updated.push({ value: 0, suffix: "", label: "" });
+                            }
+                            updated[idx] = { ...updated[idx], value: Number(e.target.value) };
+                            setHomeData({ ...homeData, stats: updated });
+                          }}
+                          disabled={!canWrite}
+                          className="w-full px-2.5 py-1.5 bg-slate-900 border border-white/5 rounded-xl text-[10px] text-white focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Suffix (e.g. +, %)</label>
+                        <input
+                          type="text"
+                          value={stat.suffix || ""}
+                          onChange={(e) => {
+                            const updated = [...(homeData.stats || [])];
+                            while (updated.length <= idx) {
+                              updated.push({ value: 0, suffix: "", label: "" });
+                            }
+                            updated[idx] = { ...updated[idx], suffix: e.target.value };
+                            setHomeData({ ...homeData, stats: updated });
+                          }}
+                          disabled={!canWrite}
+                          className="w-full px-2.5 py-1.5 bg-slate-900 border border-white/5 rounded-xl text-[10px] text-white focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Label</label>
+                        <input
+                          type="text"
+                          value={stat.label || ""}
+                          onChange={(e) => {
+                            const updated = [...(homeData.stats || [])];
+                            while (updated.length <= idx) {
+                              updated.push({ value: 0, suffix: "", label: "" });
+                            }
+                            updated[idx] = { ...updated[idx], label: e.target.value };
+                            setHomeData({ ...homeData, stats: updated });
+                          }}
+                          disabled={!canWrite}
+                          className="w-full px-2.5 py-1.5 bg-slate-900 border border-white/5 rounded-xl text-[10px] text-white focus:outline-none"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Custom Sections Editor */}
+            {/* Media Carousel Editor Section */}
             <div className="space-y-4 pt-6 border-t border-white/5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-450">Homepage Custom freeform sections</span>
-                {canWrite && (
-                  <button
-                    type="button"
-                    onClick={addHomeCustomSection}
-                    className="px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-bold uppercase border border-white/5 flex items-center gap-1"
-                  >
-                    <Plus className="w-3 h-3" /> Add Section
-                  </button>
-                )}
+              <div>
+                <h4 className="text-sm font-black text-white uppercase tracking-wider">Homepage Media Carousel</h4>
+                <p className="text-xs text-slate-500 font-bold mt-0.5">Customize the images, titles, and descriptions shown in the sliding carousel on the homepage.</p>
               </div>
 
-              <div className="space-y-4">
-                {homeData.custom_sections.map((section, index) => (
-                  <div key={section.id} className="p-4 bg-slate-950/40 border border-white/5 rounded-3xl space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Section {index + 1}</span>
-                      {canWrite && (
-                        <button
-                          type="button"
-                          onClick={() => removeHomeCustomSection(section.id)}
-                          className="text-red-400 hover:text-red-300 p-1 hover:bg-red-500/10 rounded-lg transition-all"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[0, 1, 2, 3, 4, 5, 6, 7].map((idx) => {
+                  const item = homeData.carousel_items?.[idx] || { media_id: "", title: "", description: "" };
+                  return (
+                    <div key={idx} className="p-4 bg-slate-950/40 border border-white/5 rounded-2xl space-y-3">
+                      <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest block border-b border-white/5 pb-1">Carousel Item #{idx + 1}</span>
+                      
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Select Photo</label>
+                        {loadingImages ? (
+                          <div className="text-[10px] text-slate-500">Loading photos list...</div>
+                        ) : (
+                          <select
+                            value={item.media_id || ""}
+                            onChange={(e) => {
+                              const updatedItems = [...(homeData.carousel_items || [])];
+                              while (updatedItems.length <= idx) {
+                                updatedItems.push({ media_id: "", title: "", description: "" });
+                              }
+                              updatedItems[idx] = { ...updatedItems[idx], media_id: e.target.value };
+                              setHomeData({ ...homeData, carousel_items: updatedItems });
+                            }}
+                            disabled={!canWrite}
+                            className="w-full px-2.5 py-1.5 bg-slate-900 border border-white/5 rounded-xl text-[10px] text-slate-350 focus:outline-none [&>option]:bg-[#0a1122]"
+                          >
+                            <option value="">-- No Photo Selected --</option>
+                            {imageOptions.map((opt) => (
+                              <option key={opt.id} value={opt.id}>
+                                {opt.file_name}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Item Title</label>
+                        <input
+                          type="text"
+                          value={item.title || ""}
+                          onChange={(e) => {
+                            const updatedItems = [...(homeData.carousel_items || [])];
+                            while (updatedItems.length <= idx) {
+                              updatedItems.push({ media_id: "", title: "", description: "" });
+                            }
+                            updatedItems[idx] = { ...updatedItems[idx], title: e.target.value };
+                            setHomeData({ ...homeData, carousel_items: updatedItems });
+                          }}
+                          disabled={!canWrite}
+                          className="w-full px-2.5 py-1.5 bg-slate-900 border border-white/5 rounded-xl text-[10px] text-white focus:outline-none focus:border-blue-500/25"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Item Short Description</label>
+                        <textarea
+                          rows={2}
+                          value={item.description || ""}
+                          onChange={(e) => {
+                            const updatedItems = [...(homeData.carousel_items || [])];
+                            while (updatedItems.length <= idx) {
+                              updatedItems.push({ media_id: "", title: "", description: "" });
+                            }
+                            updatedItems[idx] = { ...updatedItems[idx], description: e.target.value };
+                            setHomeData({ ...homeData, carousel_items: updatedItems });
+                          }}
+                          disabled={!canWrite}
+                          className="w-full px-2.5 py-1.5 bg-slate-900 border border-white/5 rounded-xl text-[10px] text-white focus:outline-none resize-none focus:border-blue-500/25"
+                        />
+                      </div>
                     </div>
-                    <div className="space-y-3">
-                      <input
-                        type="text"
-                        placeholder="Section Title"
-                        value={section.title}
-                        onChange={(e) => {
-                          const sections = [...homeData.custom_sections];
-                          sections[index].title = e.target.value;
-                          setHomeData({ ...homeData, custom_sections: sections });
-                        }}
-                        disabled={!canWrite}
-                        className="w-full px-3 py-2 bg-slate-950 border border-white/5 rounded-xl text-xs text-white focus:outline-none"
-                      />
-                      <textarea
-                        rows={2}
-                        placeholder="Section text content..."
-                        value={section.body}
-                        onChange={(e) => {
-                          const sections = [...homeData.custom_sections];
-                          sections[index].body = e.target.value;
-                          setHomeData({ ...homeData, custom_sections: sections });
-                        }}
-                        disabled={!canWrite}
-                        className="w-full px-3 py-2 bg-slate-950 border border-white/5 rounded-xl text-xs text-white focus:outline-none resize-none"
-                      />
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -858,6 +1030,112 @@ export default function CMSPageEditor() {
               )}
             </div>
 
+            {/* Visual Showcase Config */}
+            <div className="space-y-6 pt-6 border-t border-white/5">
+              <div>
+                <h4 className="text-sm font-black text-white uppercase tracking-wider">Showcase Media Section</h4>
+                <p className="text-xs text-slate-500 font-bold mt-0.5">Customize the heading, description, and the 3 display videos in the showcase section.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Showcase Main Heading</label>
+                  <input
+                    type="text"
+                    value={xplorData.showcase_heading || ""}
+                    onChange={(e) => setXplorData({ ...xplorData, showcase_heading: e.target.value })}
+                    disabled={!canWrite}
+                    className="w-full px-4 py-3 bg-slate-950/40 border border-white/5 rounded-2xl text-xs text-white focus:outline-none focus:border-blue-500/25"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Showcase Description</label>
+                  <textarea
+                    rows={1}
+                    value={xplorData.showcase_description || ""}
+                    onChange={(e) => setXplorData({ ...xplorData, showcase_description: e.target.value })}
+                    disabled={!canWrite}
+                    className="w-full px-4 py-2.5 bg-slate-950/40 border border-white/5 rounded-2xl text-xs text-white focus:outline-none resize-none focus:border-blue-500/25"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[0, 1, 2].map((idx) => {
+                  const item = xplorData.showcase_items?.[idx] || { media_id: "", title: "", description: "" };
+                  return (
+                    <div key={idx} className="p-4 bg-slate-950/40 border border-white/5 rounded-3xl space-y-3">
+                      <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest block border-b border-white/5 pb-1">Video Showcase #{idx + 1}</span>
+                      
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Select Video</label>
+                        {loadingVideos ? (
+                          <div className="text-[10px] text-slate-500">Loading videos list...</div>
+                        ) : (
+                          <select
+                            value={item.media_id || ""}
+                            onChange={(e) => {
+                              const updatedItems = [...(xplorData.showcase_items || [])];
+                              while (updatedItems.length <= idx) {
+                                updatedItems.push({ media_id: "", title: "", description: "" });
+                              }
+                              updatedItems[idx] = { ...updatedItems[idx], media_id: e.target.value };
+                              setXplorData({ ...xplorData, showcase_items: updatedItems });
+                            }}
+                            disabled={!canWrite}
+                            className="w-full px-2.5 py-1.5 bg-slate-900 border border-white/5 rounded-xl text-[10px] text-slate-350 focus:outline-none [&>option]:bg-[#0a1122]"
+                          >
+                            <option value="">-- No Video Selected --</option>
+                            {videoOptions.map((opt) => (
+                              <option key={opt.id} value={opt.id}>
+                                {opt.file_name}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Item Title</label>
+                        <input
+                          type="text"
+                          value={item.title || ""}
+                          onChange={(e) => {
+                            const updatedItems = [...(xplorData.showcase_items || [])];
+                            while (updatedItems.length <= idx) {
+                              updatedItems.push({ media_id: "", title: "", description: "" });
+                            }
+                            updatedItems[idx] = { ...updatedItems[idx], title: e.target.value };
+                            setXplorData({ ...xplorData, showcase_items: updatedItems });
+                          }}
+                          disabled={!canWrite}
+                          className="w-full px-2.5 py-1.5 bg-slate-900/60 border border-white/5 rounded-xl text-[10px] text-white focus:outline-none focus:border-blue-500/25"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Item Description</label>
+                        <textarea
+                          rows={2}
+                          value={item.description || ""}
+                          onChange={(e) => {
+                            const updatedItems = [...(xplorData.showcase_items || [])];
+                            while (updatedItems.length <= idx) {
+                              updatedItems.push({ media_id: "", title: "", description: "" });
+                            }
+                            updatedItems[idx] = { ...updatedItems[idx], description: e.target.value };
+                            setXplorData({ ...xplorData, showcase_items: updatedItems });
+                          }}
+                          disabled={!canWrite}
+                          className="w-full px-2.5 py-1.5 bg-slate-900/60 border border-white/5 rounded-xl text-[10px] text-white focus:outline-none resize-none focus:border-blue-500/25"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             {canWrite && (
               <button
                 type="submit"
@@ -909,6 +1187,112 @@ export default function CMSPageEditor() {
                   </div>
                 </>
               )}
+            </div>
+
+            {/* Visual Showcase Config */}
+            <div className="space-y-6 pt-6 border-t border-white/5">
+              <div>
+                <h4 className="text-sm font-black text-white uppercase tracking-wider">Showcase Media Section</h4>
+                <p className="text-xs text-slate-500 font-bold mt-0.5">Customize the heading, description, and the 3 display videos in the showcase section.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Showcase Main Heading</label>
+                  <input
+                    type="text"
+                    value={imsData.showcase_heading || ""}
+                    onChange={(e) => setImsData({ ...imsData, showcase_heading: e.target.value })}
+                    disabled={!canWrite}
+                    className="w-full px-4 py-3 bg-slate-950/40 border border-white/5 rounded-2xl text-xs text-white focus:outline-none focus:border-blue-500/25"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Showcase Description</label>
+                  <textarea
+                    rows={1}
+                    value={imsData.showcase_description || ""}
+                    onChange={(e) => setImsData({ ...imsData, showcase_description: e.target.value })}
+                    disabled={!canWrite}
+                    className="w-full px-4 py-2.5 bg-slate-950/40 border border-white/5 rounded-2xl text-xs text-white focus:outline-none resize-none focus:border-blue-500/25"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[0, 1, 2].map((idx) => {
+                  const item = imsData.showcase_items?.[idx] || { media_id: "", title: "", description: "" };
+                  return (
+                    <div key={idx} className="p-4 bg-slate-950/40 border border-white/5 rounded-3xl space-y-3">
+                      <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest block border-b border-white/5 pb-1">Video Showcase #{idx + 1}</span>
+                      
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Select Video</label>
+                        {loadingVideos ? (
+                          <div className="text-[10px] text-slate-500">Loading videos list...</div>
+                        ) : (
+                          <select
+                            value={item.media_id || ""}
+                            onChange={(e) => {
+                              const updatedItems = [...(imsData.showcase_items || [])];
+                              while (updatedItems.length <= idx) {
+                                updatedItems.push({ media_id: "", title: "", description: "" });
+                              }
+                              updatedItems[idx] = { ...updatedItems[idx], media_id: e.target.value };
+                              setImsData({ ...imsData, showcase_items: updatedItems });
+                            }}
+                            disabled={!canWrite}
+                            className="w-full px-2.5 py-1.5 bg-slate-900 border border-white/5 rounded-xl text-[10px] text-slate-355 focus:outline-none [&>option]:bg-[#0a1122]"
+                          >
+                            <option value="">-- No Video Selected --</option>
+                            {videoOptions.map((opt) => (
+                              <option key={opt.id} value={opt.id}>
+                                {opt.file_name}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Item Title</label>
+                        <input
+                          type="text"
+                          value={item.title || ""}
+                          onChange={(e) => {
+                            const updatedItems = [...(imsData.showcase_items || [])];
+                            while (updatedItems.length <= idx) {
+                              updatedItems.push({ media_id: "", title: "", description: "" });
+                            }
+                            updatedItems[idx] = { ...updatedItems[idx], title: e.target.value };
+                            setImsData({ ...imsData, showcase_items: updatedItems });
+                          }}
+                          disabled={!canWrite}
+                          className="w-full px-2.5 py-1.5 bg-slate-900/60 border border-white/5 rounded-xl text-[10px] text-white focus:outline-none focus:border-blue-500/25"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-slate-500">Item Description</label>
+                        <textarea
+                          rows={2}
+                          value={item.description || ""}
+                          onChange={(e) => {
+                            const updatedItems = [...(imsData.showcase_items || [])];
+                            while (updatedItems.length <= idx) {
+                              updatedItems.push({ media_id: "", title: "", description: "" });
+                            }
+                            updatedItems[idx] = { ...updatedItems[idx], description: e.target.value };
+                            setImsData({ ...imsData, showcase_items: updatedItems });
+                          }}
+                          disabled={!canWrite}
+                          className="w-full px-2.5 py-1.5 bg-slate-900/60 border border-white/5 rounded-xl text-[10px] text-white focus:outline-none resize-none focus:border-blue-500/25"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {canWrite && (

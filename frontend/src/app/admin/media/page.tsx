@@ -398,7 +398,7 @@ export default function MediaLibraryManager() {
                       <Music className="w-7 h-7 text-slate-600" />
                     )}
                     {/* Type badge */}
-                    <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase tracking-wider bg-black/60 text-slate-300 border border-white/10">
+                    <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase tracking-wider bg-blue-600 text-white-force border border-blue-500/20 shadow-sm">
                       {file.media_type}
                     </span>
                   </div>
@@ -412,13 +412,13 @@ export default function MediaLibraryManager() {
                   </div>
 
                   {/* ID preview + Copy */}
-                  <div className="flex items-center gap-1.5 bg-slate-900 border border-white/5 rounded-lg px-2 py-1.5">
-                    <span className="text-[9px] font-mono text-slate-500 truncate flex-1" title={file.id}>
+                  <div className="flex items-center gap-1.5 bg-blue-600 border border-blue-500/20 rounded-lg px-2 py-1.5 text-white-force">
+                    <span className="text-[9px] font-mono text-white-force truncate flex-1" title={file.id}>
                       {file.id}
                     </span>
                     <button
                       onClick={() => handleCopyId(file.id)}
-                      className="shrink-0 text-slate-400 hover:text-white transition-colors"
+                      className="shrink-0 text-blue-100 hover:text-white-force transition-colors"
                       title="Copy Media ID"
                     >
                       {copiedId === file.id ? (

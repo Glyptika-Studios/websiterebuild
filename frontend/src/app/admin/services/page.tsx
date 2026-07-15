@@ -352,14 +352,14 @@ export default function ServicesManager() {
                         <>
                           <button
                             onClick={() => handleOpenEdit(svc)}
-                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-blue-500/25 border border-white/5 text-slate-400 hover:text-blue-400 transition-all duration-200"
+                            className="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 transition-all duration-200"
                             title="Edit Service"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(svc.id)}
-                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-500/25 border border-white/5 text-slate-400 hover:text-red-400 transition-all duration-200"
+                            className="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 transition-all duration-200"
                             title="Delete Service"
                           >
                             <Trash2 className="w-4 h-4" />

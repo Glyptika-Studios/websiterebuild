@@ -172,9 +172,9 @@ export default function DashboardOverview() {
       </div>
 
       {/* Main Content Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8">
         {/* Activity & Logs */}
-        <div className="lg:col-span-2 p-6 rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-md shadow-xl flex flex-col">
+        <div className="p-6 rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-md shadow-xl flex flex-col">
           <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl">
@@ -227,73 +227,6 @@ export default function DashboardOverview() {
                 No recent activity recorded.
               </p>
             )}
-          </div>
-        </div>
-
-        {/* Integration Statuses */}
-        <div className="p-6 rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-md shadow-xl flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 border-b border-white/5 pb-4 mb-6">
-              <div className="p-2 bg-teal-500/10 border border-teal-500/20 text-teal-400 rounded-xl">
-                <Database className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-black text-white tracking-wide">System Integration</h3>
-                <p className="text-[10px] text-slate-500">Service API nodes status</p>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              {/* Database */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Database className="w-4 h-4 text-slate-400" />
-                  <div>
-                    <h4 className="text-xs font-black text-white">PostgreSQL Database</h4>
-                    <p className="text-[9px] text-slate-500">Supabase Engine</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold bg-emerald-500/5 px-2.5 py-1 rounded-full border border-emerald-500/15">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  <span>Linked</span>
-                </div>
-              </div>
-
-              {/* Email Client */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-slate-400" />
-                  <div>
-                    <h4 className="text-xs font-black text-white">Resend SMTP API</h4>
-                    <p className="text-[9px] text-slate-500">Proposal submissions</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold bg-emerald-500/5 px-2.5 py-1 rounded-full border border-emerald-500/15">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  <span>Ready</span>
-                </div>
-              </div>
-
-              {/* CDN Node */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Cloud className="w-4 h-4 text-slate-400" />
-                  <div>
-                    <h4 className="text-xs font-black text-white">Vercel Serverless Edge</h4>
-                    <p className="text-[9px] text-slate-500">Hosting and routing</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold bg-emerald-500/5 px-2.5 py-1 rounded-full border border-emerald-500/15">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  <span>Healthy</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-white/5 text-[10px] text-slate-500 font-bold flex items-center justify-between">
-            <span>NextJS Framework v15.5.19</span>
-            <span>Uptime: 99.99%</span>
           </div>
         </div>
       </div>

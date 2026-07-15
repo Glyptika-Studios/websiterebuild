@@ -11,7 +11,7 @@ export const getProducts = asyncHandler(async (req, res) => {
   let query = supabasePublic
     .from("products")
     .select(
-      "id, title, overview, description, category_id, cover_id, featured, status, published_at, category:categories(id, label, slug), cover:media_files(id, public_url), entity_media(id, display_order, media:media_files(id, public_url)), product_tags(tag:tags(id, label, slug))"
+      "id, title, overview, description, category_id, cover_id, featured, status, published_at, category:categories(id, label, slug), cover:media_files(id, public_url), entity_media(id, display_order, media:media_files(id, public_url, media_type)), product_tags(tag:tags(id, label, slug))"
     )
     .eq("status", "published")
     .order("featured", { ascending: false })
@@ -33,7 +33,7 @@ export const getProductById = asyncHandler(async (req, res) => {
   const { data, error } = await supabasePublic
     .from("products")
     .select(
-      "id, title, overview, description, category_id, cover_id, featured, status, published_at, category:categories(id, label, slug), cover:media_files(id, public_url), entity_media(id, display_order, media:media_files(id, public_url)), product_tags(tag:tags(id, label, slug)), product_modules(id, title, description, display_order, active, module_pricing(module_id, tier, price_amount, currency, billing_cycle, details))"
+      "id, title, overview, description, category_id, cover_id, featured, status, published_at, category:categories(id, label, slug), cover:media_files(id, public_url), entity_media(id, display_order, media:media_files(id, public_url, media_type)), product_tags(tag:tags(id, label, slug)), product_modules(id, title, description, display_order, active, module_pricing(module_id, tier, price_amount, currency, billing_cycle, details))"
     )
     .eq("id", req.params.id)
     .eq("status", "published")

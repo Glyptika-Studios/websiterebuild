@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, @next/next/no-img-element, react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
@@ -16,9 +17,20 @@ import {
   Sliders, 
   ChevronRight, 
   Hourglass,
+  Play,
   LucideIcon
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+
+interface MediaItem {
+  id: string;
+  title: string;
+  category: string;
+  url: string;
+  mediaType: "image" | "video";
+  description: string;
+}
 
 // ==========================================
 // INTERACTIVE MOCK DATA TYPES
@@ -149,6 +161,112 @@ export default function ImsPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [projectTitle, setProjectTitle] = useState<string>("IMS Portal: Next-Gen Logistics");
   const [projectDesc, setProjectDesc] = useState<string>("Automated logistics management custom-engineered for defense institutions and secure enterprises.");
+  const [showcaseHeading, setShowcaseHeading] = useState<string>("See IMS in Action");
+  const [showcaseDesc, setShowcaseDesc] = useState<string>("Explore high-fidelity interactive screens and modules built automatically using the IMS management pipeline.");
+
+  const [gallery, setGallery] = useState<MediaItem[]>([]);
+  const [activeMedia, setActiveMedia] = useState<MediaItem | null>(null);
+
+  useEffect(() => {
+    const fetchImsGallery = async () => {
+      try {
+        // Try pageContent API first
+        const pageRes = await fetch("/api/v1/pages/ims");
+        const pageJson = await pageRes.json();
+        
+        if (pageJson.success && pageJson.data && pageJson.data.content) {
+          const dbContent = pageJson.data.content;
+          setShowcaseHeading(dbContent.showcase_heading || "See IMS in Action");
+          setShowcaseDesc(dbContent.showcase_description || "Explore high-fidelity interactive screens and modules built automatically using the IMS management pipeline.");
+          
+          const dbShowcase = dbContent.showcase_items || [];
+          const mappedMedia: MediaItem[] = dbShowcase
+            .filter((item: any) => item.public_url)
+            .map((item: any, idx: number) => ({
+              id: item.media_id || `showcase-${idx}`,
+              title: item.title || `Showcase Asset #${idx + 1}`,
+              category: "",
+              url: item.public_url,
+              mediaType: item.media_type || "video",
+              description: item.description || ""
+            }));
+
+          if (mappedMedia.length > 0) {
+            setGallery(mappedMedia);
+            setActiveMedia(mappedMedia[0]);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching IMS page content showcase:", err);
+      }
+
+      try {
+        const res = await fetch("/api/v1/products/22222222-0000-0000-0000-000000000003");
+        const json = await res.json();
+        
+        if (json.success && json.data) {
+          const dbMedia = json.data.entity_media || [];
+          const mappedMedia: MediaItem[] = dbMedia.map((em: any, idx: number) => {
+            const m = em.media || {};
+            const publicUrl = m.public_url || "";
+            let detectedType: "image" | "video" = "image";
+            if (m.media_type === "video" || publicUrl.match(/\.(mp4|webm|ogg|mov)($|\?)/i)) {
+              detectedType = "video";
+            }
+            return {
+              id: em.id,
+              title: m.file_name ? m.file_name.replace(/\.[^/.]+$/, "") : `Showcase Asset #${idx + 1}`,
+              category: "",
+              url: publicUrl || "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&auto=format&fit=crop&q=80",
+              mediaType: detectedType,
+              description: em.description || `Interactive preview of the ${m.file_name || 'IMS Module'} tracking systems.`,
+            };
+          });
+
+          if (mappedMedia.length > 0) {
+            setGallery(mappedMedia);
+            setActiveMedia(mappedMedia[0]);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching IMS product gallery:", err);
+      }
+
+      // Fallback mock items
+      const fallbackMedia: MediaItem[] = [
+        {
+          id: "ims-f1",
+          title: "Live Logistics Control Center",
+          category: "",
+          url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+          mediaType: "video",
+          description: "Simulating on-premise dashboard tracking material dispatches and inventory levels in real-time."
+        },
+        {
+          id: "ims-f2",
+          title: "Defense Storage Depots",
+          category: "",
+          url: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&auto=format&fit=crop&q=80",
+          mediaType: "image",
+          description: "Physical asset verification mapping interface showing secure racks and compartment details."
+        },
+        {
+          id: "ims-f3",
+          title: "Decrement Telemetry",
+          category: "",
+          url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+          mediaType: "video",
+          description: "Visualizing automated barcodes scans instantly decrementing databases with zero network lag."
+        }
+      ];
+      setGallery(fallbackMedia);
+      setActiveMedia(fallbackMedia[0]);
+    };
+
+    fetchImsGallery();
+  }, []);
 
   useEffect(() => {
     const fetchImsProject = async () => {
@@ -377,6 +495,84 @@ export default function ImsPage() {
                   </div>
                 ))}
               </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ============================================================
+            3b. INTERACTIVE VISUAL SHOWCASE MEDIA GALLERY
+           ============================================================ */}
+        <section className="py-32 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[#E5E7EB]">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#111827] mt-2 mb-4">{showcaseHeading}</h2>
+            <p className="text-[#6B7280] max-w-2xl mx-auto">{showcaseDesc}</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+
+            {/* Left Column: Interactive Selector List */}
+            <div className="lg:col-span-4 flex flex-col gap-4 justify-center">
+              {gallery.map((item) => {
+                const isActive = activeMedia && item.id === activeMedia.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveMedia(item)}
+                    className={`p-6 rounded-2xl text-left border transition-all duration-200 relative overflow-hidden flex flex-col ${isActive
+                      ? 'bg-blue-50/80 border-[#2563EB] shadow-[0_8px_30px_rgba(37,99,235,0.12)]'
+                      : 'bg-white border-[#E5E7EB] hover:border-slate-300 hover:bg-slate-50/50'
+                      }`}
+                  >
+                    <span className={`text-lg font-bold leading-tight mb-2 transition-colors ${isActive ? 'text-[#2563EB]' : 'text-[#111827]'}`}>{item.title}</span>
+                    <span className={`text-xs line-clamp-2 leading-relaxed transition-colors ${isActive ? 'text-slate-600 font-medium' : 'text-[#6B7280]'}`}>{item.description}</span>
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Right Column: Display Canvas Wrapper */}
+            <div className="lg:col-span-8">
+              {activeMedia ? (
+                <motion.div
+                  key={activeMedia.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className="h-full rounded-2xl bg-white border border-[#E5E7EB] p-6 flex flex-col overflow-hidden shadow-sm"
+                >
+                  {/* Canvas Render Frame */}
+                  <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-[#E5E7EB] bg-slate-950 flex items-center justify-center group">
+                    {activeMedia.mediaType === "video" ? (
+                      <video
+                        src={activeMedia.url}
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                      />
+                    ) : (
+                      <Image
+                        src={activeMedia.url}
+                        alt={activeMedia.title}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 66vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    )}
+                  </div>
+
+                  <div className="mt-6">
+                    <h3 className="text-xl font-bold text-[#111827] mb-2">{activeMedia.title}</h3>
+                    <p className="text-sm text-[#6B7280] leading-relaxed font-light">{activeMedia.description}</p>
+                  </div>
+                </motion.div>
+              ) : (
+                <div className="h-full rounded-2xl border border-dashed border-[#E5E7EB] flex items-center justify-center text-xs text-[#6B7280] p-12 bg-[#F9FAFB]/50">
+                  Select a showcase asset to view interactive viewport preview.
+                </div>
+              )}
             </div>
 
           </div>

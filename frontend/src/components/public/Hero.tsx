@@ -1,12 +1,27 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, Layers } from "lucide-react";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [heroTitle, setHeroTitle] = useState("Building the Technology of Tomorrow");
+  const [heroSubtitle, setHeroSubtitle] = useState("One unified platform for 3D, virtual reality, AI, and automation — built for teams that refuse to settle for ordinary.");
+
+  useEffect(() => {
+    fetch("/api/v1/pages/home")
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && json.data && json.data.content) {
+          const content = json.data.content;
+          if (content.hero_title) setHeroTitle(content.hero_title);
+          if (content.hero_subtitle) setHeroSubtitle(content.hero_subtitle);
+        }
+      })
+      .catch(err => console.error("Error loading hero content:", err));
+  }, []);
 
   // Parallax: hero content scrolls slightly slower for professional depth
   const { scrollYProgress } = useScroll({
@@ -55,15 +70,39 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="w-full"
           >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-[#111827] tracking-tight mb-8 leading-[1.05] uppercase">
-              Building <br />
-              the Technology <br />
-              <span className="text-[#2563EB] pb-1 block">
-                of Tomorrow
-              </span>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-[#111827] tracking-tight mb-8 leading-[1.05] uppercase whitespace-pre-line">
+              {(() => {
+                if (heroTitle === "Building the Technology of Tomorrow" || heroTitle === "Building the Technology of Tomorrowwww") {
+                  return (
+                    <>
+                      Building <br />
+                      the Technology <br />
+                      <span className="text-[#2563EB] pb-1 block">
+                        of Tomorrow
+                      </span>
+                    </>
+                  );
+                }
+                const parts = heroTitle.split(" ");
+                if (parts.length > 2) {
+                  const lastWord = parts[parts.length - 1];
+                  const middleWord = parts[parts.length - 2];
+                  const firstPart = parts.slice(0, -2).join(" ");
+                  return (
+                    <>
+                      {firstPart} <br />
+                      {middleWord} <br />
+                      <span className="text-[#2563EB] pb-1 block">
+                        {lastWord}
+                      </span>
+                    </>
+                  );
+                }
+                return heroTitle;
+              })()}
             </h1>
             <p className="text-lg md:text-xl lg:text-2xl text-[#374151] max-w-4xl mx-auto mb-12 font-normal leading-relaxed">
-              One unified platform for 3D, virtual reality, AI, and automation — built for teams that refuse to settle for ordinary.
+              {heroSubtitle}
             </p>
           </motion.div>
 

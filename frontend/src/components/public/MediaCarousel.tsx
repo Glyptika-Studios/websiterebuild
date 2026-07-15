@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -5,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Layers, Cpu, Compass, HardHat } from "lucide-react";
 
 interface CarouselItem {
-  id: number;
+  id: string | number;
   title: string;
   description: string;
   imageUrl: string;
@@ -44,19 +45,45 @@ const ITEMS: CarouselItem[] = [
 ];
 
 export default function MediaCarousel() {
+  const [mounted, setMounted] = useState(false);
+  const [carouselItems, setCarouselItems] = useState<CarouselItem[]>(ITEMS);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const nextSlide = () => setActiveIndex((prev) => (prev + 1) % ITEMS.length);
-  const prevSlide = () => setActiveIndex((prev) => (prev - 1 + ITEMS.length) % ITEMS.length);
+  const nextSlide = () => setActiveIndex((prev) => (prev + 1) % carouselItems.length);
+  const prevSlide = () => setActiveIndex((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
+
+  useEffect(() => {
+    setMounted(true);
+    fetch("/api/v1/pages/home")
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && json.data && json.data.content && Array.isArray(json.data.content.carousel_items)) {
+          const dbCarousel = json.data.content.carousel_items;
+          const mapped = dbCarousel
+            .filter((c: any) => c.public_url)
+            .map((c: any, idx: number) => ({
+              id: c.media_id || `db-carousel-${idx}`,
+              title: c.title || `Carousel Item #${idx + 1}`,
+              description: c.description || "",
+              imageUrl: c.public_url,
+              icon: Compass
+            }));
+          if (mapped.length > 0) {
+            setCarouselItems(mapped);
+          }
+        }
+      })
+      .catch(err => console.error("Error loading carousel content:", err));
+  }, []);
 
   useEffect(() => {
     if (!isHovered) {
       timerRef.current = setInterval(nextSlide, 4500);
     }
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [isHovered]);
+  }, [isHovered, carouselItems.length]);
 
   // Layout math — all cards are 50% of the container width.
   // Since absolute cards are centered by the flex parent, each card's
@@ -68,7 +95,7 @@ export default function MediaCarousel() {
   //   Overlap with center = [50%, 75%] = 25% = 50% of card width hidden ✓
   //   Visible = [75%, 100%] = 25% = 50% of card width ✓
   const getStyle = (index: number) => {
-    const total = ITEMS.length;
+    const total = carouselItems.length;
     const diff = (index - activeIndex + total) % total;
 
     if (diff === 0) {
@@ -92,6 +119,14 @@ export default function MediaCarousel() {
     }
   };
 
+  if (!mounted) {
+    return (
+      <section className="relative w-full py-10 min-h-[400px] bg-transparent flex items-center justify-center">
+        <div className="animate-pulse text-slate-400 text-xs">Loading media showcase...</div>
+      </section>
+    );
+  }
+
   return (
     <section
       className="relative w-full py-10"
@@ -106,7 +141,7 @@ export default function MediaCarousel() {
           className="relative w-full flex items-center justify-center select-none"
           style={{ height: "clamp(220px, 32vw, 460px)" }}
         >
-          {ITEMS.map((item, idx) => {
+          {carouselItems.map((item, idx) => {
             const pos = getStyle(idx);
             const isActive = idx === activeIndex;
 
@@ -190,7 +225,7 @@ export default function MediaCarousel() {
 
         {/* Dots */}
         <div className="flex justify-center items-center gap-2 mt-6">
-          {ITEMS.map((item, idx) => (
+          {carouselItems.map((item, idx) => (
             <button
               key={item.id}
               onClick={() => setActiveIndex(idx)}

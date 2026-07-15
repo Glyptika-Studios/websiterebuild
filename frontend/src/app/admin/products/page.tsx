@@ -523,7 +523,7 @@ export default function ProjectsManager() {
                     <button
                       type="button"
                       onClick={() => setShowNewCategoryInput(!showNewCategoryInput)}
-                      className="text-[9px] font-bold text-blue-500 hover:text-blue-600 underline"
+                      className="text-[11px] font-extrabold uppercase tracking-wider text-blue-600 hover:text-blue-500"
                     >
                       {showNewCategoryInput ? "Cancel" : "+ New"}
                     </button>
@@ -648,7 +648,7 @@ export default function ProjectsManager() {
                             className={`text-[9px] font-mono px-2 py-0.5 rounded transition-all ${
                               isSelected
                                 ? "bg-blue-600 text-white border border-blue-600"
-                                : "bg-slate-200 text-slate-700 border border-slate-300 hover:border-slate-450"
+                                : "bg-blue-50/60 text-blue-600 border border-blue-100 hover:bg-blue-100/80 hover:text-blue-700"
                             }`}
                           >
                             {t.label}
@@ -687,7 +687,7 @@ export default function ProjectsManager() {
                         setNewTagInput("");
                       }
                     }}
-                    className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold transition-all"
+                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 border border-blue-500/20 text-white rounded-lg text-xs font-bold transition-all"
                   >
                     Add
                   </button>

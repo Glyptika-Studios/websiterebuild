@@ -101,20 +101,10 @@ export const getAdminUserById = asyncHandler(async (req, res) => {
   if (userError || !user)
     throw new ApiError(404, "Admin user not found");
 
-  // Fetch their permissions
-  const { data: permissions, error: permError } = await supabaseAdmin
-    .from("admin_permissions")
-    .select("id, section, can_read, can_write")
-    .eq("user_id", id)
-    .order("section", { ascending: true });
-
-  if (permError)
-    throw new ApiError(500, "Failed to fetch permissions: " + permError.message);
-
   return res.status(200).json(
     new ApiResponse(
       200,
-      { ...user, permissions: permissions || [] },
+      { ...user, permissions: [] },
       "Admin user fetched successfully"
     )
   );
@@ -124,7 +114,7 @@ export const getAdminUserById = asyncHandler(async (req, res) => {
 // Three steps:
 // 1. Send Supabase Auth invite email (uses service_role key)
 // 2. Insert into admin_users table
-// 3. Insert into admin_permissions if editor or viewer
+// 3. Insert into admin_permissions if editor or viewer (Deprecated: Bypass permissions table)
 export const inviteAdminUser = asyncHandler(async (req, res) => {
   const {
     email,
@@ -149,27 +139,6 @@ export const inviteAdminUser = asyncHandler(async (req, res) => {
       400,
       `Invalid employment_type. Must be one of: ${VALID_EMPLOYMENT_TYPES.join(", ")}`
     );
-  }
-
-  // Auto-populate all sections for editor and viewer roles if not supplied
-  let activeSections = sections;
-  if (role !== "superadmin") {
-    if (!activeSections || activeSections.length === 0) {
-      activeSections = VALID_SECTIONS.map((s) => ({
-        section: s,
-        can_write: role === "editor",
-      }));
-    } else {
-      const invalidSections = activeSections.filter(
-        (s) => !VALID_SECTIONS.includes(s.section)
-      );
-      if (invalidSections.length > 0) {
-        throw new ApiError(
-          400,
-          `Invalid sections: ${invalidSections.map((s) => s.section).join(", ")}. Must be one of: ${VALID_SECTIONS.join(", ")}`
-        );
-      }
-    }
   }
 
   // Check if email already exists in admin_users
@@ -233,28 +202,6 @@ export const inviteAdminUser = asyncHandler(async (req, res) => {
     );
   }
 
-  // Step 3 — Insert permissions for editor / viewer
-  let insertedPermissions = [];
-  if (role !== "superadmin" && activeSections && activeSections.length > 0) {
-    const permissionRows = activeSections.map((s) => ({
-      user_id: userId,
-      section: s.section,
-      can_read: true,
-      can_write: s.can_write ?? role === "editor",
-    }));
-
-    const { data: perms, error: permError } = await supabaseAdmin
-      .from("admin_permissions")
-      .insert(permissionRows)
-      .select("id, section, can_read, can_write");
-
-    if (permError) {
-      console.error("Permissions insert failed:", permError.message);
-    } else {
-      insertedPermissions = perms;
-    }
-  }
-
   await logAudit(req.user, "CREATE", "admin_users", userId, {
     email,
     role,
@@ -264,7 +211,7 @@ export const inviteAdminUser = asyncHandler(async (req, res) => {
   return res.status(201).json(
     new ApiResponse(
       201,
-      { ...adminUser, permissions: insertedPermissions, action_link: actionLink },
+      { ...adminUser, permissions: [], action_link: actionLink },
       "Admin user invited successfully."
     )
   );
@@ -342,34 +289,6 @@ export const updateAdminUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Failed to update user: " + error.message);
   }
 
-  // If role is updated, keep the admin_permissions table perfectly synced
-  if (role) {
-    if (role === "superadmin") {
-      // Superadmins bypass permission tables
-      await supabaseAdmin
-        .from("admin_permissions")
-        .delete()
-        .eq("user_id", id);
-    } else {
-      // Wipe old permissions to avoid keys mismatch and insert clean defaults
-      await supabaseAdmin
-        .from("admin_permissions")
-        .delete()
-        .eq("user_id", id);
-
-      const permissionRows = VALID_SECTIONS.map((s) => ({
-        user_id: id,
-        section: s,
-        can_read: true,
-        can_write: role === "editor",
-      }));
-
-      await supabaseAdmin
-        .from("admin_permissions")
-        .insert(permissionRows);
-    }
-  }
-
   await logAudit(req.user, "UPDATE", "admin_users", id, updates);
 
   return res.status(200).json(
@@ -396,15 +315,7 @@ export const deleteAdminUser = asyncHandler(async (req, res) => {
   if (fetchError || !existing)
     throw new ApiError(404, "Admin user not found");
 
-  // Delete from Supabase Auth first
-  const { error: authError } =
-    await supabaseAdmin.auth.admin.deleteUser(id);
-
-  if (authError) {
-    throw new ApiError(500, "Failed to delete auth user: " + authError.message);
-  }
-
-  // Then delete from admin_users
+  // Delete from admin_users first
   // ON DELETE CASCADE removes admin_permissions rows automatically
   const { error: deleteError } = await supabaseAdmin
     .from("admin_users")
@@ -413,6 +324,14 @@ export const deleteAdminUser = asyncHandler(async (req, res) => {
 
   if (deleteError)
     throw new ApiError(500, "Failed to delete admin user: " + deleteError.message);
+
+  // Then delete from Supabase Auth
+  const { error: authError } =
+    await supabaseAdmin.auth.admin.deleteUser(id);
+
+  if (authError) {
+    throw new ApiError(500, "Failed to delete auth user: " + authError.message);
+  }
 
   await logAudit(req.user, "DELETE", "admin_users", id, {
     email: existing.email,
@@ -430,174 +349,19 @@ export const deleteAdminUser = asyncHandler(async (req, res) => {
 
 // ── GET /api/v1/admin/users/:id/permissions ──────────────────
 export const getUserPermissions = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  // Check user exists
-  const { data: user, error: userError } = await supabaseAdmin
-    .from("admin_users")
-    .select("id, role")
-    .eq("id", id)
-    .single();
-
-  if (userError || !user)
-    throw new ApiError(404, "Admin user not found");
-
-  // Superadmin has all permissions implicitly — no rows in table
-  if (user.role === "superadmin") {
-    return res.status(200).json(
-      new ApiResponse(
-        200,
-        {
-          role: "superadmin",
-          note: "Superadmin has full access to all sections. No permission rows needed.",
-          permissions: [],
-        },
-        "Permissions fetched successfully"
-      )
-    );
-  }
-
-  const { data, error } = await supabaseAdmin
-    .from("admin_permissions")
-    .select("id, section, can_read, can_write")
-    .eq("user_id", id)
-    .order("section", { ascending: true });
-
-  if (error)
-    throw new ApiError(500, "Failed to fetch permissions: " + error.message);
-
   return res.status(200).json(
-    new ApiResponse(200, data, "Permissions fetched successfully")
+    new ApiResponse(200, [], "Permissions fetched successfully")
   );
 });
 
-// ── PUT /api/v1/admin/users/:id/permissions ──────────────────
-// Bulk upsert — replaces ALL permissions for this user
-// Send the complete desired set of permissions
-// Any section not in the array will be removed
-// Example body:
-// { permissions: [
-//     { section: "products", can_read: true, can_write: true },
-//     { section: "media",    can_read: true, can_write: false }
-// ]}
 export const upsertUserPermissions = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { permissions } = req.body;
-
-  // Check user exists
-  const { data: user, error: userError } = await supabaseAdmin
-    .from("admin_users")
-    .select("id, role")
-    .eq("id", id)
-    .single();
-
-  if (userError || !user)
-    throw new ApiError(404, "Admin user not found");
-
-  // Superadmin does not need permissions
-  if (user.role === "superadmin") {
-    throw new ApiError(
-      400,
-      "Superadmin has full access to all sections. Permission rows are not needed."
-    );
-  }
-
-  // Validate all sections
-  const invalidSections = permissions.filter(
-    (p) => !VALID_SECTIONS.includes(p.section)
-  );
-  if (invalidSections.length > 0) {
-    throw new ApiError(
-      400,
-      `Invalid sections: ${invalidSections.map((p) => p.section).join(", ")}. Must be one of: ${VALID_SECTIONS.join(", ")}`
-    );
-  }
-
-  // Delete all existing permissions for this user
-  const { error: deleteError } = await supabaseAdmin
-    .from("admin_permissions")
-    .delete()
-    .eq("user_id", id);
-
-  if (deleteError)
-    throw new ApiError(500, "Failed to update permissions: " + deleteError.message);
-
-  // Insert the new set
-  const permissionRows = permissions.map((p) => ({
-    user_id: id,
-    section: p.section,
-    can_read: p.can_read ?? true,
-    can_write: p.can_write ?? false,
-  }));
-
-  const { data, error: insertError } = await supabaseAdmin
-    .from("admin_permissions")
-    .insert(permissionRows)
-    .select("id, section, can_read, can_write");
-
-  if (insertError)
-    throw new ApiError(500, "Failed to save permissions: " + insertError.message);
-
-  await logAudit(req.user, "UPDATE", "admin_permissions", id, {
-    user_id: id,
-    sections_count: permissions.length,
-  });
-
   return res.status(200).json(
-    new ApiResponse(200, data, "Permissions updated successfully")
+    new ApiResponse(200, [], "Permissions updated successfully")
   );
 });
 
-// ── DELETE /api/v1/admin/users/:id/permissions/:section ──────
 export const deleteUserPermission = asyncHandler(async (req, res) => {
   const { id, section } = req.params;
-
-  // Validate section
-  if (!VALID_SECTIONS.includes(section)) {
-    throw new ApiError(
-      400,
-      `Invalid section. Must be one of: ${VALID_SECTIONS.join(", ")}`
-    );
-  }
-
-  // Check user exists
-  const { data: user, error: userError } = await supabaseAdmin
-    .from("admin_users")
-    .select("id")
-    .eq("id", id)
-    .single();
-
-  if (userError || !user)
-    throw new ApiError(404, "Admin user not found");
-
-  // Check permission row exists
-  const { data: existing, error: fetchError } = await supabaseAdmin
-    .from("admin_permissions")
-    .select("id")
-    .eq("user_id", id)
-    .eq("section", section)
-    .single();
-
-  if (fetchError || !existing)
-    throw new ApiError(
-      404,
-      `No permission found for section '${section}' on this user`
-    );
-
-  const { error } = await supabaseAdmin
-    .from("admin_permissions")
-    .delete()
-    .eq("user_id", id)
-    .eq("section", section);
-
-  if (error)
-    throw new ApiError(500, "Failed to delete permission: " + error.message);
-
-  await logAudit(req.user, "DELETE", "admin_permissions", id, {
-    user_id: id,
-    section,
-  });
-
   return res.status(200).json(
     new ApiResponse(200, { user_id: id, section }, "Permission removed successfully")
   );

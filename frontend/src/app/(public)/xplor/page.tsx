@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, @next/next/no-img-element, react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
@@ -29,6 +30,7 @@ interface MediaItem {
   title: string;
   category: string;
   imageUrl: string;
+  mediaType: "image" | "video";
   description: string;
 }
 
@@ -174,41 +176,74 @@ export default function XplorPage() {
   const [activeMedia, setActiveMedia] = useState<MediaItem | null>(null);
   const [activeModuleTab, setActiveModuleTab] = useState<"" | "neo" | "adorno" | "apice">("neo");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  
+  const [showcaseHeading, setShowcaseHeading] = useState<string>("See XPLOR in Action");
+  const [showcaseDesc, setShowcaseDesc] = useState<string>("Explore high-fidelity interactive spaces built automatically using the XPLOR synthesis pipeline.");
+
   const [modulesMap, setModulesMap] = useState<Record<string, ModuleDetails>>(INITIAL_MODULE_DETAILS);
 
   useEffect(() => {
     const loadXplorData = async () => {
+      let hasCmsGallery = false;
+      try {
+        const pageRes = await fetch("/api/v1/pages/xplor");
+        const pageJson = await pageRes.json();
+        if (pageJson.success && pageJson.data && pageJson.data.content) {
+          const dbContent = pageJson.data.content;
+          setShowcaseHeading(dbContent.showcase_heading || "See XPLOR in Action");
+          setShowcaseDesc(dbContent.showcase_description || "Explore high-fidelity interactive spaces built automatically using the XPLOR synthesis pipeline.");
+          
+          const dbShowcase = dbContent.showcase_items || [];
+          const mappedMedia: MediaItem[] = dbShowcase
+            .filter((item: any) => item.public_url)
+            .map((item: any, idx: number) => ({
+              id: item.media_id || `showcase-${idx}`,
+              title: item.title || `Showcase Asset #${idx + 1}`,
+              category: "",
+              imageUrl: item.public_url,
+              mediaType: item.media_type || "video",
+              description: item.description || ""
+            }));
+          
+          if (mappedMedia.length > 0) {
+            setGallery(mappedMedia);
+            setActiveMedia(mappedMedia[0]);
+            hasCmsGallery = true;
+          }
+        }
+      } catch (err) {
+        console.error("Error loading Xplor pageContent showcase:", err);
+      }
+
       try {
         const res = await fetch("/api/v1/products/22222222-0000-0000-0000-000000000002");
         const json = await res.json();
         if (json.success && json.data) {
           const dbModules = json.data.product_modules || [];
           const updatedMap = { ...INITIAL_MODULE_DETAILS };
-          
+
           dbModules.forEach((dbMod: any) => {
             if (!dbMod.active) return;
-            
+
             const titleLower = dbMod.title.toLowerCase();
             let key: "neo" | "adorno" | "apice" | null = null;
             if (titleLower.includes("neo")) key = "neo";
             else if (titleLower.includes("adorno")) key = "adorno";
             else if (titleLower.includes("apice")) key = "apice";
-            
+
             if (key) {
               updatedMap[key] = {
                 ...updatedMap[key],
                 name: dbMod.title,
                 desc: dbMod.description || updatedMap[key].desc,
               };
-              
+
               const dbPrices = dbMod.module_pricing || [];
               if (dbPrices.length > 0) {
                 const sortedTiers = [...dbPrices].sort((a: any, b: any) => {
                   const order = { basic: 1, standard: 2, premium: 3 } as any;
                   return (order[a.tier] || 9) - (order[b.tier] || 9);
                 });
-                
+
                 const mappedPricing: PricingTier[] = sortedTiers.map((p: any) => {
                   const details = p.details || {};
                   return {
@@ -227,7 +262,7 @@ export default function XplorPage() {
                     features: details.features || [],
                   };
                 });
-                
+
                 if (key === "apice") {
                   mappedPricing.push({
                     name: "Apice Enterprise",
@@ -245,34 +280,46 @@ export default function XplorPage() {
                     features: ["Air-gapped on-premise containers", "Custom API connectors", "Uncapped throughput options", "Dedicated enterprise engineer"]
                   });
                 }
-                
+
                 updatedMap[key].pricing = mappedPricing;
               }
             }
           });
-          
-          // Parse entity_media for gallery
-          const dbMedia = json.data.entity_media || [];
-          const mappedMedia: MediaItem[] = dbMedia.map((em: any, idx: number) => ({
-            id: em.id,
-            title: `Showcase Asset #${idx + 1}`,
-            category: "Visual Gallery",
-            imageUrl: em.media?.public_url || "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80",
-            description: "Rendering generated from vector blueprint maps."
-          }));
-          
-          if (mappedMedia.length === 0) {
-            mappedMedia.push({
-              id: "g-default",
-              title: "Product Visual Showcase",
-              category: "Spatial Showcase",
-              imageUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80",
-              description: "Blueprint-to-3D interactive preview."
+
+          if (!hasCmsGallery) {
+            // Parse entity_media for gallery
+            const dbMedia = json.data.entity_media || [];
+            const mappedMedia: MediaItem[] = dbMedia.map((em: any, idx: number) => {
+              const m = em.media || {};
+              const publicUrl = m.public_url || "";
+              let detectedType: "image" | "video" = "image";
+              if (m.media_type === "video" || publicUrl.match(/\.(mp4|webm|ogg|mov)($|\?)/i)) {
+                detectedType = "video";
+              }
+              return {
+                id: em.id,
+                title: m.file_name ? m.file_name.replace(/\.[^/.]+$/, "") : `Showcase Asset #${idx + 1}`,
+                category: "",
+                imageUrl: publicUrl || "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80",
+                mediaType: detectedType,
+                description: em.description || "Rendering generated from vector blueprint maps."
+              };
             });
+
+            if (mappedMedia.length === 0) {
+              mappedMedia.push({
+                id: "g-default",
+                title: "Product Visual Showcase",
+                category: "",
+                imageUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80",
+                mediaType: "image",
+                description: "Blueprint-to-3D interactive preview."
+              });
+            }
+
+            setGallery(mappedMedia);
+            setActiveMedia(mappedMedia[0]);
           }
-          
-          setGallery(mappedMedia);
-          setActiveMedia(mappedMedia[0]);
 
           setModulesMap(updatedMap);
         }
@@ -297,8 +344,8 @@ export default function XplorPage() {
             }}
           />
           {/* Dot Matrix Overlay */}
-          <div 
-            className="absolute inset-0 w-full h-full z-0 pointer-events-none" 
+          <div
+            className="absolute inset-0 w-full h-full z-0 pointer-events-none"
             style={{
               backgroundImage: "radial-gradient(#CBD5E1 1.5px, transparent 1.5px)",
               backgroundSize: "32px 32px",
@@ -382,7 +429,7 @@ export default function XplorPage() {
           <div className="py-6 relative z-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="rounded-2xl border border-white/50 p-8 md:p-12" style={{ background: "rgba(255,255,255,0.75)", boxShadow: "0 8px 32px rgba(37,99,235,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
-                
+
                 {/* Heading */}
                 <div className="text-center mb-12 relative z-10">
                   <h3 className="text-2xl sm:text-3xl font-bold text-[#111827]">
@@ -547,9 +594,8 @@ export default function XplorPage() {
            ============================================================ */}
         <section className="py-32 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#2563EB]">Visual Showcase</span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#111827] mt-2 mb-4">See XPLOR in Action</h2>
-            <p className="text-[#6B7280] max-w-2xl mx-auto">Explore high-fidelity interactive spaces built automatically using the XPLOR synthesis pipeline.</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#111827] mt-2 mb-4">{showcaseHeading}</h2>
+            <p className="text-[#6B7280] max-w-2xl mx-auto">{showcaseDesc}</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
@@ -563,13 +609,12 @@ export default function XplorPage() {
                     key={item.id}
                     onClick={() => setActiveMedia(item)}
                     className={`p-6 rounded-2xl text-left border transition-all duration-200 relative overflow-hidden flex flex-col ${isActive
-                      ? 'bg-[#F3F7FF] border-[#2563EB]/30 shadow-sm'
-                      : 'bg-white border-[#E5E7EB] hover:border-[#BDC1C6] hover:bg-[#F1F3F4]'
+                      ? 'bg-blue-50/80 border-[#2563EB] shadow-[0_8px_30px_rgba(37,99,235,0.12)]'
+                      : 'bg-white border-[#E5E7EB] hover:border-slate-300 hover:bg-slate-50/50'
                       }`}
                   >
-                    <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-widest mb-1.5">{item.category}</span>
-                    <span className="text-lg font-bold text-[#111827] leading-tight mb-2">{item.title}</span>
-                    <span className="text-xs text-[#6B7280] line-clamp-2 leading-relaxed">{item.description}</span>
+                    <span className={`text-lg font-bold leading-tight mb-2 transition-colors ${isActive ? 'text-[#2563EB]' : 'text-[#111827]'}`}>{item.title}</span>
+                    <span className={`text-xs line-clamp-2 leading-relaxed transition-colors ${isActive ? 'text-slate-600 font-medium' : 'text-[#6B7280]'}`}>{item.description}</span>
                   </button>
                 )
               })}
@@ -578,17 +623,25 @@ export default function XplorPage() {
             {/* Right Column: Display Canvas Wrapper */}
             <div className="lg:col-span-8">
               {activeMedia ? (
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeMedia.id}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.5 }}
-                    className="h-full rounded-2xl bg-white border border-[#E5E7EB] p-6 flex flex-col overflow-hidden shadow-sm"
-                  >
-                    {/* Canvas Render Frame */}
-                    <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-[#E5E7EB] group">
+                <motion.div
+                  key={activeMedia.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className="h-full rounded-2xl bg-white border border-[#E5E7EB] p-6 flex flex-col overflow-hidden shadow-sm"
+                >
+                  {/* Canvas Render Frame */}
+                  <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-[#E5E7EB] bg-slate-950 flex items-center justify-center group">
+                    {activeMedia.mediaType === "video" ? (
+                      <video
+                        src={activeMedia.imageUrl}
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                      />
+                    ) : (
                       <Image
                         src={activeMedia.imageUrl}
                         alt={activeMedia.title}
@@ -596,21 +649,14 @@ export default function XplorPage() {
                         sizes="(max-width: 1024px) 100vw, 66vw"
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      {/* Live Interaction HUD overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
-                        <div className="flex items-center gap-3 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-xl border border-[#E5E7EB]">
-                          <Play className="w-4 h-4 text-[#2563EB] fill-[#2563EB] animate-pulse" />
-                          <span className="text-xs text-[#111827] font-bold tracking-wide uppercase">Viewport Interactive Preview</span>
-                        </div>
-                      </div>
-                    </div>
+                    )}
+                  </div>
 
-                    <div className="mt-6">
-                      <h3 className="text-xl font-bold text-[#111827] mb-2">{activeMedia.title}</h3>
-                      <p className="text-sm text-[#6B7280] leading-relaxed font-light">{activeMedia.description}</p>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
+                  <div className="mt-6">
+                    <h3 className="text-xl font-bold text-[#111827] mb-2">{activeMedia.title}</h3>
+                    <p className="text-sm text-[#6B7280] leading-relaxed font-light">{activeMedia.description}</p>
+                  </div>
+                </motion.div>
               ) : (
                 <div className="h-full rounded-2xl border border-dashed border-[#E5E7EB] flex items-center justify-center text-xs text-[#6B7280] p-12 bg-[#F9FAFB]/50">
                   Select a showcase asset to view interactive viewport preview.
@@ -648,22 +694,20 @@ export default function XplorPage() {
                   <button
                     key={moduleKey}
                     onClick={() => setActiveModuleTab(isActive ? "" : moduleKey)}
-                    className={`p-6 rounded-2xl text-left border transition-all duration-300 relative overflow-hidden flex flex-col justify-between group h-full ${
-                      isActive
+                    className={`p-6 rounded-2xl text-left border transition-all duration-300 relative overflow-hidden flex flex-col justify-between group h-full ${isActive
                         ? "bg-[#F3F7FF] border-[#2563EB]/40 shadow-sm"
                         : "bg-white border-[#E5E7EB] hover:border-[#BDC1C6] hover:bg-[#F1F3F4]/20 hover:shadow-sm"
-                    }`}
+                      }`}
                   >
                     <div>
                       <div className="flex items-center gap-3 mb-4">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${
-                          isActive ? "bg-[#2563EB] text-white" : "bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF]"
-                        }`}>
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${isActive ? "bg-[#2563EB] text-white" : "bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF]"
+                          }`}>
                           <ModIcon className="w-5 h-5" />
                         </div>
                         <h3 className="text-lg font-bold text-[#111827]">{mod.name}</h3>
                       </div>
-                      
+
                       <div className="mb-6">
                         <p className="text-xs font-semibold text-[#6B7280] uppercase tracking-wider mb-2">{mod.shortTagline}</p>
                         <p className="text-xs text-[#6B7280] leading-relaxed line-clamp-2">Best for: {mod.bestFor}</p>
@@ -675,9 +719,8 @@ export default function XplorPage() {
                         <span className="text-[9px] uppercase tracking-wider text-[#6B7280] font-semibold block">Starting at</span>
                         <span className="text-base font-bold text-[#2563EB]">{startingPrice}<span className="text-xs text-[#6B7280] font-normal">/mo</span></span>
                       </div>
-                      <div className={`text-xs font-bold uppercase tracking-wider transition-colors duration-205 flex items-center gap-1 ${
-                        isActive ? "text-[#2563EB]" : "text-[#6B7280] group-hover:text-[#2563EB]"
-                      }`}>
+                      <div className={`text-xs font-bold uppercase tracking-wider transition-colors duration-205 flex items-center gap-1 ${isActive ? "text-[#2563EB]" : "text-[#6B7280] group-hover:text-[#2563EB]"
+                        }`}>
                         {isActive ? "Viewing details" : "Explore plans"}
                         <svg className={`w-3.5 h-3.5 transition-transform duration-300 ${isActive ? "rotate-90 text-[#2563EB]" : "group-hover:translate-x-0.5"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />

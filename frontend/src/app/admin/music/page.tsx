@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { api } from "@/lib/api";
 import {
   Music,
   Volume2,
@@ -12,6 +13,7 @@ import {
   Play,
   Pause,
   RefreshCw,
+  Loader2,
 } from "lucide-react";
 
 interface MusicSettings {
@@ -35,18 +37,48 @@ export default function MusicConfigManager() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
+  const [mediaAudios, setMediaAudios] = useState<any[]>([]);
+  const [loadingMedia, setLoadingMedia] = useState(false);
+
+  const formatBytes = (bytes: number) => {
+    if (!bytes) return "—";
+    const k = 1024;
+    const sizes = ["B", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+  };
+
+  const fetchMediaAudios = async () => {
+    setLoadingMedia(true);
+    try {
+      const response = await api.get<any>("/api/v1/admin/media?limit=100&media_type=audio");
+      if (response.success && response.data) {
+        setMediaAudios(response.data.items || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch media audios:", err);
+    } finally {
+      setLoadingMedia(false);
+    }
+  };
+
   useEffect(() => {
     const saved = localStorage.getItem("glyptika_admin_music");
-    if (saved) {
+    const loadSettings = async () => {
       try {
-        setMusic(JSON.parse(saved));
-      } catch (e) {
+        const response = await api.get<any>("/api/v1/pages/home");
+        if (response.success && response.data?.content?.ambient_music) {
+          setMusic(response.data.content.ambient_music);
+        } else {
+          setMusic(DEFAULT_MUSIC);
+        }
+      } catch (err) {
+        console.error("Failed to load music settings from DB:", err);
         setMusic(DEFAULT_MUSIC);
       }
-    } else {
-      setMusic(DEFAULT_MUSIC);
-      localStorage.setItem("glyptika_admin_music", JSON.stringify(DEFAULT_MUSIC));
-    }
+    };
+    loadSettings();
+    fetchMediaAudios();
   }, []);
 
   // Sync audio object when track changes
@@ -85,7 +117,7 @@ export default function MusicConfigManager() {
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
 
@@ -94,9 +126,28 @@ export default function MusicConfigManager() {
       return;
     }
 
-    localStorage.setItem("glyptika_admin_music", JSON.stringify(music));
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 2000);
+    try {
+      const currentRes = await api.get<any>("/api/v1/pages/home");
+      const currentContent = (currentRes.success && currentRes.data?.content) || {};
+
+      const updatedContent = {
+        ...currentContent,
+        ambient_music: music,
+      };
+
+      const response = await api.put<any>("/api/v1/admin/pages/home", {
+        content: updatedContent,
+      });
+
+      if (response.success) {
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 2000);
+      } else {
+        setFormError(response.message || "Failed to save sound settings.");
+      }
+    } catch (err: any) {
+      setFormError(err.message || "Failed to save sound settings.");
+    }
   };
 
   return (
@@ -138,8 +189,46 @@ export default function MusicConfigManager() {
             )}
 
             <div className="space-y-4">
+              {/* Media Library Selector */}
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-wider text-slate-400">Audio Track (.MP3 URL)</label>
+                <label className="text-xs font-black uppercase tracking-wider text-slate-400">
+                  Select Track from Media Library
+                </label>
+                {loadingMedia ? (
+                  <div className="flex items-center gap-2 py-3 text-slate-500 text-xs">
+                    <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+                    <span>Loading audio files...</span>
+                  </div>
+                ) : (
+                  <select
+                    value={mediaAudios.find((a) => a.public_url === music.track_url)?.id || ""}
+                    onChange={(e) => {
+                      const selectedId = e.target.value;
+                      if (selectedId) {
+                        const selected = mediaAudios.find((a) => a.id === selectedId);
+                        if (selected) {
+                          setMusic({ ...music, track_url: selected.public_url });
+                        }
+                      } else {
+                        setMusic({ ...music, track_url: "" });
+                      }
+                    }}
+                    disabled={!canWrite}
+                    className="w-full px-4 py-3 bg-white border border-slate-250 focus:border-blue-500 rounded-2xl text-xs text-slate-700 focus:outline-none transition-all font-bold"
+                  >
+                    <option value="">-- Choose from library (or input below) --</option>
+                    {mediaAudios.map((audio) => (
+                      <option key={audio.id} value={audio.id}>
+                        {audio.file_name} ({formatBytes(audio.size_bytes)})
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              {/* Custom Track Input */}
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-wider text-slate-400">Custom Audio URL (.MP3)</label>
                 <input
                   type="text"
                   placeholder="https://..."
@@ -163,7 +252,13 @@ export default function MusicConfigManager() {
                     min="0"
                     max="100"
                     value={music.volume}
-                    onChange={(e) => setMusic({ ...music, volume: Number(e.target.value) })}
+                    onChange={(e) => {
+                      const newVolume = Number(e.target.value);
+                      setMusic({ ...music, volume: newVolume });
+                      if (audio) {
+                        audio.volume = newVolume / 100;
+                      }
+                    }}
                     disabled={!canWrite}
                     className="flex-1 accent-blue-500 bg-slate-950/40 border border-white/5 h-1.5 rounded-full cursor-pointer"
                   />

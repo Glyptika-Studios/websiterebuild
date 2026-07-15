@@ -377,3 +377,8 @@ html {
     background-color: #FFFFFF !important;
     color: #202124 !important;
 }
+
+/* Force white text class to bypass admin light theme overrides */
+.text-white-force {
+    color: #ffffff !important;
+}
