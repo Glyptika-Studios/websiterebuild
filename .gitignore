@@ -8,3 +8,8 @@ supabase/.temp/
 supabase/.branches/
 .DS_Store
 **/.DS_Store
+
+# Large media assets (ignores recursively)
+*.mp4
+*.docx
+/Glyptika_Rebuild_Master_Spec.md
