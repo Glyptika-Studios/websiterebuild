@@ -39,8 +39,8 @@ Thumbs.db
 supabase/.temp/
 supabase/.branches/
 
-# Large media assets at root (preserves frontend/public assets)
-/*.mp4
+# Large media assets (ignores recursively)
+*.mp4
 /*.docx
 /Glyptika_Rebuild_Master_Spec.md
 
