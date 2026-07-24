@@ -64,7 +64,7 @@ export default function MediaCarousel() {
           const mapped = dbCarousel
             .filter((c: any) => c.public_url)
             .map((c: any, idx: number) => ({
-              id: c.media_id || `db-carousel-${idx}`,
+              id: c.media_id ? `${c.media_id}-${idx}` : `db-carousel-${idx}`,
               title: c.title || `Carousel Item #${idx + 1}`,
               description: c.description || "",
               imageUrl: c.public_url,

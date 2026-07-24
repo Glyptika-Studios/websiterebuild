@@ -183,7 +183,7 @@ export default function ImsPage() {
           const mappedMedia: MediaItem[] = dbShowcase
             .filter((item: any) => item.public_url)
             .map((item: any, idx: number) => ({
-              id: item.media_id || `showcase-${idx}`,
+              id: item.media_id ? `${item.media_id}-${idx}` : `showcase-${idx}`,
               title: item.title || `Showcase Asset #${idx + 1}`,
               category: "",
               url: item.public_url,
