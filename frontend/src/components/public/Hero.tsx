@@ -114,14 +114,14 @@ export default function Hero() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4"
           >
             <Link
-              href="#services"
+              href="/services"
               className="group inline-flex items-center gap-2.5 px-8 py-3 rounded-full text-base font-medium text-[#111827] bg-transparent border border-[#111827] hover:bg-[#1A73E8] hover:border-[#1A73E8] hover:text-white shadow-sm hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
             >
               <Search className="w-4 h-4 transition-colors" />
               Explore Services
             </Link>
             <Link
-              href="#products"
+              href="/products"
               className="group inline-flex items-center gap-2.5 px-8 py-3 rounded-full text-base font-medium text-[#111827] bg-transparent border border-[#111827] hover:bg-[#1A73E8] hover:border-[#1A73E8] hover:text-white shadow-sm hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
             >
               <Layers className="w-4 h-4 transition-colors" />

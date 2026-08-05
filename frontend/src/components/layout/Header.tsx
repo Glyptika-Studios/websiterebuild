@@ -25,6 +25,7 @@ export default function Header() {
     { name: "Products", href: "/products" },
     { name: "XPLOR", href: "/xplor" },
     { name: "IMS", href: "/ims" },
+    { name: "Workshop", href: "/workshop" },
     { name: "Insights", href: "/insights" },
     { name: "Team", href: "/team" },
     { name: "Careers", href: "/careers" },
@@ -34,7 +35,7 @@ export default function Header() {
     <>
       {/* Navbar */}
       <div
-        className={`fixed left-1/2 -translate-x-1/2 z-50 w-[calc(100%-40px)] sm:w-[calc(100%-60px)] max-w-5xl xl:max-w-6xl transition-all duration-500 ${
+        className={`fixed left-1/2 -translate-x-1/2 z-50 w-[calc(100%-40px)] sm:w-[calc(100%-60px)] max-w-5xl xl:max-w-[1220px] transition-all duration-500 ${
           isScrolled ? "top-4" : "top-6"
         }`}
       >
