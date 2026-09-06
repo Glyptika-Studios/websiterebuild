@@ -43,28 +43,30 @@ INSERT INTO social_links (platform, url) VALUES
 INSERT INTO page_content (page, content) VALUES
   ('home', '{
     "hero": {
-      "title": "We build digital products",
-      "subtitle": "Glyptika is a product studio crafting SaaS, mobile, and web experiences.",
-      "cta_label": "See our work",
-      "cta_url": "/projects"
+      "title": "Building the Technology of Tomorrow",
+      "subtitle": "One unified platform for 3D, virtual reality, AI, and automation — built for teams that refuse to settle for ordinary.",
+      "cta_label": "Explore Services",
+      "cta_url": "/services"
     },
-    "stats": [
-      { "label": "Projects delivered", "value": "40+" },
-      { "label": "Happy clients", "value": "30+" },
-      { "label": "Years of experience", "value": "5+" }
-    ]
+    "contact": {
+      "email1": "outreach_mv@glyptika.com",
+      "email2": "",
+      "phone1": "+91 8810207029",
+      "phone2": "+91 9877851947",
+      "address": "Venture Lab, Thapar Institute Of Engineering and Technology"
+    }
   }'),
   ('services', '{
-    "headline": "What we do",
-    "subheadline": "End-to-end digital product design and development."
+    "headline": "VR, 3D & Custom Software.",
+    "subheadline": "From training simulators to product animations to custom-built tools — all engineered in-house, tailored to what you need."
   }'),
   ('xplor', '{
-    "headline": "Xplor",
-    "subheadline": "Explore our research and experiments."
+    "headline": "XPLOR",
+    "subheadline": "Making spatial visualization faster, more accessible, and more affordable."
   }'),
   ('ims', '{
-    "headline": "IMS",
-    "subheadline": "Integrated management solutions."
+    "headline": "IMS: Total Visibility Over Every Asset",
+    "subheadline": "Purpose-built inventory infrastructure for defense, critical infrastructure, and high-security enterprises — combining offline-first architecture, granular access control, and tamper-proof audit trails."
   }'),
   ('team', '{
     "headline": "Meet the team",
@@ -89,12 +91,12 @@ VALUES
    'Senior Full Stack Developer', 'Engineering', 'Remote / Delhi',
    'Full-time',
    'We are looking for a Senior Full Stack Developer to join our growing engineering team.',
-   true),
+   false),
   ('11111111-0000-0000-0000-000000000002',
    'UI/UX Designer', 'Design', 'Remote / Delhi',
    'Full-time',
    'We are looking for a talented UI/UX Designer to craft beautiful and intuitive interfaces.',
-   true),
+   false),
   ('11111111-0000-0000-0000-000000000003',
    'Product Manager', 'Product', 'Delhi',
    'Full-time',
@@ -149,20 +151,20 @@ VALUES
 INSERT INTO products (id, title, overview, description, status, featured, published_at)
 VALUES
   ('22222222-0000-0000-0000-000000000001',
-   'Glyptika CMS',
-   'A headless CMS built for modern product studios.',
-   'Glyptika CMS is a flexible, developer-friendly content management system designed for agencies and product studios. It supports multi-user access, rich media management, and a fully customizable content schema.',
+   'HRV Simulator',
+   'Immersive VR training for heavy recovery vehicle operations — engineered for real-world readiness without risking multi-million dollar equipment.',
+   'Full-scale VR simulation environment engineered for high-stakes mechanical training and operational readiness without risking multi-million dollar equipment.',
    'published', true, CURRENT_DATE),
   ('22222222-0000-0000-0000-000000000002',
-   'Xplor Analytics',
-   'Real-time analytics for growing SaaS products.',
-   'Xplor Analytics gives product teams instant visibility into user behaviour, retention, and growth metrics. Built on a PostgreSQL core with a clean dashboard UI.',
-   'published', false, CURRENT_DATE),
+   'IMS',
+   'Our defense-grade inventory automation platform, built on two core modules: GAVIN-SPARK for smart parts allocation and SAPEAA for procurement intelligence.',
+   'Purpose-built inventory infrastructure combining offline-first architecture, granular access control, and tamper-proof audit trails.',
+   'published', true, CURRENT_DATE),
   ('22222222-0000-0000-0000-000000000003',
-   'IMS Platform',
-   'Integrated management system for operations teams.',
-   'IMS Platform streamlines internal operations — HR, inventory, approvals, and reporting — in a single unified dashboard.',
-   'draft', false, CURRENT_DATE);
+   'XPLOR',
+   'Making spatial visualization faster, more accessible, and more affordable — automating the conversion of 2D drawings into 3D and VR environments.',
+   'Revolutionary automation platform transforming flat architectural drawings into fully interactive spatial environments in record time.',
+   'published', true, CURRENT_DATE);
 
 -- Product tags
 INSERT INTO product_tags (product_id, tag_id)

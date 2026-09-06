@@ -10,58 +10,58 @@ const MOCK_SERVICES = [
   {
     id: "svc-1",
     number: "01",
-    title: "Custom 3D Asset Creation",
-    category: "3D Visualization",
+    title: "Custom 3D Models",
+    category: "3D Modeling",
     description:
-      "Procedural synthesis of high-fidelity 3D assets mapped from CAD outlines. Optimized using texture atlases and dynamic Level of Detail (LOD) compilation.",
+      "Bespoke 3D models built to your exact specifications, from product prototypes to full architectural elements.",
     icon: Move3d,
     accent: "#3B82F6",
     accentBg: "#EFF6FF",
     accentBorder: "#DBEAFE",
     url: "/request-proposal",
-    tags: ["CAD Import", "LOD Optimization", "glTF Export"],
+    tags: ["3D Assets", "Prototypes", "Architectural"],
   },
   {
     id: "svc-2",
     number: "02",
-    title: "VR Environment Creation",
+    title: "VR Software & Simulators",
     category: "Spatial Engineering",
     description:
-      "Bespoke virtual reality scenes and simulations compatible with WebXR, SteamVR, and Oculus arrays. Full collision meshes and customized lighting bakes.",
+      "Custom-built VR training software and simulation environments — including our Heavy Recovery Vehicle (HRV) Simulator — engineered for high-stakes, real-world training.",
     icon: Layers,
     accent: "#8B5CF6",
     accentBg: "#F5F3FF",
     accentBorder: "#EDE9FE",
     url: "/request-proposal",
-    tags: ["WebXR", "Unreal Engine", "Custom Lighting"],
+    tags: ["VR Training", "Simulators", "HRV Simulation"],
   },
   {
     id: "svc-3",
     number: "03",
-    title: "Digital Automation",
-    category: "Software Engineering",
+    title: "Animations & Product Videos",
+    category: "Media Production",
     description:
-      "Transition manual material logs to secure automated scripts. Custom APIs, webhooks, and air-gapped system integrations.",
+      "High-definition animations and product videos that turn complex systems and products into content people actually understand.",
     icon: Code2,
     accent: "#10B981",
     accentBg: "#ECFDF5",
     accentBorder: "#D1FAE5",
     url: "/request-proposal",
-    tags: ["API Design", "Webhooks", "Air-gapped"],
+    tags: ["Product Reels", "3D Animation", "Explainer Videos"],
   },
   {
     id: "svc-4",
     number: "04",
-    title: "Inventory Management Solutions",
-    category: "Logistics Sync",
+    title: "Custom Software",
+    category: "Software Engineering",
     description:
-      "Bespoke deployment, migration, and maintenance packages for the IMS Portal. Custom authorization rules tailored to enterprise operational pipelines.",
+      "Bespoke software and automation solutions built around your existing workflows and systems, not the other way around.",
     icon: Database,
     accent: "#F59E0B",
     accentBg: "#FEF3C7",
     accentBorder: "#FDE68A",
-    url: "/ims",
-    tags: ["IMS Portal", "Enterprise Auth", "Migration"],
+    url: "/request-proposal",
+    tags: ["Automation", "Custom Workflows", "API Integrations"],
   },
 ];
 
@@ -73,33 +73,33 @@ const serviceDesignMeta: Record<string, {
   accentBg: string;
   accentBorder: string;
 }> = {
-  "Product Design": {
-    description: "Procedural synthesis of high-fidelity 3D assets mapped from CAD outlines. Optimized using texture atlases and dynamic Level of Detail (LOD) compilation.",
-    tags: ["CAD Import", "LOD Optimization", "glTF Export"],
+  "Custom 3D Models": {
+    description: "Bespoke 3D models built to your exact specifications, from product prototypes to full architectural elements.",
+    tags: ["3D Assets", "Prototypes", "Architectural"],
     icon: Move3d,
     accent: "#3B82F6",
     accentBg: "#EFF6FF",
     accentBorder: "#DBEAFE"
   },
-  "Web Development": {
-    description: "Bespoke virtual reality scenes and simulations compatible with WebXR, SteamVR, and Oculus arrays. Full collision meshes and customized lighting bakes.",
-    tags: ["WebXR", "Unreal Engine", "Custom Lighting"],
+  "VR Software & Simulators": {
+    description: "Custom-built VR training software and simulation environments — including our Heavy Recovery Vehicle (HRV) Simulator — engineered for high-stakes, real-world training.",
+    tags: ["VR Training", "Simulators", "HRV Simulation"],
     icon: Layers,
     accent: "#8B5CF6",
     accentBg: "#F5F3FF",
     accentBorder: "#EDE9FE"
   },
-  "Mobile Development": {
-    description: "Transition manual material logs to secure automated scripts. Custom APIs, webhooks, and air-gapped system integrations.",
-    tags: ["API Design", "Webhooks", "Air-gapped"],
+  "Animations & Product Videos": {
+    description: "High-definition animations and product videos that turn complex systems and products into content people actually understand.",
+    tags: ["Product Reels", "3D Animation", "Explainer Videos"],
     icon: Code2,
     accent: "#10B981",
     accentBg: "#ECFDF5",
     accentBorder: "#D1FAE5"
   },
-  "Brand Identity": {
-    description: "Bespoke deployment, migration, and maintenance packages for the IMS Portal. Custom authorization rules tailored to enterprise operational pipelines.",
-    tags: ["IMS Portal", "Enterprise Auth", "Migration"],
+  "Custom Software": {
+    description: "Bespoke software and automation solutions built around your existing workflows and systems, not the other way around.",
+    tags: ["Automation", "Custom Workflows", "API Integrations"],
     icon: Database,
     accent: "#F59E0B",
     accentBg: "#FEF3C7",
@@ -165,17 +165,16 @@ export default function ServicesPage() {
             Our Services
           </div>
           <h1 className="text-5xl md:text-7xl font-black text-[#0F172A] tracking-tight leading-none mb-6">
-            Digital
+            VR, 3D &amp;
             <br />
             <span
               className="bg-clip-text text-transparent bg-gradient-to-r from-[#1A73E8] via-[#4285F4] to-[#0F172A] pb-1 block"
             >
-              Ecosystems.
+              Custom Software.
             </span>
           </h1>
           <p className="text-lg md:text-xl text-[#475569] max-w-2xl leading-relaxed font-normal">
-            We engineer bespoke solutions across spatial computing, 3D
-            visualization, and automated enterprise software.
+            From training simulators to product animations to custom-built tools — all engineered in-house, tailored to what you need.
           </p>
         </motion.div>
 

@@ -124,11 +124,11 @@ const FAQS = [
   },
   {
     question: "How long does deployment take?",
-    answer: "Standard deployment takes 2-4 weeks including data migration, network setup, and initial staff onboarding workshops."
+    answer: "Standard deployment takes 2–4 weeks including data migration, network setup, and initial staff onboarding workshops."
   },
   {
-    question: "Does this integrate with our existing ERP?",
-    answer: "Yes, our system provides robust REST APIs and custom integration bridges for legacy ERP synchronization (SAP, Oracle, custom defense setups)."
+    question: "How is our team trained to use the system?",
+    answer: "We provide live demo sessions with your team, along with pre-recorded video walkthroughs so staff can learn the system at their own pace and revisit specific workflows whenever needed."
   }
 ];
 
@@ -159,8 +159,8 @@ function AnimatedCounter({ value, decimals = 0, suffix = "" }: { value: number; 
 export default function ImsPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [projectTitle, setProjectTitle] = useState<string>("IMS Portal: Next-Gen Logistics");
-  const [projectDesc, setProjectDesc] = useState<string>("Automated logistics management custom-engineered for defense institutions and secure enterprises.");
+  const [projectTitle, setProjectTitle] = useState<string>("IMS: Total Visibility Over Every Asset");
+  const [projectDesc, setProjectDesc] = useState<string>("Purpose-built inventory infrastructure for defense, critical infrastructure, and high-security enterprises — combining offline-first architecture, granular access control, and tamper-proof audit trails.");
   const [showcaseHeading, setShowcaseHeading] = useState<string>("See IMS in Action");
   const [showcaseDesc, setShowcaseDesc] = useState<string>("Explore high-fidelity interactive screens and modules built automatically using the IMS management pipeline.");
 
@@ -176,6 +176,12 @@ export default function ImsPage() {
         
         if (pageJson.success && pageJson.data && pageJson.data.content) {
           const dbContent = pageJson.data.content;
+          if (dbContent.headline || dbContent.hero_title) {
+            setProjectTitle(dbContent.headline || dbContent.hero_title);
+          }
+          if (dbContent.subheadline || dbContent.hero_subtitle) {
+            setProjectDesc(dbContent.subheadline || dbContent.hero_subtitle);
+          }
           setShowcaseHeading(dbContent.showcase_heading || "See IMS in Action");
           setShowcaseDesc(dbContent.showcase_description || "Explore high-fidelity interactive screens and modules built automatically using the IMS management pipeline.");
           
@@ -269,22 +275,6 @@ export default function ImsPage() {
   }, []);
 
   useEffect(() => {
-    const fetchImsProject = async () => {
-      try {
-        const res = await fetch("/api/v1/projects/44444444-0000-0000-0000-000000000004");
-        const json = await res.json();
-        if (json.success && json.data) {
-          setProjectTitle(json.data.title || "IMS Portal: Next-Gen Logistics");
-          setProjectDesc(json.data.description || "Automated logistics management custom-engineered for defense institutions and secure enterprises.");
-        }
-      } catch (err) {
-        console.error("Error loading dynamic IMS project data:", err);
-      }
-    };
-    fetchImsProject();
-  }, []);
-
-  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
@@ -307,8 +297,8 @@ export default function ImsPage() {
   const [calcAdmins, setCalcAdmins] = useState<number>(3);
 
   // Calculator logic
-  const estTimeSaved = Math.round((calcAssets * 0.5) + (calcAdmins * 24));
-  const estCostSaved = Math.round((calcAssets * 150) + (calcAdmins * 12500));
+  const estTimeSaved = Math.round(calcAssets * 0.5 * calcAdmins);
+  const estCostSaved = Math.round(calcAssets * 150 * calcAdmins);
 
   return (
     <main className="min-h-screen bg-transparent overflow-x-hidden relative">
@@ -417,7 +407,7 @@ export default function ImsPage() {
                 {/* Stat 1 */}
                 <div className="flex flex-col items-center justify-center space-y-2 group">
                   <div className="text-2xl sm:text-3xl font-bold text-[#2563EB] tracking-tight transition-all duration-300">
-                    <AnimatedCounter value={99.99} decimals={2} suffix="%" />
+                    <AnimatedCounter value={99.97} decimals={2} suffix="%" />
                   </div>
                   <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
                     System Uptime
@@ -427,20 +417,20 @@ export default function ImsPage() {
                 {/* Stat 2 */}
                 <div className="flex flex-col items-center justify-center space-y-2 group">
                   <div className="text-2xl sm:text-3xl font-bold text-[#2563EB] tracking-tight transition-all duration-300">
-                    <AnimatedCounter value={85} decimals={0} suffix="%" />
+                    <AnimatedCounter value={68} decimals={0} suffix="%" />
                   </div>
                   <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
-                    Time Reduction
+                    Faster Audit Cycles
                   </div>
                 </div>
 
                 {/* Stat 3 */}
                 <div className="flex flex-col items-center justify-center space-y-2 group">
                   <div className="text-2xl sm:text-3xl font-bold text-[#2563EB] tracking-tight transition-all duration-300">
-                    <AnimatedCounter value={0} decimals={0} suffix="" />
+                    <AnimatedCounter value={15000} decimals={0} suffix="+" />
                   </div>
                   <div className="text-xs md:text-sm text-[#6B7280] font-bold uppercase tracking-widest">
-                    Security Breaches
+                    Assets Under Active Management
                   </div>
                 </div>
               </div>
@@ -448,10 +438,10 @@ export default function ImsPage() {
               {/* 4 Cards Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
                 {[
-                  { icon: Lock, title: "Air-Gapped Setup", desc: "Run completely offline within local defense containers." },
-                  { icon: Database, title: "Isolated DB Nodes", desc: "Isolated database cores featuring Row Level Security." },
-                  { icon: Zap, title: "Automatic Decrements", desc: "Logistics flows auto sync to asset databases instantly." },
-                  { icon: Activity, title: "Immutable History", desc: "Chronological activity sync audit registers." }
+                  { icon: Lock, title: "Role-Based Access Control", desc: "Granular permissions down to warehouse, unit, and item level." },
+                  { icon: Database, title: "Real-Time Stock Sync", desc: "Every scan, transfer, and dispatch reflected instantly across sites." },
+                  { icon: Activity, title: "Tamper-Evident Audit Trail", desc: "Cryptographically chained logs that can't be altered or deleted after the fact." },
+                  { icon: Zap, title: "Offline-First Architecture", desc: "Full functionality during network blackouts, with automatic sync on reconnect." }
                 ].map((prop, i) => (
                   <div key={i} className="p-6 rounded-[20px] bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:border-[#2563EB] hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-250 flex flex-col items-start space-y-3 group">
                     <div className="w-10 h-10 rounded-xl bg-[#F3E8FD] border border-[#E4CCFA] flex items-center justify-center text-[#A142F4] font-bold">

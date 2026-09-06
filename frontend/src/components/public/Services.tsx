@@ -8,29 +8,29 @@ import Link from "next/link";
 const SERVICES_DATA = [
   {
     id: "svc-1",
-    title: "Custom 3D Asset Creation",
-    tag: "3D Modeling",
-    description: "Bespoke 3D models tailored to your exact specifications. From product prototypes to architectural elements.",
-    icon: Cuboid,
-    color: "#2563EB",
-    tagBg: "#F3F7FF",
-    tagBorder: "#DCEBFF",
-  },
-  {
-    id: "svc-2",
-    title: "VR Environment Creation",
+    title: "VR Software & Simulators",
     tag: "VR Simulation",
-    description: "Fully immersive virtual reality environments designed for training, visualization, and interactive experiences.",
+    description: "Custom-built VR training software and simulation environments — including our Heavy Recovery Vehicle (HRV) Simulator — engineered for high-stakes, real-world training.",
     icon: Move3d,
     color: "#2563EB",
     tagBg: "#F3F7FF",
     tagBorder: "#DCEBFF",
   },
   {
+    id: "svc-2",
+    title: "Custom 3D Models",
+    tag: "3D Modeling",
+    description: "Bespoke 3D models built to your exact specifications, from product prototypes to full architectural elements.",
+    icon: Cuboid,
+    color: "#2563EB",
+    tagBg: "#F3F7FF",
+    tagBorder: "#DCEBFF",
+  },
+  {
     id: "svc-3",
-    title: "INSDAG Collaboration",
+    title: "Animations & Product Videos",
     tag: "Explainer Reel",
-    description: "Partnering with INSDAG to modernize workforce development through intuitive, high-fidelity instructional animations.",
+    description: "High-definition animations and product videos that turn complex systems and products into content people actually understand.",
     icon: Video,
     color: "#2563EB",
     tagBg: "#F3F7FF",
@@ -101,7 +101,7 @@ export default function Services() {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#111827] mb-5 tracking-tight leading-tight"
           >
-            Elite 3D &amp; VR Services
+            Explore Our Services
           </motion.h2>
 
           <motion.p
@@ -111,7 +111,7 @@ export default function Services() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-[#6B7280] text-xl md:text-2xl font-normal leading-relaxed max-w-2xl"
           >
-            Precision-engineered 3D modeling, immersive VR experiences, and cutting-edge visualization for commercial, government, and defense clients.
+            We build VR software &amp; simulators, custom 3D models, and animations &amp; product videos — all in-house, tailored to what you need.
           </motion.p>
         </div>
 

@@ -7,15 +7,15 @@ import { Move3d, HardHat, TrendingDown, Clock, Layers, Rocket } from "lucide-rea
 const FEATURED_PROJECTS = [
   {
     id: "proj-1",
-    title: "XPLOR MVP",
+    title: "XPLOR",
     subtitle: "2D Maps → VR Environments",
     content: [
-      "A revolutionary automation platform that transforms flat architectural drawings into fully interactive spatial environments in record time.",
-      "By eliminating the manual modeling bottleneck, we drastically reduce production costs and time-to-market for real estate and architectural visualization.",
+      "Making spatial visualization faster, more accessible, and more affordable — automating the conversion of 2D drawings into 3D and VR environments.",
+      "By eliminating the manual modeling bottleneck, we drastically reduce production costs and time-to-market for real estate and spatial applications.",
     ],
     metrics: [
-      { label: "Time Saved", value: "99%", icon: Clock },
-      { label: "Cost Saved", value: "99.98%", icon: TrendingDown },
+      { label: "Time Saved", value: "95%", icon: Clock },
+      { label: "Cost Saved", value: "98%", icon: TrendingDown },
     ],
     imageIcon: Move3d,
     imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&auto=format&fit=crop&q=80",
@@ -27,15 +27,15 @@ const FEATURED_PROJECTS = [
   },
   {
     id: "proj-2",
-    title: "HRV Simulator",
-    subtitle: "Heavy Recovery Vehicle VR Training Module",
+    title: "IMS",
+    subtitle: "Total Visibility Over Every Asset",
     content: [
-      "A full-scale VR simulation environment engineered for high-stakes mechanical training and operational readiness without risking multi-million dollar equipment.",
-      "Delivering uncompromised fidelity and physics accuracy to ensure personnel are mission-ready from day one.",
+      "Our defense-grade inventory automation platform, built on two core modules: GAVIN-SPARK for smart parts allocation and SAPEAA for procurement intelligence.",
+      "Engineered for high-security enterprises combining offline-first architecture, granular access control, and tamper-proof audit trails.",
     ],
     metrics: [
-      { label: "3D Assets", value: "150+", icon: Layers },
-      { label: "Deployment", value: "Full VR", icon: Rocket },
+      { label: "Uptime", value: "99.97%", icon: Layers },
+      { label: "Active Assets", value: "15,000+", icon: Rocket },
     ],
     imageIcon: HardHat,
     imageUrl: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=1200&auto=format&fit=crop&q=80",

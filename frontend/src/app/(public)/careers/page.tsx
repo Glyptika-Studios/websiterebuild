@@ -117,109 +117,23 @@ export default function CareersPage() {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="space-y-6"
         >
-          <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-4 mb-6">
-            <h2 className="text-xl font-bold text-[#111827] tracking-tight">Open Positions</h2>
-            <span className="text-xs font-semibold px-3 py-1 bg-white rounded-full text-[#6B7280] border border-[#E5E7EB]">
-              {loading ? "..." : `${positions.length} Opening${positions.length !== 1 ? "s" : ""}`}
-            </span>
+          <div className="p-10 rounded-2xl bg-white border border-[#E5E7EB] shadow-[0_12px_32px_rgba(15,23,42,0.06)] text-center space-y-4">
+            <h3 className="text-2xl font-bold text-[#111827]">Current Opportunities</h3>
+            <p className="text-[#6B7280] text-base max-w-xl mx-auto leading-relaxed">
+              We are not currently recruiting for specific open roles at the moment, but we are always eager to connect with extraordinary engineers, 3D artists, and software innovators.
+            </p>
+            <p className="text-[#9CA3AF] text-sm max-w-lg mx-auto">
+              If you&apos;re interested in working with us on future projects, feel free to send us your resume and introduction.
+            </p>
+            <div className="pt-2">
+              <Link 
+                href="/request-proposal" 
+                className="inline-flex items-center gap-2 px-7 py-3 bg-[#2563EB] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-colors duration-200 text-sm shadow-sm hover:shadow-md"
+              >
+                Send General Application
+              </Link>
+            </div>
           </div>
-
-          {loading ? (
-            <div className="flex items-center justify-center py-16">
-              <Loader2 className="w-5 h-5 animate-spin text-[#2563EB] mr-3" />
-              <span className="text-[#6B7280] text-sm">Loading positions...</span>
-            </div>
-          ) : positions.length === 0 ? (
-            <div className="py-16 text-center">
-              <p className="text-[#6B7280] text-sm mb-2">No open positions right now.</p>
-              <p className="text-[#9CA3AF] text-xs">Check back soon or send us a general application below.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-4">
-              {positions.map((job) => {
-                const benefits = (job.position_items || []).filter((i) => i.kind === "benefit");
-                const responsibilities = (job.position_items || []).filter((i) => i.kind === "responsibility");
-                const requirements = (job.position_items || []).filter((i) => i.kind === "requirement");
-                const totalItems = responsibilities.length + requirements.length + benefits.length;
-
-                return (
-                  <div 
-                    key={job.id}
-                    className="group relative bg-white border border-[#E5E7EB] rounded-[20px] p-6 md:p-8 shadow-[0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:bg-[#D2E3FC] hover:border-[#B4D0FB] hover:shadow-[0_24px_48px_rgba(15,23,42,0.3)] transition-all duration-250 flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden"
-                  >
-                    <div className="flex-1 relative z-10">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-[10px] font-semibold uppercase tracking-wider text-[#2563EB] bg-[#F3F7FF] px-3 py-1 rounded-full border border-[#DCEBFF]">
-                          {job.department}
-                        </span>
-                        {totalItems > 0 && (
-                          <span className="text-[10px] font-medium text-[#9CA3AF]">
-                            {totalItems} detail{totalItems !== 1 ? "s" : ""}
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-xl font-bold text-[#111827] mb-2 group-hover:text-[#2563EB] transition-colors leading-tight">
-                        {job.title}
-                      </h3>
-                      {job.description && (
-                        <p className="text-[#6B7280] text-sm mb-4 max-w-2xl leading-relaxed line-clamp-2">
-                          {job.description}
-                        </p>
-                      )}
-                      
-                      <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-[#6B7280]">
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-3.5 h-3.5 text-[#6B7280]" />
-                          {job.location}
-                        </div>
-                        <div className="w-1 h-1 rounded-full bg-[#BDC1C6]" />
-                        <div className="flex items-center gap-1">
-                          <Briefcase className="w-3.5 h-3.5 text-[#6B7280]" />
-                          {job.employment_type}
-                        </div>
-                        {benefits.length > 0 && (
-                          <>
-                            <div className="w-1 h-1 rounded-full bg-[#BDC1C6]" />
-                            <div className="flex items-center gap-1">
-                              <Gift className="w-3.5 h-3.5 text-emerald-500" />
-                              {benefits.length} benefit{benefits.length !== 1 ? "s" : ""}
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="relative z-10 md:shrink-0 flex items-center justify-start md:justify-end">
-                      <button
-                        onClick={() => handleViewRole(job.id)}
-                        className="flex items-center gap-1.5 px-5 py-2.5 bg-[#F3F7FF] text-[#2563EB] border border-[#DCEBFF] hover:bg-[#2563EB] hover:text-white rounded-full font-semibold transition-all duration-300 text-sm shadow-sm"
-                      >
-                        View Role
-                        <ChevronRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Fallback / General Application */}
-          <div className="mt-10 p-8 rounded-2xl bg-white border border-[#E5E7EB] flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <h3 className="text-lg font-bold text-[#111827] mb-1">Don&apos;t see a perfect fit?</h3>
-              <p className="text-[#6B7280] text-sm max-w-md">
-                We&apos;re always looking for outstanding talent. Send us your resume and a brief intro, and we&apos;ll keep you in mind for future roles.
-              </p>
-            </div>
-            <Link 
-              href="/request-proposal" 
-              className="shrink-0 px-6 py-3 bg-[#2563EB] hover:bg-[#1765CC] text-white rounded-full font-semibold transition-colors duration-200 text-sm shadow-sm hover:shadow-md"
-            >
-              Get in Touch
-            </Link>
-          </div>
-
         </motion.div>
       </div>
 

@@ -68,7 +68,7 @@ export default function ProductsPage() {
           badgeIcon={LayoutGrid}
           title="Proprietary" 
           gradientTitle="Platforms"
-          description="Discover our suite of high-performance tools designed to automate, train, and accelerate your operations."
+          description="We build training simulators, inventory automation systems, and spatial visualization tools — all engineered in-house, tailored to what you need."
         />
         
         {loading ? (
@@ -77,9 +77,38 @@ export default function ProductsPage() {
             <span className="ml-3 text-sm text-[#6B7280]">Loading products...</span>
           </div>
         ) : items.length === 0 ? (
-          <div className="py-20 text-center text-[#6B7280] text-sm">
-            No products available at the moment.
-          </div>
+          <ItemGrid 
+            items={[
+              {
+                id: "prod-hrv",
+                title: "HRV Simulator",
+                category: "Simulation",
+                description: "Immersive VR training for heavy recovery vehicle operations — engineered for real-world readiness without risking multi-million dollar equipment.",
+                fullDescription: "Immersive VR training for heavy recovery vehicle operations — engineered for real-world readiness without risking multi-million dollar equipment.",
+                href: "/request-proposal",
+                tags: ["VR Training", "Defense"],
+              },
+              {
+                id: "prod-ims",
+                title: "IMS",
+                category: "Logistics Automation",
+                description: "Our defense-grade inventory automation platform, built on two core modules: GAVIN-SPARK for smart parts allocation and SAPEAA for procurement intelligence.",
+                fullDescription: "Our defense-grade inventory automation platform, built on two core modules: GAVIN-SPARK (Global Automated Virtual Inventory & Network) for smart parts allocation and record keeping, and SAPEAA (Sales and Purchase Ecosystem with Advanced Analysis) for procurement intelligence.",
+                href: "/ims",
+                tags: ["GAVIN-SPARK", "SAPEAA", "Defense"],
+              },
+              {
+                id: "prod-xplor",
+                title: "XPLOR",
+                category: "Spatial Visualization",
+                description: "Making spatial visualization faster, more accessible, and more affordable — automating the conversion of 2D drawings into 3D and VR environments.",
+                fullDescription: "Making spatial visualization faster, more accessible, and more affordable — automating the conversion of 2D drawings into 3D and VR environments.",
+                href: "/xplor",
+                tags: ["2D to 3D", "VR Conversion"],
+              },
+            ]} 
+            type="products" 
+          />
         ) : (
           <ItemGrid items={items} type="products" />
         )}
